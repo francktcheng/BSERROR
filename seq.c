@@ -12,12 +12,12 @@ real BM[N] ALIGNED; //brownian motion
 real PX[N+1] ALIGNED; //price
 
 const real PI = 3.14159265358979323846; /* pi */
-const real X0 = 1.6; //price of risky asset at t0
-const real SIGMA = 1.0; //volatility of risky asset
-const real K = 0.4; //strike price of the option
+//const real X0 = 1.6; //price of risky asset at t0
+const real SIGMA = 0.5; //volatility of risky asset
+//const real K = 0.4; //strike price of the option
 const real T = 1.0; //muaturity time 
-const unsigned long long M = 1000; //Monte Carlo Simulation
-const real EPSILON = 1.0e-2; // threshold value
+const unsigned long long M = 500; //Monte Carlo Simulation
+//const real EPSILON = 1.0e-2; // threshold value
 const real prob = 0.95;
 
 
@@ -41,7 +41,7 @@ real NormalIntegral(real b)
     sum += 4.0*exp(-s*s/2.0);
   }
   
-  sum = 0.5 + h*sum/3.0;
+  sum = 0.5*sqrt(2*PI) + h*sum/3.0;
   return sum;
 }
 
@@ -50,7 +50,14 @@ int main(int argc, char *argv[])
   unsigned long long count = 0;
   real err;
   real upbd1, upbd2;
-  const real dt = T/N; 
+  const real dt = T/N;
+  //////read from terminal
+  const real X0 = atof(argv[1]);
+  const real K = atof(argv[2]);
+  const real EPSILON=X0*1.0e-2;
+  //
+  //
+  //
   //For each thread, initialize a random number stream
   VSLStreamStatePtr stream; //stream for random numbers
   //int seed = omp_get_thread_num();
@@ -72,6 +79,7 @@ int main(int argc, char *argv[])
       real upbd = (log(PX[j]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
       err -= 1/(sqrt(2*PI))*(PX[j+1]-PX[j])*NormalIntegral(upbd); 
     }
+    printf("err=%.20lf  ",err);	
     if (PX[N] > K)
       err += PX[N] - K;
     upbd1 = (log(X0/K) + 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
