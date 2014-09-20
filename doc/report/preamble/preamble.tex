@@ -1,0 +1,115 @@
+\documentclass[12pts,a4paper]{report}
+
+\usepackage{fontspec}
+% \setromanfont{LiHei Pro} % 儷黑Pro
+\setromanfont{Hiragino Sans GB} % 儷黑Pro
+\setmonofont[Scale=0.8]{Courier New} % 等寬字型
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt
+
+\renewcommand\abstractname{摘要}
+\renewcommand\appendixname{附录}
+\renewcommand\bibname{参考文献}
+\renewcommand\chaptername{章节}
+%\renewcommand\contentsname{}
+%\renewcommand\indexname{}
+%\renewcommand\listfigurename{}
+%\renewcommand\listtablename{}
+%\renewcommand\partname{}
+%\renewcommand\refname{}
+
+\usepackage{inputenc}
+\usepackage{verbatim}
+%\usepackage[dvips]{lscape,graphicx}
+\usepackage{pstricks} %graphics objects
+\usepackage{pst-node}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{fullpage}
+\usepackage{vmargin}
+\usepackage[normalem]{ulem}           
+\usepackage{array}
+\usepackage{multirow} 
+\usepackage{moreverb}
+\usepackage{epsfig}
+\usepackage{subfigure}
+\usepackage{nopageno}
+\usepackage{url}                       
+\usepackage{hyperref}                 
+\usepackage{color}                     
+\usepackage{pifont}                     
+\usepackage{fancybox}
+\usepackage{listings}                           
+\usepackage{bibunits}
+%\usepackage{bibtopic}
+\usepackage{graphicx}
+%\usepackage{ams}
+\usepackage{amsmath, amssymb, amsthm} % AMS packages
+
+\usepackage {algorithm}
+\usepackage{algorithmic,algorithm} % AMS packages
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{12pt}
+\fancyhf{}
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhf{} \fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[LO]{\bfseries\rightmark}
+\fancyhead[RE]{\bfseries\leftmark}
+\renewcommand{\headrulewidth}{0.5pt}
+
+\addtolength{\headheight}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{ \fancyhead{}
+\renewcommand{\headrulewidth}{0pt}} 
+
+
+% commandes persos pour tabuler les blocs
+% dans un algorithme
+
+\newcommand{\ztab}[1]{\noindent
+#1\\
+}
+
+\newcommand{\tab}[1]{\noindent
+\begin{tabular}{@{} l|l @{}}
+&
+#1\\
+\end{tabular}\\
+}
+
+\newcommand{\ttab}[1]{\noindent
+\begin{tabular}{@{} l|l|l @{}}
+&&
+#1\\
+\end{tabular}\\
+}
+
+\newcommand{\tttab}[1]{\noindent
+\begin{tabular}{@{} l|l|l|l @{}}
+&&&
+#1\\
+\end{tabular}\\
+}
+
+\newcommand{\flga}[0]{\leftarrow}
+\newcommand{\fldr}[0]{\rightarrow}
+\newcommand{\non}[0]{\invneg}          % non logique
+
+\newcommand{\paren}[1]{\left(#1\right)} % entre parentheses
+\newcommand{\croch}[1]{\left[#1\right]} % entre crochets
+
+\newcommand{\brut}[1]{\textrm{#1}}  % texte normal
+\newcommand{\gras}[1]{\textbf{#1}}  % texte en gras
+\newcommand{\sase}[1]{\textsf{#1}}  % texte sans empattement (SAns SErif)
+
+
+\floatstyle{ruled}
+\newfloat{algorithm}{thp}{lop}
+\floatname{algorithm}{Algorithm}
+
