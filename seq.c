@@ -12,10 +12,10 @@ real BM[N] ALIGNED; //brownian motion
 real PX[N+1] ALIGNED; //price
 
 const real PI = 3.14159265358979323846; /* pi */
-const real X0 = 10.0; //price of risky asset at t0
+const real X0 = 1.6; //price of risky asset at t0
 const real SIGMA = 1.0; //volatility of risky asset
-const real K = 10.0; //strike price of the option
-const real T = 50.0; //muaturity time 
+const real K = 0.4; //strike price of the option
+const real T = 1.0; //muaturity time 
 const unsigned long long M = 1000; //Monte Carlo Simulation
 const real EPSILON = 1.0e-2; // threshold value
 const real prob = 0.95;
@@ -64,12 +64,12 @@ int main(int argc, char *argv[])
       BM[j] = BM[j-1] + sqrt((real)T/N)*NRV[j];
     }
     PX[0] = X0;
-    for (int j = 0; j < N+1; ++j){
+    for (int j = 1; j < N+1; ++j){
       PX[j] = X0*exp(-0.5*SIGMA*SIGMA*j*dt+SIGMA*BM[j-1]);
     }
     for (int j = 0; j < N; ++j){
       real Tj = j*T/N;
-      real upbd = (log(PX[j]/K)+0.5*(T-Tj))/(SIGMA*sqrt(T-Tj));
+      real upbd = (log(PX[j]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
       err -= 1/(sqrt(2*PI))*(PX[j+1]-PX[j])*NormalIntegral(upbd); 
     }
     if (PX[N] > K)
