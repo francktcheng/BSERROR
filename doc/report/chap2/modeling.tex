@@ -1,0 +1,115 @@
+\chapter{课题陈述}
+\label{chp:2}
+
+本文所要研究的金融问题是基于欧洲式期权的离散时间对冲策略的风险控制。欧式期权(European Option) 是期权的一种类型。另外两种期权类型是美式期权
+(American Option)和亚洲期权(Asian Option)。期权本质上是一种金融合约，它授予期权的拥有者（买方）一种在某一特定时间点或之前，以某一个在合约中给出的价格
+(strike price) 购买或者出售某一种金融产品(underlying asset) 的权利。买家在执行自己的权利时，卖家必须按照合约规定的价格进行交易，
+但买家同时需要付给买家一定的额外交易手续费(premium)。期权的研究主要集中在对其价值的评估。期权的价值一般可以分为两个部分。一是期权的内部价值
+(intrinsic value)，主要由该期权基于的金融产品在交易时的市场价格和合约定价的差值决定。二十期权的时间价值(Time Value)，这一部分取决于交易前的其他因素如
+利息，增值等。期权的研究从19世纪就开始了，但目前的研究一般都是基于1973年提出的Black-Scholes模型。我们的课题也是基于Black-Scholes模型，并对欧式期权
+对冲策略的风险控制进行研究。
+
+\section{欧式期权} % (fold)
+\label{sec:euroOption}
+
+欧式期权的特点在于买方必须在合约规定的时间到期时才能行使权力。通常将欧式期权的合理价格价定为其期望价值。
+相比与美式期权，二者在执行时间上有所不同。
+美式期权合同在到期日前的任何时候或在到期日都可以执行合同，结算日则是在履约日之后的一天或两天，
+大多数的美式期权合同允许持有者在交易日到履约日之间随时履约，但也有一些合同规定一段比较短的时间可以履约，如“到期日前两周”。
+欧式期权合同要求其持有者只能在到期日履行合同，结算日是履约后的一天或两天。目前国内的外汇期权交易都是采用的欧式期权合同方式。
+通过比较，结论是：欧式期权本少利大，但在获利的时间上不具灵活性；美式期权虽然灵活，但付费十分昂贵。因此，国际上大部分的期权交易都是欧式期权。
+中国国内银行设立的外汇期权业务都是采用的欧式期权交易。
+
+% section 欧式期权 (end)
+
+\section{Black-Scholes模型} % (fold)
+\label{sec:BlackScholes}
+
+Black-Scholes 是一个70年代由Fischer Black和Myron Scholes 提出的用于金融衍生品交易的数学模型。这个模型可以推出Black-Scholes公式，
+并用于预测欧式期权定价的理论值。70年代至今在众多的实际交易中，该公式的预测估值被认为是非常接近实际观测到的价值。
+这个模型的成功也直接导致了期权交易市场的繁荣，并能使芝加哥期权交易市场等大的期权交易场所得到科学的有效的监管。
+Black-Scholes 公式是一个偏微分方程，用于预测期权价格随时间的变化。而该模型背后的策略则是通过合理地买卖期权来对冲风险，这种对冲策略被
+成为"Delta Hedging"，这也是许多更复杂的对冲机构策略的基础。此后Robert C. Merton 进一步发展了该模型，并和Schole分享了1997年的诺贝尔经济学奖。
+
+
+% section Black-Scholes模型 (end)
+
+\section{课题表述} % (fold)
+\label{sec:subject}
+
+本课题研究的对象就是欧式期权利用对冲策略来降低交易的风险。我们采用了经典的Black-Scholes模型，同时将预测时间$T$进行了离散化处理
+\begin{equation}
+   0=T_0 < T_i < T_N = T
+\end{equation}
+由于每一个时间点上$T_i$上的对冲交易都要支付一笔手续费，所以在一定的交易风险范围内，如果能找到一个最小的$N$，就可以最优化交易成本。
+假设在$t=T$时，交易的风险可表示为$|P(X) - P_{T_N}(X)|$, 而可接受的最大误差为$\epsilon$，我们将采用蒙特卡洛模拟算法，通过$M$次模拟，计算出
+$|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N) > 0.95$ 时，我们认为$N$是一个可接受的抽样次数。
+
+\begin{algorithm}
+  \caption{欧式期权对冲策略误差控制的串行算法}
+  \label{alg:ArnoldiHG}
+	\begin{algorithmic}[1]
+	 \State 参数 $X0$ \Comment{金融产品在$t=0$时的初始价格}
+	 \State 参数 $\sigma$ \Comment{市场波动性}
+	 \State 参数 $K$ \Comment{期权合约价格}
+	 \State 参数 $T$ \Comment{期权到期时间}
+	 \State 参数 $\epsilon$ \Comment{可接受的误差上限}
+	 \State 参数 $Prob$ \Comment{离散策略误差可接受概率下限}
+	 \Procedure{BSERROR}{$M$,$N$} 	 \Comment{$M$ 是蒙特卡洛模拟次数，$N$是离散抽样次数} 
+	  \State $\delta t \gets T/N$ \Comment{时间间隔}
+	  \State $count \gets 0$ \Comment{在$M$次模拟中$N$被接受的次数}
+
+	  \ForAll{$m=1:M$} \Comment{外部循环实现多次蒙特卡洛模拟}
+	  \State NRV[N] \Comment{一组高斯分布的随机数} 
+	  \For {all NRV[j]}
+	     $NRV[j] \gets GaussienNumGenerator()$
+	  \EndFor
+	  \State BM[N] \Comment{一个数组模拟布朗随机过程}  
+	  \State $BM[0] \gets NRV[0] \cdot \sqrt{\delta t}$ 
+	  \For {all BM[j]}
+	     $BM[j] \gets BM[j-1] + NRV[j]\cdot \sqrt{\delta t}$ 
+	  \EndFor
+	  \State PX[N+1] \Comment{离散化的期权估价}
+	  \State $PX[0] \gets X0$
+	  \ForAll {$j= 1:N+1$}
+	  \State $PX[j]\gets X0 \cdot exp(-0.5\cdot \sigma^2 \cdot j \cdot \delta t + \sigma \cdot BM[j-1])$
+	  \EndFor
+      \State $error \gets 0$ \Comment{离散估价和连续估价的误差}
+	  \ForAll{$j=0:N$}
+	  \State $Upper \gets (\log(PX[j]/K) + 0.5\cdot \sigma^2 \cdot (T- T_j))/ (\sigma \cdot \sqrt{T-T_j})$ \Comment{积分上界}
+	  \State $error \gets error - 1/(\sqrt{2\pi}) \cdot (PX[j+1]-PX[j])\cdot \int_{-\infty}^{Upper}e^{-t^2/2}dt $
+	  \EndFor
+
+	  \If {PX[N] > K} \Comment{只考虑在合约到期时间买入的情况}
+	  \State $error \gets error + (PX[N] -K)$
+	  \EndIf
+
+	  \State $Upper1 \gets (log(X0/K) + 0.5\cdot \sigma^2 \cdot T)/(\sigma \sqrt{T})$
+	  \State $Upper2 \gets (log(X0/K) - 0.5\cdot \sigma^2 \cdot T)/(\sigma \sqrt{T})$
+	  \State $error = error + K/(\sqrt{2\pi} \cdot \int_{-\infty}^{Upper2}e^{-t^2/2}dt -X0/(\sqrt{2\pi})\cdot \int_{-\infty}^{Upper1}e^{-t^2/2}dt$
+	  
+	  \If {$error < \epsilon$} 
+	  \State $count \gets count + 1$ 
+	  \EndIf
+	  \EndFor
+
+	  \State $prob \gets count/M$
+	  \If{$prob < Prob$}
+	  \State $N \gets N + 1$
+	  \Else
+	  \State $N \gets N - 1$
+	  \EndIf
+
+	  \State return N
+	 \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+
+
+% section 课题表述 (end)
+
