@@ -1,0 +1,76 @@
+	/*参数宏，与俄国人文章中的记号是对应的*/
+#define X0 InitialPrice   
+	//InitialPrice为一个具体大于零的数值，代表所对应的risky asset在0时刻的价格
+#define SIGMA Volatility
+	//Volatility为一个具体大于零的数值，代表对应的risky asset的volatility
+#define K StrikePrice
+	//StrikePrice为一个具体大于零的数值，代表option的strike price
+#define T MaturityTime
+	//MaturityTime为一个具体大于零的数值，代表option的maturity time.
+#define M MonteCarloSimulation
+	//MonteCarloSimulation为一个具体的正整数，代表Monte Carlo simulation的次数
+#define N NumberOfTimeSpan
+	//NumberOfTimeSpan为一个具体的正整数，代表0时刻到T时刻被均分为N等份。每等份的时间长度为T/N
+#define T_i i*T/N
+	//T_i=i*T/N为第i个离散的时间点，注意到T_N=T, T_0=0.
+#define DeltaT T/N
+	//DeltaT=T/N,为每等份时间的长度
+#define SquareDeltaT sqrt(T/N)
+	//SquareDeltaT=sqrt(T/N)
+#define EPSILON ThresholdValue
+	//We compare this value with the error to see if the error is small enough
+#define Prob 0.95
+	//此处我们要求95%的概率误差被控制在要求的范围内
+#define pi 3.14159265359
+	//圆周率
+
+	/*函数声明*/
+(double*) GaussRandomVariable(int NumberOfRandomVariable)
+	//该函数每次调用返回一个指向double类型的指针，该指针指向NumberOfRandomVariable这么多个独立的标准正态分布的随机变量数组
+double NormalIntegral(double IntegralUpperLimit)
+	//该函数返回标准正态分布函数的积分值，积分是从负无穷积到IntegralUpperLimit
+
+int count=0;
+	//count用于计数，观测每次Monte Carlo simulation的结果误差是否比EPSILON小
+for (int i=0; i<M; i++)
+	//Monte Carlo simulation for循环
+{
+	double* NRV=GaussRandomVariable(N);
+		//NRV成为一个长度为N的数组，每个元素都是相互独立的标准正态分布随机变量
+	double BM[N];
+		//BM为一个布朗运动过程，在下面的循环中生成
+	BM[0]=SquareDeltaT*NRV[0];
+	for (int j=1; j<N; j++)
+	{
+		BM[j]=BM[j-1]+SquareDeltaT*NRV[j];	
+	}	
+	double PX[N+1];
+		//PX是price的数组，由下面循环生成
+	PX[0]=X0;
+	for (int j=1; j<(N+1); j++)
+	{
+		PX[j]=X0*exp(-0.5*SIGMA*SIGMA*j*DeltaT+SIGMA*BM[j-1]);
+	}	
+	double ERROR＝0;
+		//下面计算误差
+	for (int j=0; j<N; j++)
+	{
+		temp=(log(PX[j]/K)+0.5*(T-T_j))/(SIGMA*sqrt(T-T_j));
+		ERROR-=1/(sqrt(2*pi))*(PX[j+1]-PX[j])*NormalIntegral(temp);
+	}
+	if (PX[N]>K)
+		ERROR+=PX[N]-k;
+	temp1=(log(X0/K)+0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
+	temp2=(log(X0/K)-0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
+	ERROR=ERROR+K/(sqrt(2*pi))*NormalIntegral(temp2)-X0/(sqrt(2*pi))*NormalIntegral(temp1);
+	if(ERROR<EPSILON)
+		count++;
+} 
+
+int Probability=count/M;
+If (Probability < Prob)
+	increase N;
+else 
+	decrease N;
+
+
