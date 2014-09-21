@@ -30,10 +30,11 @@ int main(int argc, char *argv[])
   real err;
   real upbd1, upbd2;
   const real dt = T/N;
+ 
   //////read from terminal
-  const real X0 = atof(argv[1]);
-  const real K = atof(argv[2]);
-  const real EPSILON=X0*1.0e-2;
+  //const real X0 = atof(argv[1]);
+  //const real K = atof(argv[2]);
+  //const real EPSILON=X0*1.0e-2;
 
   //For each thread, initialize a random number stream
   VSLStreamStatePtr stream; //stream for random numbers
