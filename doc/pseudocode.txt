@@ -55,7 +55,7 @@ for (int i=0; i<M; i++)
 		//下面计算误差
 	for (int j=0; j<N; j++)
 	{
-		temp=(log(PX[j]/K)+0.5*(T-T_j))/(SIGMA*sqrt(T-T_j));
+		temp=(log(PX[j]/K)+0.5*SIGMA*SIGMA*(T-T_j))/(SIGMA*sqrt(T-T_j));
 		ERROR-=1/(sqrt(2*pi))*(PX[j+1]-PX[j])*NormalIntegral(temp);
 	}
 	if (PX[N]>K)

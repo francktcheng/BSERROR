@@ -1,0 +1,207 @@
+\chapter{课题陈述}
+\label{chp:2}
+
+本文所要研究的金融问题是基于欧洲式期权的离散时间对冲策略的风险控制。欧式期权(European Option) 是期权的一种类型。另外两种期权类型是美式期权
+(American Option)和亚洲期权(Asian Option)。期权本质上是一种金融合约，它授予期权的拥有者（买方）一种在某一特定时间点或之前，以某一个在合约中给出的价格
+(strike price) 购买或者出售某一种金融产品(underlying asset) 的权利。买家在执行自己的权利时，卖家必须按照合约规定的价格进行交易，
+但买家同时需要付给买家一定的额外交易手续费(premium)。期权的研究主要集中在对其价值的评估。期权的价值一般可以分为两个部分。一是期权的内部价值
+(intrinsic value)，主要由该期权基于的金融产品在交易时的市场价格和合约定价的差值决定。二十期权的时间价值(Time Value)，这一部分取决于交易前的其他因素如
+利息，增值等。期权的研究从19世纪就开始了，但目前的研究一般都是基于1973年提出的Black-Scholes模型。我们的课题也是基于Black-Scholes模型，并对欧式期权
+对冲策略的风险控制进行研究。
+
+\section{欧式期权} % (fold)
+\label{sec:euroOption}
+
+欧式期权的特点在于买方必须在合约规定的时间到期时才能行使权力。通常将欧式期权的合理价格价定为其期望价值。
+相比与美式期权，二者在执行时间上有所不同。
+美式期权合同在到期日前的任何时候或在到期日都可以执行合同，结算日则是在履约日之后的一天或两天，
+大多数的美式期权合同允许持有者在交易日到履约日之间随时履约，但也有一些合同规定一段比较短的时间可以履约，如“到期日前两周”。
+欧式期权合同要求其持有者只能在到期日履行合同，结算日是履约后的一天或两天。目前国内的外汇期权交易都是采用的欧式期权合同方式。
+通过比较，结论是：欧式期权本少利大，但在获利的时间上不具灵活性；美式期权虽然灵活，但付费十分昂贵。因此，国际上大部分的期权交易都是欧式期权。
+中国国内银行设立的外汇期权业务都是采用的欧式期权交易。
+
+% section 欧式期权 (end)
+
+\section{Black-Scholes模型} % (fold)
+\label{sec:BlackScholes}
+
+Black-Scholes 是一个70年代由Fischer Black和Myron Scholes 提出的用于金融衍生品交易的数学模型。这个模型可以推出Black-Scholes公式，
+并用于预测欧式期权定价的理论值。70年代至今在众多的实际交易中，该公式的预测估值被认为是非常接近实际观测到的价值。
+这个模型的成功也直接导致了期权交易市场的繁荣，并能使芝加哥期权交易市场等大的期权交易场所得到科学的有效的监管。
+Black-Scholes 公式是一个偏微分方程，用于预测期权价格随时间的变化。而该模型背后的策略则是通过合理地买卖期权来对冲风险，这种对冲策略被
+成为"Delta Hedging"，这也是许多更复杂的对冲机构策略的基础。此后Robert C. Merton 进一步发展了该模型，并和Schole分享了1997年的诺贝尔经济学奖。
+
+
+% section Black-Scholes模型 (end)
+
+\section{课题表述} % (fold)
+\label{sec:subject}
+
+本课题研究的对象就是欧式期权利用对冲策略来降低交易的风险。
+我们考虑基于Black-Scholes模型的Delta 对冲策略，该策略为一个连续时间策略，也即策略所要求的交易行为发生在每时每刻，关于时间轴连续。
+我们知道现实生活中，交易只能发生在一些离散的时间点上, 即交易员只能在一系列相继的时刻点上交易。
+一个总所周知的事实是，实际中想要完美的复制实现一个给定的连续时间策略是不可能的。
+本课题研究的就是离散时间版本的Delta 对冲策略与理论上的Delta 对冲策略之间的误差及风险控制。
+
+To describe the problem, we use a generalized Black-Scholes model with a risky asset, with price $X_t$ at time t, and a non risky asset, with price $S_t^0$ at time t. The price $X_t$ is given by the following 1-dimensional stochastic differential equation
+$$dX_t=\mu(X_t)X_tdt+\sigma(X_t)X_tdB_t,$$
+with $X_0=x_0>0, \sigma(x)>0, \forall x>0$, and the non risky asset by the ordinary differential equations
+$$dS_t^0=rS^0_tdt$$
+
+We introduce the process $W_t=B_t+\int^t_0\frac{\mu(X_s)-r}{\sigma(X_s)}ds$, Under the risk-neutral probability, this is a Brownian motion. From now on, we consider the problem under this risk-neutral probability. 
+The risky asset now satisfies a new stochastic differential equation
+$$dX_t=rX_tdt+\sigma(X_t)X_tdW_t$$
+
+Suppose that $\mu$ and $\sigma$ fulfill the following assumptions:
+
+$(\mathcal{H}_1)$ $\mu$ and $\sigma$ are bounded, twice continuously differentiable and the second derivative satisfy some Holder conditions. More precisely, if we set $\hat{\mu}(x)=\mu(exp(x))$ and $\hat{\sigma}(x)=\sigma(exp(x))$, we assume that there are $\delta\in (0,1)$ and $K>0$, such that for $(x,x')\in \mathbb{R}^2$, we have 
+$$|\hat{\mu}'(x)|+|\hat{\mu}''(x)|+\frac{|\hat{\mu}''(x)-\hat{\mu}''(x')|}{|x-x'|^\delta}+|\hat{\sigma}'(x)|+|\hat{\sigma}''(x)|+\frac{|\hat{\sigma}''(x)-\hat{\sigma''}(x')|}{|x-x'|^\delta}<K.$$ 
+
+$(\mathcal{H}_2)$ $\exists  \sigma_0>0$ such that $|\sigma(x)|\geq \sigma_0$ for $x>0$.
+
+Under these two assumptions we consider European vanilla options with payoff function $f\in L^2(X_t)$, the price of this option at time 0 is given by 
+\[
+h(f)(x_0)=\mathbb{E}(exp(-rT)f(X_T)|X_0=x_0).
+\]
+If we set 
+\[
+u(t, x)=\mathbb{E}(e^{-r(T-t)}f(X_{T-t}^x)),
+\]
+then $u$ solves the Cauchy problem:
+\begin{equation}
+-\frac{\partial}{\partial t}u(t, x) =\frac{1}{2}\sigma^2(x)x^2\frac{\partial^2}{\partial x^2}u(t,x)+rx\frac{\partial}{\partial x}u(t,x)-ru(t,x)
+\end{equation}
+with $(t,x)\in [0,T)\times (0,\infty)$ and the conditions $u(0,x)=h(f)$ and $u(T,x)=f(x)$.
+
+The well known option valuation formula is 
+\[
+e^{-rT}f(X_T)=h(f)+\int_0^T \xi_t d\widetilde{X}_t
+\]
+where $\widetilde{X}_t=e^{-rT}X_t$ is the discounted price of the risky asset. 
+Ito's formula implies that the delta heding strategy $\xi$ is given by 
+\[
+\xi_t=\frac{\partial u}{\partial x}(t, X_t)
+\]
+In other word, to have a perfect heding, the investor must trade at each time 
+$t\in [0, T]$ and hold $\xi_t$ units of the underlying asset. In paractice, this 
+is impossible.
+
+An alternative solution is to hedge only at discrete tiems. In fact, assume that the 
+investor will trade at $N$ fixed times in period $(0, T)$. At each trading time
+defined by $t_k=kT/N$, $(k\in \{0,...,N\})$, the trader holds $\xi_{t_k}$ units of
+the asset $X_t$. Hence, at maturity the investor will be left with the difference:
+\[
+\begin{split}
+M_T^N
+&=e^{-rT}f(X_T)-(u(0,x)+\int_0^T\frac{\partial u}{\partial x}(\varphi(t), 
+X_{\varphi_t}))d\widetilde{X}_t\\
+&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\    partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t
+\end{split}
+\]
+where $\varphi(t)=sup\{t_i | t_i\leq t \}$.
+
+假设$T$为期权的期限 (maturity time), 交易发生在离散化的时刻点$T_i$上：
+\begin{equation}
+   0=T_0 \leq T_i < T_N = T
+\end{equation}
+由于每一个时间点上$T_i$上的对冲交易都要支付一笔手续费，所以在一定的交易风险范围内，如果能找到一个最小的$N$，就可以最优化交易成本。
+假设在$t=T$时，交易的风险可表示为$|P(X) - P_{T_N}(X)|$, 而可接受的最大误差为$\epsilon$，我们将采用蒙特卡洛模拟算法，通过$M$次模拟，计算出
+$|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N)$的值大于一个预先设定的概率值时，我们认为$N$是一个可接受的抽样次数。
+算法\ref{alg:bserror} 给出了我们计算验证一个$N$值的串行算法伪代码。
+
+\begin{algorithm}
+  \caption{欧式期权对冲策略误差控制的串行算法}
+  \label{alg:bserror}
+	\begin{algorithmic}[1]
+	 \State 参数 $X0$ \Comment{金融产品在$t=0$时的初始价格}
+	 \State 参数 $\sigma$ \Comment{市场波动性}
+	 \State 参数 $K$ \Comment{期权合约价格}
+	 \State 参数 $T$ \Comment{期权到期时间}
+	 \State 参数 $\epsilon$ \Comment{可接受的误差上限}
+	 \State 参数 $Prob$ \Comment{离散策略误差可接受概率下限}
+	 \Procedure{BSERROR}{$M$,$N$} 	 \Comment{$M$ 是蒙特卡洛模拟次数，$N$是离散抽样次数} 
+	  \State $\delta t \gets T/N$ \Comment{时间间隔}
+	  \State $count \gets 0$ \Comment{在$M$次模拟中$N$被接受的次数}
+
+	  \ForAll{$m=1:M$} \Comment{外部循环实现多次蒙特卡洛模拟}
+	  \State $NRV[N]$ \Comment{一组高斯分布的随机数} 
+	  \For {all $NRV[j]$}
+	     $NRV[j] \gets GaussienNumGenerator()$
+	  \EndFor
+	  \State $BM[N]$ \Comment{一个数组模拟布朗随机过程}  
+	  \State $BM[0] \gets NRV[0] \cdot \sqrt{\delta t}$ 
+	  \For {all $BM[j]$}
+	     $BM[j] \gets BM[j-1] + NRV[j]\cdot \sqrt{\delta t}$ 
+	  \EndFor
+	  \State $PX[N+1]$ \Comment{离散化的期权估价}
+	  \State $PX[0] \gets X0$
+	  \ForAll {$j= 1:N+1$}
+	  \State $PX[j]\gets X0 \cdot exp(-0.5\cdot \sigma^2 \cdot j \cdot \delta t + \sigma \cdot BM[j-1])$
+	  \EndFor
+      \State $error \gets 0$ \Comment{离散估价和连续估价的误差}
+	  \ForAll{$j=0:N$}
+	  \State $Upper \gets (\log(PX[j]/K) + 0.5\cdot \sigma^2 \cdot (T- T_j))/ (\sigma \cdot \sqrt{T-T_j})$ \Comment{积分上界}
+	  \State $error \gets error - 1/(\sqrt{2\pi}) \cdot (PX[j+1]-PX[j])\cdot \int_{-\infty}^{Upper}e^{-t^2/2}dt $
+	  \EndFor
+
+	  \If {$PX[N] > K$} \Comment{只考虑在合约到期时间买入的情况}
+	  \State $error \gets error + (PX[N]-K)$
+	  \EndIf
+
+	  \State $Upper1 \gets (log(X0/K) + 0.5\cdot \sigma^2 \cdot T)/(\sigma \sqrt{T})$
+	  \State $Upper2 \gets (log(X0/K) - 0.5\cdot \sigma^2 \cdot T)/(\sigma \sqrt{T})$
+	  \State $error = error + K/(\sqrt{2\pi} \cdot \int_{-\infty}^{Upper2}e^{-t^2/2}dt -X0/(\sqrt{2\pi})\cdot \int_{-\infty}^{Upper1}e^{-t^2/2}dt$
+	  
+	  \If {$error < \epsilon$} 
+	  \State $count \gets count + 1$ 
+	  \EndIf
+	  \EndFor
+
+	  \State $prob \gets count/M$
+	  \If{$prob < Prob$}
+	  \State $N \gets N + 1$
+	  \Else
+	  \State $N \gets N - 1$
+	  \EndIf
+
+	  \State return $N$
+	 \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+在获得一个可接受的$N$值后，我们可以继续寻找满足条件的更小的$N$值，一般初始的$N$值取的较大，所以这种最优化的寻找可以通过一个二分法的搜寻算法来实现。
+\begin{algorithm}
+	\caption{最优$N$值的搜索算法}
+	\label{alg:searchN}
+	\begin{algorithmic}[1]
+		\State 参数 $M0$ \Comment{蒙特卡洛模拟的次数，$M0$越大模拟结果可信度越高}
+		\Procedure{NBSECT}{$N0$, $\lambda$} \Comment{$N0$是初始化抽样次数，$\lambda$是最优解的置信区间}
+		\State $nL \gets 1$ \Comment{设置$n$值的初始下界} 
+		\State $nU \gets N0$ \Comment{设置$n$值的初始上界}
+		\State $n \gets 0.5\cdot (nL + nU)$
+		\While {$|nU - nL| > \lambda$} 
+		\If {$BSERROR(M0,n) < n$} \Comment{缩小搜索范围}
+		\State $nU \gets n$
+		\State $n \gets 0.5\cdot(nL + nU)$ 		
+		\Else  \Comment{扩大搜索范围}
+		\State $nL \gets n$
+		\State $n \gets 0.5\cdot(nL + nU)$ 		
+		\EndIf
+		\EndWhile
+		\State return $n, nU, nL$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+在算法 \ref{alg:searchN} 中我们设置的收敛条件为$|nU - nL| \le \lambda$ 这是因为蒙特卡洛模拟本身具有一定的随机性。在$N$的收敛过程中会出现波动，导致无法
+收敛到一个单一的值上，在$BSERROR$中给定了置信概率$Prob$的情况下，我们很自然地就能利用置信区间这一概念来表述我们取到的最优值$N$。在实际应用中，
+$N$的初始值通常需要取得很大，然后通过二分法来逐步缩小范围取得最优值。此外蒙特卡洛模拟得次数$M$也需要取一个很大的值来保证其精确性。如果$N$和$M$的取值
+都较大，就会极大地增加计算时间和内存空间需求。这时串行程序在普通的计算机上就难以满足问题的需求，我们将需要转而开发并行程序并使其运行在超级计算机上。
+
+% section 课题表述 (end)
+
+\section{BSERROR算法的并行化} % (fold)
+\label{sec:BSERRORParallel}
+
+
+
+% section BSERROR算法的并行化 (end)

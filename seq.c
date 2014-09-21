@@ -29,7 +29,12 @@ int main(int argc, char *argv[])
   real EPSILON = X0*1.0E-2;
   real err;
   real upbd1, upbd2;
-  const real dt = T/N; 
+  const real dt = T/N;
+  //////read from terminal
+  const real X0 = atof(argv[1]);
+  const real K = atof(argv[2]);
+  const real EPSILON=X0*1.0e-2;
+
   //For each thread, initialize a random number stream
   VSLStreamStatePtr stream; //stream for random numbers
   //int seed = omp_get_thread_num();
@@ -55,7 +60,7 @@ int main(int argc, char *argv[])
       real upbd = (log(PX[j]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
       err -= 1/(sqrt(2*PI))*(PX[j+1]-PX[j])*NormalIntegral(upbd); 
     }
-
+    //printf("err=%.20lf  ",err);	
     if (PX[N] > K)
       err += PX[N] - K;
     upbd1 = (log(X0/K) + 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
@@ -64,8 +69,8 @@ int main(int argc, char *argv[])
     err = fabs(err);
     if(err < EPSILON)
       count++;
-    printf("err=%.10lf\n",err);
   }
+  printf("err=%.10lf\n",err);
   printf ("time %g ms\n",stop_timer());
   printf("count=%llu, M=%llu\n",count, M);
   printf("%.5g\n", (real)count/(real)M);
