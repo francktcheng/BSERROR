@@ -37,9 +37,72 @@ Black-Scholes 公式是一个偏微分方程，用于预测期权价格随时间
 \section{课题表述} % (fold)
 \label{sec:subject}
 
-本课题研究的对象就是欧式期权利用对冲策略来降低交易的风险。我们采用了经典的Black-Scholes模型，同时将预测时间$T$进行了离散化处理
+本课题研究的对象就是欧式期权利用对冲策略来降低交易的风险。
+我们考虑基于Black-Scholes模型的Delta 对冲策略，该策略为一个连续时间策略，也即策略所要求的交易行为发生在每时每刻，关于时间轴连续。
+我们知道现实生活中，交易只能发生在一些离散的时间点上, 即交易员只能在一系列相继的时刻点上交易。
+一个总所周知的事实是，实际中想要完美的复制实现一个给定的连续时间策略是不可能的。
+本课题研究的就是离散时间版本的Delta 对冲策略与理论上的Delta 对冲策略之间的误差及风险控制。
+
+To describe the problem, we use a generalized Black-Scholes model with a risky asset, with price $X_t$ at time t, and a non risky asset, with price $S_t^0$ at time t. The price $X_t$ is given by the following 1-dimensional stochastic differential equation
+$$dX_t=\mu(X_t)X_tdt+\sigma(X_t)X_tdB_t,$$
+with $X_0=x_0>0, \sigma(x)>0, \forall x>0$, and the non risky asset by the ordinary differential equations
+$$dS_t^0=rS^0_tdt$$
+
+We introduce the process $W_t=B_t+\int^t_0\frac{\mu(X_s)-r}{\sigma(X_s)}ds$, Under the risk-neutral probability, this is a Brownian motion. From now on, we consider the problem under this risk-neutral probability. 
+The risky asset now satisfies a new stochastic differential equation
+$$dX_t=rX_tdt+\sigma(X_t)X_tdW_t$$
+
+Suppose that $\mu$ and $\sigma$ fulfill the following assumptions:
+
+$(\mathcal{H}_1)$ $\mu$ and $\sigma$ are bounded, twice continuously differentiable and the second derivative satisfy some Holder conditions. More precisely, if we set $\hat{\mu}(x)=\mu(exp(x))$ and $\hat{\sigma}(x)=\sigma(exp(x))$, we assume that there are $\delta\in (0,1)$ and $K>0$, such that for $(x,x')\in \mathbb{R}^2$, we have 
+$$|\hat{\mu}'(x)|+|\hat{\mu}''(x)|+\frac{|\hat{\mu}''(x)-\hat{\mu}''(x')|}{|x-x'|^\delta}+|\hat{\sigma}'(x)|+|\hat{\sigma}''(x)|+\frac{|\hat{\sigma}''(x)-\hat{\sigma''}(x')|}{|x-x'|^\delta}<K.$$ 
+
+$(\mathcal{H}_2)$ $\exists  \sigma_0>0$ such that $|\sigma(x)|\geq \sigma_0$ for $x>0$.
+
+Under these two assumptions we consider European vanilla options with payoff function $f\in L^2(X_t)$, the price of this option at time 0 is given by 
+\[
+h(f)(x_0)=\mathbb{E}(exp(-rT)f(X_T)|X_0=x_0).
+\]
+If we set 
+\[
+u(t, x)=\mathbb{E}(e^{-r(T-t)}f(X_{T-t}^x)),
+\]
+then $u$ solves the Cauchy problem:
 \begin{equation}
-   0=T_0 < T_i < T_N = T
+-\frac{\partial}{\partial t}u(t, x) =\frac{1}{2}\sigma^2(x)x^2\frac{\partial^2}{\partial x^2}u(t,x)+rx\frac{\partial}{\partial x}u(t,x)-ru(t,x)
+\end{equation}
+with $(t,x)\in [0,T)\times (0,\infty)$ and the conditions $u(0,x)=h(f)$ and $u(T,x)=f(x)$.
+
+The well known option valuation formula is 
+\[
+e^{-rT}f(X_T)=h(f)+\int_0^T \xi_t d\widetilde{X}_t
+\]
+where $\widetilde{X}_t=e^{-rT}X_t$ is the discounted price of the risky asset. 
+Ito's formula implies that the delta heding strategy $\xi$ is given by 
+\[
+\xi_t=\frac{\partial u}{\partial x}(t, X_t)
+\]
+In other word, to have a perfect heding, the investor must trade at each time 
+$t\in [0, T]$ and hold $\xi_t$ units of the underlying asset. In paractice, this 
+is impossible.
+
+An alternative solution is to hedge only at discrete tiems. In fact, assume that the 
+investor will trade at $N$ fixed times in period $(0, T)$. At each trading time
+defined by $t_k=kT/N$, $(k\in \{0,...,N\})$, the trader holds $\xi_{t_k}$ units of
+the asset $X_t$. Hence, at maturity the investor will be left with the difference:
+\[
+\begin{split}
+M_T^N
+&=e^{-rT}f(X_T)-(u(0,x)+\int_0^T\frac{\partial u}{\partial x}(\varphi(t), 
+X_{\varphi_t}))d\widetilde{X}_t\\
+&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\    partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t
+\end{split}
+\]
+where $\varphi(t)=sup\{t_i | t_i\leq t \}$.
+
+假设$T$为期权的期限 (maturity time), 交易发生在离散化的时刻点$T_i$上：
+\begin{equation}
+   0=T_0 \leq T_i < T_N = T
 \end{equation}
 由于每一个时间点上$T_i$上的对冲交易都要支付一笔手续费，所以在一定的交易风险范围内，如果能找到一个最小的$N$，就可以最优化交易成本。
 假设在$t=T$时，交易的风险可表示为$|P(X) - P_{T_N}(X)|$, 而可接受的最大误差为$\epsilon$，我们将采用蒙特卡洛模拟算法，通过$M$次模拟，计算出

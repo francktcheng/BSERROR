@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.3-0.9997.5 (TeX Live 2011) (format=xelatex 2011.7.3)  21 SEP 2014 15:32
+This is XeTeX, Version 3.1415926-2.3-0.9997.5 (TeX Live 2011) (format=xelatex 2011.7.3)  21 SEP 2014 19:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1031,28 +1031,29 @@ File: se-ascii-print.def 2010/03/01 v1.8 stringenc: Printable ASCII characters
 
 ]
 章节 2.
-LaTeX Font Info:    Try loading font information for U+msa on input line 40.
-(/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsa.fd
+[2
+
+]
+LaTeX Font Info:    Try loading font information for U+msa on input line 46.
+ (/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 40.
+LaTeX Font Info:    Try loading font information for U+msb on input line 46.
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-) [2
-
-]
+) [3]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 50.
+put line 113.
 
 
 LaTeX Font Warning: Font shape `EU1/HiraginoSansGB(0)/m/sc' undefined
-(Font)              using `EU1/HiraginoSansGB(0)/m/n' instead on input line 59.
-
+(Font)              using `EU1/HiraginoSansGB(0)/m/n' instead on input line 122
+.
 
 )
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 14.
- [3] [4] [5]
+ [4] [5] [6]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 14.
  (./report.aux)
 Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 14.
@@ -1066,10 +1067,10 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 14.
 Here is how much of TeX's memory you used:
  21386 strings out of 494150
  339158 string characters out of 3152950
- 492332 words of memory out of 3000000
+ 493342 words of memory out of 3000000
  24302 multiletter control sequences out of 15000+200000
  6287 words of font info for 44 fonts, out of 3000000 for 9000
  1018 hyphenation exceptions out of 8191
- 40i,12n,52p,589b,338s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 40i,16n,52p,589b,338s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on report.pdf (5 pages).
+Output written on report.pdf (6 pages).
