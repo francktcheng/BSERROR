@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
       PX[j] = X0*exp(-0.5*SIGMA*SIGMA*j*dt+SIGMA*BM[j-1]);
     }
     for (int j = 0; j < N; ++j){
-      real Tj = j*T/N;
+      real Tj = j*(real)T/N;
       real upbd = (log(PX[j]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
       err -= 1/(sqrt(2*PI))*(PX[j+1]-PX[j])*NormalIntegral(upbd); 
     }
