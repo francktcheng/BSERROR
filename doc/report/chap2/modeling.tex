@@ -43,6 +43,68 @@ Black-Scholes 公式是一个偏微分方程，用于预测期权价格随时间
 一个总所周知的事实是，实际中想要完美的复制实现一个给定的连续时间策略是不可能的。
 本课题研究的就是离散时间版本的Delta 对冲策略与理论上的Delta 对冲策略之间的误差及风险控制。
 
+让我们简单的回忆下一般化的 Black-Scholes 模型。 假设在时刻$t$, 期权所基于的风险资产价格为 $X_t$， 另外有一无风险资产价格为 $S_t^0$。
+$X_t$ 满足如下的一维随机偏微分方程：
+\begin{equation}
+dX_t=\mu(X_t)X_tdt+\sigma(X_t)X_tdB_t,
+\end{equation}
+$X_0=x_0>0, \sigma(x)>0, \forall x>0$,
+而无风险资产价格满足一个常微分方程：
+\begin{equation}
+dS_t^0=rS^0_tdt
+\end{equation}。
+我们引进一个新的随机过程$W_t$：
+\begin{equation}
+W_t=B_t+\int^t_0\frac{\mu(X_s)-r}{\sigma(X_s)}ds
+\end{equation}，
+在中性风险的概率空间下，这个随机过程是一个标准的布朗运动。 我们在此中性风险概率空间下考虑问题。
+现在风险资产所满足的随机微分方程变为如下形式：
+\begin{equation}
+dX_t=rX_tdt+\sigma(X_t)X_tdW_t
+\end{equation}
+若欧洲期权的回报函数为 $f\in L^2(X_t)$, 则该期权在0 时刻的价格由下面公式给出：
+\begin{equation}
+h(f)(x_0)=\mathbb{E}(exp(-rT)f(X_T)|X_0=x_0).
+\end{equation}
+令
+\begin{equation}
+u(t, x)=\mathbb{E}(e^{-r(T-t)}f(X_{T-t}^x)),
+\end{equation}
+则$u$ 是如下方程的解：
+\begin{equation}
+-\frac{\partial}{\partial t}u(t, x) =\frac{1}{2}\sigma^2(x)x^2\frac{\partial^2}{\partial x^2}u(t,x)+rx\frac{\partial}{\partial x}u(t,x)-ru(t,x)
+\end{equation}
+这里 $(t,x)\in [0,T)\times (0,\infty)$ 且 $u(0,x)=h(f)$，  $u(T,x)=f(x)$。
+
+一个广为人知的期权定价公式如下：
+\begin{equation}
+e^{-rT}f(X_T)=h(f)+\int_0^T \xi_t d\widetilde{X}_t
+\end{equation}
+这里 $\widetilde{X}_t=e^{-rT}X_t$ 是风险资产的折旧贴现价格。 
+Ito's 公式给出了Delta 对冲策略$\xi$: 
+\begin{equation}
+\xi_t=\frac{\partial u}{\partial x}(t, X_t)
+\end{equation}
+换句话说，为了达到完美对冲，交易员需要在 
+$t\in [0, T]$ 的时间内无时不刻的交易， 并且使自己在时刻 $t$ 持有恰好 $\xi_t$ 单位的风险资产。 
+这在现实中是不可能达到的。
+
+一个替代的解决方案是用在离散的时刻点交易的方法来逼近原先的对冲策略。假设交易员在$t\in[0, T)$
+时间内交易$N$ 次，交易时间被定义为$t_k=kT/N$, $(k\in \{0,...,N\})$, 在 $t\in [t_k, t_{k+1})$时间内，
+交易员使自己持有$\xi_{t_k}$单位的风险资产$X_t$。在此离散化策略的逼近下，在期权到期时刻$T$, 
+完美对冲和离散化对冲的差值为：
+\begin{equation}
+\begin{split}
+M_T^N
+&=e^{-rT}f(X_T)-(u(0,x)+\int_0^T\frac{\partial u}{\partial x}(\varphi(t), 
+X_{\varphi_t}))d\widetilde{X}_t\\
+&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\    partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t
+\end{split}
+\end{equation}
+这里 $\varphi(t)=sup\{t_i | t_i\leq t \}$.
+
+
+\begin{comment}
 To describe the problem, we use a generalized Black-Scholes model with a risky asset, with price $X_t$ at time t, and a non risky asset, with price $S_t^0$ at time t. The price $X_t$ is given by the following 1-dimensional stochastic differential equation
 $$dX_t=\mu(X_t)X_tdt+\sigma(X_t)X_tdB_t,$$
 with $X_0=x_0>0, \sigma(x)>0, \forall x>0$, and the non risky asset by the ordinary differential equations
@@ -99,13 +161,10 @@ X_{\varphi_t}))d\widetilde{X}_t\\
 \end{split}
 \]
 where $\varphi(t)=sup\{t_i | t_i\leq t \}$.
+\end{comment}
 
-假设$T$为期权的期限 (maturity time), 交易发生在离散化的时刻点$T_i$上：
-\begin{equation}
-   0=T_0 \leq T_i < T_N = T
-\end{equation}
-由于每一个时间点上$T_i$上的对冲交易都要支付一笔手续费，所以在一定的交易风险范围内，如果能找到一个最小的$N$，就可以最优化交易成本。
-假设在$t=T$时，交易的风险可表示为$|P(X) - P_{T_N}(X)|$, 而可接受的最大误差为$\epsilon$，我们将采用蒙特卡洛模拟算法，通过$M$次模拟，计算出
+由于实际交易中每一个时间点上$T_i$的交易都要支付一笔手续费，所以在一定的交易风险范围内，如果能找到一个最小的$N$，就可以最优化交易成本。
+假设在$t=T$时，交易的误差可表示为$|P(X) - P_{T_N}(X)|$, 而可接受的最大误差为$\epsilon$，我们将采用蒙特卡洛模拟算法，通过$M$次模拟，计算出
 $|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N)$的值大于一个预先设定的概率值时，我们认为$N$是一个可接受的抽样次数。
 算法\ref{alg:bserror} 给出了我们计算验证一个$N$值的串行算法伪代码。
 
@@ -139,7 +198,7 @@ $|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N)$的值大于
 	  \State $PX[j]\gets X0 \cdot exp(-0.5\cdot \sigma^2 \cdot j \cdot \delta t + \sigma \cdot BM[j-1])$
 	  \EndFor
       \State $error \gets 0$ \Comment{离散估价和连续估价的误差}
-	  \ForAll{$j=0:N$}
+	  \ForAll{$j=0:N-1$}
 	  \State $Upper \gets (\log(PX[j]/K) + 0.5\cdot \sigma^2 \cdot (T- T_j))/ (\sigma \cdot \sqrt{T-T_j})$ \Comment{积分上界}
 	  \State $error \gets error - 1/(\sqrt{2\pi}) \cdot (PX[j+1]-PX[j])\cdot \int_{-\infty}^{Upper}e^{-t^2/2}dt $
 	  \EndFor

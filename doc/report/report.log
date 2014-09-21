@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.3-0.9997.5 (TeX Live 2011) (format=xelatex 2011.7.3)  21 SEP 2014 19:26
+This is XeTeX, Version 3.1415926-2.3-0.9997.5 (TeX Live 2011) (format=xelatex 2011.7.3)  21 SEP 2014 22:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1044,11 +1044,11 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 46.
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 ) [3]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 113.
+put line 172.
 
 
 LaTeX Font Warning: Font shape `EU1/HiraginoSansGB(0)/m/sc' undefined
-(Font)              using `EU1/HiraginoSansGB(0)/m/n' instead on input line 122
+(Font)              using `EU1/HiraginoSansGB(0)/m/n' instead on input line 181
 .
 
 )
@@ -1062,15 +1062,18 @@ Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 14.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 14.
  ) 
 Here is how much of TeX's memory you used:
  21386 strings out of 494150
  339158 string characters out of 3152950
- 493342 words of memory out of 3000000
+ 491332 words of memory out of 3000000
  24302 multiletter control sequences out of 15000+200000
  6287 words of font info for 44 fonts, out of 3000000 for 9000
  1018 hyphenation exceptions out of 8191
- 40i,16n,52p,589b,338s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 40i,16n,52p,589b,336s stack positions out of 5000i,500n,10000p,200000b,50000s
 
 Output written on report.pdf (6 pages).
