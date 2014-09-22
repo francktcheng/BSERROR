@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.3-0.9997.5 (TeX Live 2011) (format=xelatex 2011.7.3)  21 SEP 2014 22:56
+This is XeTeX, Version 3.1415926-2.3-0.9997.5 (TeX Live 2011) (format=xelatex 2011.7.3)  23 SEP 2014 00:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -388,15 +388,83 @@ h options [Scale=0.8].
 (fontspec)  <->s*[0.8]"Courier New/BI/ICU:script=latn;language=DFLT;"
 
 
+(/usr/local/texlive/2011/texmf-dist/tex/latex/bbm-macros/bbm.sty
+Package: bbm 1999/03/15 V 1.2 provides fonts for set symbols - TH
+LaTeX Font Info:    Overwriting math alphabet `\mathbbm' in version `bold'
+(Font)                  U/bbm/m/n --> U/bbm/bx/n on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathbbmss' in version `bold'
+(Font)                  U/bbmss/m/n --> U/bbmss/bx/n on input line 35.
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/extarrows/extarrows.sty
+Package: extarrows 2008/05/15 v1.0b Some extensible arrows
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip52
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks39
+\ex@=\dimen112
+))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen113
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count174
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count175
+\leftroot@=\count176
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count177
+\DOTSCASE@=\count178
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box27
+\strutbox@=\box28
+\big@size=\dimen114
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count179
+\c@MaxMatrixCols=\count180
+\dotsspace@=\muskip10
+\c@parentequation=\count181
+\dspbrk@lvl=\count182
+\tag@help=\toks40
+\row@=\count183
+\column@=\count184
+\maxfields@=\count185
+\andhelp@=\toks41
+\eqnshift@=\dimen115
+\alignsep@=\dimen116
+\tagshift@=\dimen117
+\tagwidth@=\dimen118
+\totwidth@=\dimen119
+\lineht@=\dimen120
+\@envbody=\toks42
+\multlinegap=\skip53
+\multlinetaggap=\skip54
+\mathdisplay@stack=\toks43
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+))
 (/usr/local/texlive/2011/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2008/03/30 v1.1d Input encoding file
-\inpenc@prehook=\toks39
-\inpenc@posthook=\toks40
+\inpenc@prehook=\toks44
+\inpenc@posthook=\toks45
 )
 (/usr/local/texlive/2011/texmf-dist/tex/latex/tools/verbatim.sty
 Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
-\every@verbatim=\toks41
-\verbatim@line=\toks42
+\every@verbatim=\toks46
+\verbatim@line=\toks47
 \verbatim@in@stream=\read1
 )
 (/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/lscape.sty
@@ -418,8 +486,8 @@ File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
 )))
 (/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
-\Gin@req@height=\dimen112
-\Gin@req@width=\dimen113
+\Gin@req@height=\dimen121
+\Gin@req@width=\dimen122
 )
 (/usr/local/texlive/2011/texmf-dist/tex/latex/pstricks/pstricks.sty
 Package: pstricks 2011/04/23 v0.50 LaTeX wrapper for `PSTricks' (RN,HV)
@@ -438,62 +506,63 @@ File: pst-xkey.tex 2005/11/25 v1.6 PSTricks specialization of xkeyval (HA)
 )
 (/usr/local/texlive/2011/texmf-dist/tex/generic/pstricks/pst-fp.tex
 `pst-fp' v0.05, 2010/01/17 (hv)
-\pstFP@xs=\count174
-\pstFP@xia=\count175
-\pstFP@xib=\count176
-\pstFP@xfa=\count177
-\pstFP@xfb=\count178
-\pstFP@rega=\count179
-\pstFP@regb=\count180
-\pstFP@regs=\count181
-\pstFP@times=\count182
+\pstFP@xs=\count186
+\pstFP@xia=\count187
+\pstFP@xib=\count188
+\pstFP@xfa=\count189
+\pstFP@xfb=\count190
+\pstFP@rega=\count191
+\pstFP@regb=\count192
+\pstFP@regs=\count193
+\pstFP@times=\count194
 )
-\psLoopIndex=\count183
+\psLoopIndex=\count195
 
 `PSTricks' v2.20  <2011/04/23> (tvz)
-\pst@dima=\dimen114
-\pst@dimb=\dimen115
-\pst@dimc=\dimen116
-\pst@dimd=\dimen117
-\pst@dimg=\dimen118
-\pst@dimh=\dimen119
-\pst@dimm=\dimen120
-\pst@dimn=\dimen121
-\pst@dimo=\dimen122
-\pst@dimp=\dimen123
-\pst@hbox=\box27
-\pst@ibox=\box28
-\pst@boxg=\box29
-\pst@cnta=\count184
-\pst@cntb=\count185
-\pst@cntc=\count186
-\pst@cntd=\count187
-\pst@cntg=\count188
-\pst@cnth=\count189
-\pst@cntm=\count190
-\pst@cntn=\count191
-\pst@cnto=\count192
-\pst@cntp=\count193
-\@zero=\count194
-\pst@toks=\toks43
+\pst@dima=\dimen123
+\pst@dimb=\dimen124
+\pst@dimc=\dimen125
+\pst@dimd=\dimen126
+\pst@dimg=\dimen127
+\pst@dimh=\dimen128
+\pst@dimm=\dimen129
+\pst@dimn=\dimen130
+\pst@dimo=\dimen131
+\pst@dimp=\dimen132
+\pst@hbox=\box29
+\pst@ibox=\box30
+\pst@boxg=\box31
+\pst@cnta=\count196
+\pst@cntb=\count197
+\pst@cntc=\count198
+\pst@cntd=\count199
+\pst@cntg=\count200
+\pst@cnth=\count201
+Normal \count register pool exhausted, switching to extended pool.
+\pst@cntm=\count277
+\pst@cntn=\count278
+\pst@cnto=\count279
+\pst@cntp=\count280
+\@zero=\count281
+\pst@toks=\toks48
 (/usr/local/texlive/2011/texmf-dist/tex/xelatex/xetex-pstricks/pstricks.con
 (/usr/local/texlive/2011/texmf-dist/tex/generic/pstricks/config/xdvipdfmx.cfg))
-\psunit=\dimen124
-\psxunit=\dimen125
-\psyunit=\dimen126
-\pst@C@@rType=\count195
-\pslinewidth=\dimen127
-\psk@startLW=\dimen128
-\psk@endLW=\dimen129
-\pst@customdefs=\toks44
-\pslinearc=\dimen130
-\pst@symbolStep=\dimen131
-\pst@symbolWidth=\dimen132
-\everypsbox=\toks45
-\psframesep=\dimen133
-\pslabelsep=\dimen134
-\pst@shift=\dimen135
-\theoverlaybox=\box30
+\psunit=\dimen133
+\psxunit=\dimen134
+\psyunit=\dimen135
+\pst@C@@rType=\count282
+\pslinewidth=\dimen136
+\psk@startLW=\dimen137
+\psk@endLW=\dimen138
+\pst@customdefs=\toks49
+\pslinearc=\dimen139
+\pst@symbolStep=\dimen140
+\pst@symbolWidth=\dimen141
+\everypsbox=\toks50
+\psframesep=\dimen142
+\pslabelsep=\dimen143
+\pst@shift=\dimen144
+\theoverlaybox=\box32
 (/usr/local/texlive/2011/texmf-dist/tex/xelatex/xetex-pstricks/pstricks.con
 (/usr/local/texlive/2011/texmf-dist/tex/generic/pstricks/config/xdvipdfmx.cfg
 Using PSTricks configuration for XeTeX+xdvipdfmx
@@ -528,103 +597,44 @@ Package: pst-node 2010/04/22 package wrapper for pst-node.tex
 
 (/usr/local/texlive/2011/texmf-dist/tex/generic/pst-node/pst-node.tex
  v1.16, 2011/05/05
-\psrow=\count196
-\pscol=\count197
-\psmatrixcnt=\count198
-\psrowsep=\skip52
-\pscolsep=\skip53
-\pst@args=\count199
-\num@pts=\count200
-\pst@argcnt=\count201
+\psrow=\count283
+\pscol=\count284
+\psmatrixcnt=\count285
+\psrowsep=\skip55
+\pscolsep=\skip56
+\pst@args=\count286
+\num@pts=\count287
+\pst@argcnt=\count288
 )
 File: pst-node.tex 2011/05/05 1.16 `pst-node' (tvz)
 )
 (/usr/local/texlive/2011/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-Normal \count register pool exhausted, switching to extended pool.
-\c@float@type=\count277
-\float@exts=\toks46
-\float@box=\box31
-\@float@everytoks=\toks47
-\@floatcapt=\box32
+\c@float@type=\count289
+\float@exts=\toks51
+\float@box=\box33
+\@float@everytoks=\toks52
+\@floatcapt=\box34
 )
 (/usr/local/texlive/2011/texmf-dist/tex/latex/subfigure/subfigure.sty
 Package: subfigure 2002/03/15 v2.1.5 subfigure package
-\subfigtopskip=\skip54
-\subfigcapskip=\skip55
-\subfigcaptopadj=\dimen136
-\subfigbottomskip=\skip56
-\subfigcapmargin=\dimen137
-\subfiglabelskip=\skip57
-\c@subfigure=\count278
-\c@lofdepth=\count279
-\c@subtable=\count280
-\c@lotdepth=\count281
+\subfigtopskip=\skip57
+\subfigcapskip=\skip58
+\subfigcaptopadj=\dimen145
+\subfigbottomskip=\skip59
+\subfigcapmargin=\dimen146
+\subfiglabelskip=\skip60
+\c@subfigure=\count290
+\c@lofdepth=\count291
+\c@subtable=\count292
+\c@lotdepth=\count293
 
 ****************************************
 * Local config file subfigure.cfg used *
 ****************************************
 (/usr/local/texlive/2011/texmf-dist/tex/latex/subfigure/subfigure.cfg)
-\subfig@top=\skip58
-\subfig@bottom=\skip59
-)
-(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2000/07/18 v2.13 AMS math features
-\@mathmargin=\skip60
-
-For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01
-
-(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks48
-\ex@=\dimen138
-))
-(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen139
-)
-(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 1999/12/14 v2.01 operator names
-)
-\inf@bad=\count282
-LaTeX Info: Redefining \frac on input line 211.
-\uproot@=\count283
-\leftroot@=\count284
-LaTeX Info: Redefining \overline on input line 307.
-\classnum@=\count285
-\DOTSCASE@=\count286
-LaTeX Info: Redefining \ldots on input line 379.
-LaTeX Info: Redefining \dots on input line 382.
-LaTeX Info: Redefining \cdots on input line 467.
-\Mathstrutbox@=\box33
-\strutbox@=\box34
-\big@size=\dimen140
-LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
-\macc@depth=\count287
-\c@MaxMatrixCols=\count288
-\dotsspace@=\muskip10
-\c@parentequation=\count289
-\dspbrk@lvl=\count290
-\tag@help=\toks49
-\row@=\count291
-\column@=\count292
-\maxfields@=\count293
-\andhelp@=\toks50
-\eqnshift@=\dimen141
-\alignsep@=\dimen142
-\tagshift@=\dimen143
-\tagwidth@=\dimen144
-\totwidth@=\dimen145
-\lineht@=\dimen146
-\@envbody=\toks51
-\multlinegap=\skip61
-\multlinetaggap=\skip62
-\mathdisplay@stack=\toks52
-LaTeX Info: Redefining \[ on input line 2666.
-LaTeX Info: Redefining \] on input line 2667.
+\subfig@top=\skip61
+\subfig@bottom=\skip62
 )
 (/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
@@ -897,11 +907,11 @@ Document Style - pseudocode environments for use with the `algorithmicx' style
 )
 
 Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
-less on input line 64.
+less on input line 77.
 
 
 Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
-less on input line 66.
+less on input line 79.
 
 )
 
@@ -1042,22 +1052,29 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 46.
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-) [3]
+)
+Missing character: There is no ö in font Hiragino Sans GB W3/ICU:script=latn;l
+anguage=DFLT;!
+ [3]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 172.
+put line 148.
 
 
 LaTeX Font Warning: Font shape `EU1/HiraginoSansGB(0)/m/sc' undefined
-(Font)              using `EU1/HiraginoSansGB(0)/m/n' instead on input line 181
+(Font)              using `EU1/HiraginoSansGB(0)/m/n' instead on input line 157
 .
 
-)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 14.
- [4] [5] [6]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 14.
+) (./chap3/parameters.tex [4] [5] [6]
+章节 3.
+[7
+
+])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 17.
+ [8]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 17.
  (./report.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 14.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 14.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 17.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 17.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1065,15 +1082,15 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 14.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 17.
  ) 
 Here is how much of TeX's memory you used:
- 21386 strings out of 494150
- 339158 string characters out of 3152950
- 491332 words of memory out of 3000000
- 24302 multiletter control sequences out of 15000+200000
+ 21446 strings out of 494150
+ 340287 string characters out of 3152950
+ 501910 words of memory out of 3000000
+ 24350 multiletter control sequences out of 15000+200000
  6287 words of font info for 44 fonts, out of 3000000 for 9000
  1018 hyphenation exceptions out of 8191
- 40i,16n,52p,589b,336s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 40i,18n,52p,589b,336s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on report.pdf (6 pages).
+Output written on report.pdf (8 pages).
