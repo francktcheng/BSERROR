@@ -3,6 +3,7 @@
 #include <mkl.h>
 #include <mkl_vsl.h>
 #include <omp.h>
+#include <immintrin.h>
 #include "inc/misc.h"
 
 #define real double
@@ -167,7 +168,7 @@ real vNormalIntegral(real b)
 {
   __declspec(align(64)) __m512d vec_cf0, vec_cf1, vec_cf2, vec_s, vec_stp, vec_exp; 
   
-  //const int NN = 1000; //has to be the multiple of 8
+  const int NN = 1000; //has to be the multiple of 8
   const int vecsize = 8; 
   const int nCal = (NN/2-1)/vecsize;
   //const int left = NN%vecsize;
@@ -211,7 +212,7 @@ real vNormalIntegral(real b)
 #else
 real vNormalIntegral(real b)
 {
-  //const int NN = 100000;
+  const int NN = 1000;
   real a = 0.0f;
   real s, h, sum = 0.0f;
   h = (b-a)/NN;
