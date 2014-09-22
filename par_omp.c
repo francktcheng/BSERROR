@@ -62,10 +62,13 @@ int main(int argc, char *argv[])
 	  tmp = BM[0]; 
 #pragma simd reduction(+:tmp) vectorlengthfor(real) assert
 	  for (int j = 1; j <= i; ++j){
-	    tmp += rootdt*NRV[j];
+	    //tmp += rootdt*NRV[j];
+	    tmp += NRV[j];
 	  }
-	  BM[i] = tmp;
-	  PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(k*Ncache+i+1)*dt+SIGMA*tmp);
+	  //BM[i] = tmp;
+	  BM[i] = tmp*rootdt;
+	  //PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(k*Ncache+i+1)*dt+SIGMA*tmp);
+	  PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(k*Ncache+i+1)*dt+SIGMA*BM[i]);
 	}
 #pragma omp single
 	{
@@ -221,7 +224,7 @@ real vNormalIntegral(real b)
   // and the last one
   sum += exp(-b*b/2.0);
   
-#pragma vector always 
+  //#pragma vector always 
   for (int i = 1; i < NN/2; ++i){
     s = a + 2*i*h;
     sum += 2.0*exp(-s*s/2.0);

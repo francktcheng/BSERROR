@@ -82,7 +82,7 @@ real NormalIntegral(real b)
 {
   //if(b < -10.0) return  0.0f;
   //if(b > 10.0) return 1.0f;
-  int NN = 10000;
+  int NN = 1000;
   real a = 0.0f;
   real s, h, sum = 0.0f;
   h = (b-a)/NN;
