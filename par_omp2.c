@@ -8,6 +8,7 @@
 
 #define ALIGNED __attribute__((aligned(64)))
 #define N 100000
+#define NN 322 //integral interval
 
 #define Nvec 192 //tunable, multiple of 8
 #define GUIDED_CHUNK 1 //tunable
@@ -52,7 +53,7 @@ int main(int argc, char *argv[])
       int i,j,k;
       VSLStreamStatePtr stream;
       int errcode = vslNewStream(&stream, VSL_BRNG_MT2203, 0);//seed=0
-#pragma omp for schedule(guided,GUIDED_CHUNK) nowait
+#pragma omp for schedule(guided, GUIDED_CHUNK) nowait
       for (k = 0; k < nCal; ++k){
 	//update BM to the questioned position
 	tmp = 0.0;
@@ -163,8 +164,9 @@ int main(int argc, char *argv[])
 double vNormalIntegral(double b)
 {
   __declspec(align(64)) __m512d vec_cf0, vec_cf1, vec_cf2, vec_s, vec_stp, vec_exp; 
-  
-  const int NN = 1000; //has to be the multiple of 8
+  //NN/2-1 has to be the multiple of 8
+  //NN = (8*LV+1)*2, LV = 20 -> NN = 322 
+  //const int NN = 322; //has to be the multiple of 8
   //const int vecsize = 8; 
   const int nCal = (NN/2-1)/vecsize;
   //const int left = NN%vecsize;
@@ -208,7 +210,7 @@ double vNormalIntegral(double b)
 #else
 double vNormalIntegral(double b)
 {
-  const int NN = 1000;
+  //const int NN = 322;//correspond to vNormalIntegral
   double a = 0.0f;
   double s, h, sum = 0.0f;
   h = (b-a)/NN;
@@ -229,4 +231,3 @@ double vNormalIntegral(double b)
   return sum;
 }
 #endif
-

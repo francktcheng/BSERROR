@@ -10,6 +10,7 @@
 #define ALIGNED __attribute__((aligned(64)))
 #define N 100000
 #define Ncache 10000 //tunable
+#define NN 322 //integral interval 
 //suggested Ncache 1301333 for L2
 //81333 for L1
 #define GUIDED_CHUNK 1 //tunable
@@ -203,8 +204,9 @@ int main(int argc, char *argv[])
 real vNormalIntegral(real b)
 {
   __declspec(align(64)) __m512d vec_cf0, vec_cf1, vec_cf2, vec_s, vec_stp, vec_exp; 
-  
-  const int NN = 1000; //has to be the multiple of 8
+  //NN/2-1 has to be the multiple of 8
+  //NN = (8*LV+1)*2, LV = 20 -> NN = 322
+  //const int NN = 322; //has to be the multiple of 8
   const int vecsize = 8; 
   const int nCal = (NN/2-1)/vecsize;
   //const int left = NN%vecsize;
@@ -248,7 +250,7 @@ real vNormalIntegral(real b)
 #else
 real vNormalIntegral(real b)
 {
-  const int NN = 1000;
+  //const int NN = 322;//corresponds to vNormalIntegral
   real a = 0.0f;
   real s, h, sum = 0.0f;
   h = (b-a)/NN;
