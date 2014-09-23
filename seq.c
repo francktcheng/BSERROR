@@ -6,7 +6,8 @@
 
 #define real double
 #define ALIGNED __attribute__((aligned(64)))
-#define N 100000
+#define N 42
+#define NN 322 //integral interval
 
 real NRV[N] ALIGNED; //normal distribution random vector
 real BM[N] ALIGNED; //brownian motion
@@ -50,7 +51,7 @@ int main(int argc, char *argv[])
     for (int j = 1; j < N; ++j){
       BM[j] = BM[j-1] + sqrt((real)T/N)*NRV[j];
     }
-
+    
     PX[0] = X0;
     for (int j = 1; j < N+1; ++j){
       PX[j] = X0*exp(-0.5*SIGMA*SIGMA*j*dt+SIGMA*BM[j-1]);
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
       real Tj = j*(real)T/N;
       real upbd = (log(PX[j]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
       err -= 1/(sqrt(2*PI))*(PX[j+1]-PX[j])*NormalIntegral(upbd); 
+      printf("err=%.4lf\n", upbd);
     }
     //printf("err=%.20lf  ",err);	
     if (PX[N] > K)
@@ -82,7 +84,7 @@ real NormalIntegral(real b)
 {
   //if(b < -10.0) return  0.0f;
   //if(b > 10.0) return 1.0f;
-  int NN = 10000;
+  //const int NN = 322;//correspond to vNormalIntegral
   real a = 0.0f;
   real s, h, sum = 0.0f;
   h = (b-a)/NN;
