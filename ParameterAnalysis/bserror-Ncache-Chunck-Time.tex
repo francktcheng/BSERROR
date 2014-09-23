@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat = 1.3}
+\pgfplotsset{width=\textwidth, height=10cm}
+\pgfplotsset{
+	grid style = {
+		dash pattern = on 0.025mm off 0.95mm on 0.025mm off 0mm, % start with half a dot to get correct centering of the pattern
+			line cap = round,black,
+		line width = 0.7pt
+	}
+}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{tikzpicture} 
+	\begin{axis}[
+			title=Time of bserror within different Chunck and Ncache values,
+			xlabel={Ncache value},
+			ylabel={Time(/ms)},
+			% ymin=0,
+			% ymax=5,
+			% xtick={0,10,20,...,130},
+			grid=major,
+			% legend style={at={(1,0.5)},anchor=west,legend cell align=left,font=\tiny},
+			legend style={at={(0.9,1)},font=\small, fill=none},
+			% legend entries={Chunck=10, Chunck=20, Chunck=30, Chunck=40, Chunck=50, Chunck=60, Chunck=70, Chunck=80, Chunck=90, Chunck=100},
+			 legend entries={Chunck=10},
+		]
+		\addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-10-Data.csv};
+		% \addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-20-Data.csv};
+		% \addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-30-Data.csv};
+		% \addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-40-Data.csv};
+		% \addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-50-Data.csv};
+		% \addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-60-Data.csv};
+		% \addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-70-Data.csv};
+		% \addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-80-Data.csv};
+		% \addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-90-Data.csv};
+		% \addplot table[x=Ncache,y=Time, col sep=comma] {bserror-Chunck-100-Data.csv};
+		% \addplot table[x=NP,y=ARHG.CSR, col sep=comma] {C-Diag-96000-weak-64-Time.csv};
+		% \addplot table[x=NP,y=IARm4.CSR, col sep=comma] {C-Diag-96000-weak-64-Time.csv};
+		% \addplot table[x=NP,y=IAR4.CSR, col sep=comma] {C-Diag-96000-weak-64-Time.csv};
+		% \addplot table[x=NP,y=IARHGm4.CSR, col sep=comma] {C-Diag-96000-weak-64-Time.csv};
+		% \addplot table[x=NP,y=IARHG4.CSR, col sep=comma] {C-Diag-96000-weak-64-Time.csv};
+	\end{axis}
+\end{tikzpicture}
+
+
+\end{document}

@@ -43,7 +43,7 @@ Black-Scholes 公式是一个偏微分方程，用于预测期权价格随时间
 一个总所周知的事实是，实际中想要完美的复制实现一个给定的连续时间策略是不可能的。
 本课题研究的就是离散时间版本的Delta 对冲策略与理论上的Delta 对冲策略之间的误差及风险控制。
 
-让我们简单的回忆下一般化的 Black-Scholes 模型。 假设在时刻$t$, 期权所基于的风险资产价格为 $X_t$， 另外有一无风险资产价格为 $S_t^0$。
+在一般化的 Black-Scholes 模型中， 假设在时刻$t$, 期权所基于的风险资产价格为 $X_t$， 另外有一无风险资产价格为 $S_t^0$。
 $X_t$ 满足如下的一维随机偏微分方程：
 \begin{equation}
 dX_t=\mu(X_t)X_tdt+\sigma(X_t)X_tdB_t,
@@ -62,6 +62,14 @@ W_t=B_t+\int^t_0\frac{\mu(X_s)-r}{\sigma(X_s)}ds
 \begin{equation}
 dX_t=rX_tdt+\sigma(X_t)X_tdW_t
 \end{equation}
+我们假设考虑的问题满足如下两个条件：
+
+$(\mathcal{H}_1)$ $\mu$ 和 $\sigma$ 有限的, 两次连续可微且二次偏微分满足 H\"{o}lder 条件. 更准确的来说, 令 $\hat{\mu}(x)=\mu(exp(x))$， $\hat{\sigma}(x)=\sigma(exp(x))$, 且 $\delta\in (0,1)$， $K>0$, 对任意 $(x,x')\in \mathbb{R}^2$, 我们有：
+$$|\hat{\mu}'(x)|+|\hat{\mu}''(x)|+\frac{|\hat{\mu}''(x)-\hat{\mu}''(x')|}{|x-x'|^\delta}+|\hat{\sigma}'(x)|+|\hat{\sigma}''(x)|+\frac{|\hat{\sigma}''(x)-\hat{\sigma''}(x')|}{|x-x'|^\delta}<K.$$ 
+
+$(\mathcal{H}_2)$ 存在$\sigma_0>0$ 使得对任意 $x>0$ 有$|\sigma(x)|\geq \sigma_0$。
+
+在这两个条件下
 若欧洲期权的回报函数为 $f\in L^2(X_t)$, 则该期权在0 时刻的价格由下面公式给出：
 \begin{equation}
 h(f)(x_0)=\mathbb{E}(exp(-rT)f(X_T)|X_0=x_0).
@@ -98,72 +106,40 @@ $t\in [0, T]$ 的时间内无时不刻的交易， 并且使自己在时刻 $t$ 
 M_T^N
 &=e^{-rT}f(X_T)-(u(0,x)+\int_0^T\frac{\partial u}{\partial x}(\varphi(t), 
 X_{\varphi_t}))d\widetilde{X}_t\\
-&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\    partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t
+&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\    partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t\\
+&=(X_T-K)^+-\mathbb{E}[(X_T-K)^+]-\int_0^T\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})dX_t\\
+&=(X_T-K)^+-x_0N(d_1(0))+KN(d_2(0))-\sum_{i=0}^{n-1}N(d_1(t_i))(X_{t_{i+1}}-X_{t_i})\\
+&=(X_T-K)^+-\frac{x_0}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T}
+{\sigma\sqrt{T}}}e^{-\frac{v^2}{2}}dv+\frac{K}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{x_0}{K})-\frac{1}{2}\sigma^2T}{\sigma\sqrt{T}}}e^{-\frac{v^2}{2}}dv\\
+&-\sum_{i=0}^{n-1}\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{X_{t_i}}{K})+\frac{1}{2}\sigma^2(T-t_i)}{\sigma\sqrt{T-t_i}}}e^{-\frac{v^2}{2}}dv(X_{t_{i+1}}-X_{t_i})\\
 \end{split}
 \end{equation}
 这里 $\varphi(t)=sup\{t_i | t_i\leq t \}$.
 
-
-\begin{comment}
-To describe the problem, we use a generalized Black-Scholes model with a risky asset, with price $X_t$ at time t, and a non risky asset, with price $S_t^0$ at time t. The price $X_t$ is given by the following 1-dimensional stochastic differential equation
-$$dX_t=\mu(X_t)X_tdt+\sigma(X_t)X_tdB_t,$$
-with $X_0=x_0>0, \sigma(x)>0, \forall x>0$, and the non risky asset by the ordinary differential equations
-$$dS_t^0=rS^0_tdt$$
-
-We introduce the process $W_t=B_t+\int^t_0\frac{\mu(X_s)-r}{\sigma(X_s)}ds$, Under the risk-neutral probability, this is a Brownian motion. From now on, we consider the problem under this risk-neutral probability. 
-The risky asset now satisfies a new stochastic differential equation
-$$dX_t=rX_tdt+\sigma(X_t)X_tdW_t$$
-
-Suppose that $\mu$ and $\sigma$ fulfill the following assumptions:
-
-$(\mathcal{H}_1)$ $\mu$ and $\sigma$ are bounded, twice continuously differentiable and the second derivative satisfy some Holder conditions. More precisely, if we set $\hat{\mu}(x)=\mu(exp(x))$ and $\hat{\sigma}(x)=\sigma(exp(x))$, we assume that there are $\delta\in (0,1)$ and $K>0$, such that for $(x,x')\in \mathbb{R}^2$, we have 
-$$|\hat{\mu}'(x)|+|\hat{\mu}''(x)|+\frac{|\hat{\mu}''(x)-\hat{\mu}''(x')|}{|x-x'|^\delta}+|\hat{\sigma}'(x)|+|\hat{\sigma}''(x)|+\frac{|\hat{\sigma}''(x)-\hat{\sigma''}(x')|}{|x-x'|^\delta}<K.$$ 
-
-$(\mathcal{H}_2)$ $\exists  \sigma_0>0$ such that $|\sigma(x)|\geq \sigma_0$ for $x>0$.
-
-Under these two assumptions we consider European vanilla options with payoff function $f\in L^2(X_t)$, the price of this option at time 0 is given by 
-\[
-h(f)(x_0)=\mathbb{E}(exp(-rT)f(X_T)|X_0=x_0).
-\]
-If we set 
-\[
-u(t, x)=\mathbb{E}(e^{-r(T-t)}f(X_{T-t}^x)),
-\]
-then $u$ solves the Cauchy problem:
+对于该误差$M_T^N$，我们已知它有如下的渐进性质：
+%\begin{Theorem}
+$M_T^N$ 在概率上趋向于0:
 \begin{equation}
--\frac{\partial}{\partial t}u(t, x) =\frac{1}{2}\sigma^2(x)x^2\frac{\partial^2}{\partial x^2}u(t,x)+rx\frac{\partial}{\partial x}u(t,x)-ru(t,x)
+M_T^N\xlongrightarrow[N\rightarrow +\infty]{\mathbb{P}}0
 \end{equation}
-with $(t,x)\in [0,T)\times (0,\infty)$ and the conditions $u(0,x)=h(f)$ and $u(T,x)=f(x)$.
+%\end{Theorem}
+See XXXXXX
+%\begin{Theorem}
 
-The well known option valuation formula is 
-\[
-e^{-rT}f(X_T)=h(f)+\int_0^T \xi_t d\widetilde{X}_t
-\]
-where $\widetilde{X}_t=e^{-rT}X_t$ is the discounted price of the risky asset. 
-Ito's formula implies that the delta heding strategy $\xi$ is given by 
-\[
-\xi_t=\frac{\partial u}{\partial x}(t, X_t)
-\]
-In other word, to have a perfect heding, the investor must trade at each time 
-$t\in [0, T]$ and hold $\xi_t$ units of the underlying asset. In paractice, this 
-is impossible.
+令 $X_t$ 随机偏微分方程 $dX_t=\sigma(X_t)X_tdW_t$ 的解所对应的随机过程, $u$ 如前文定义, 则我们有 
+\begin{equation}
+\sqrt{n}M_T^N\xlongrightarrow[N\rightarrow +\infty]{d} \hat{W}_\tau
+\end{equation}
+这里 $\tau=\frac{1}{2}\int_0^T(\frac{\partial^2 u}{\partial x^2}(t,X_t))^2\sigma^4(X_t)X_t^4dt$, 且 $\hat{W}$ 是一个独立于 $\tau$另一个布朗运动.
+%\end{Theorem}
 
-An alternative solution is to hedge only at discrete tiems. In fact, assume that the 
-investor will trade at $N$ fixed times in period $(0, T)$. At each trading time
-defined by $t_k=kT/N$, $(k\in \{0,...,N\})$, the trader holds $\xi_{t_k}$ units of
-the asset $X_t$. Hence, at maturity the investor will be left with the difference:
-\[
-\begin{split}
-M_T^N
-&=e^{-rT}f(X_T)-(u(0,x)+\int_0^T\frac{\partial u}{\partial x}(\varphi(t), 
-X_{\varphi_t}))d\widetilde{X}_t\\
-&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\    partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t
-\end{split}
-\]
-where $\varphi(t)=sup\{t_i | t_i\leq t \}$.
-\end{comment}
+See XXXXXX
 
-由于实际交易中每一个时间点上$T_i$的交易都要支付一笔手续费，所以在一定的交易风险范围内，如果能找到一个最小的$N$，就可以最优化交易成本。
+上面的两条渐进性质不仅告诉我们随着 $N$的增大，离散对冲策略的逼近将越来越成功，两者相差的误差将在概率意义下趋于零，而且还告诉我们此误差的渐进表现
+类似于一个系数逐渐变小的布朗运动。特别的，我们从中可知，通过增大 $N$, 在概率意义下，离散化的Delta 对冲策略可以任意程度的逼近完美Delta 对冲策略。
+
+由于实际交易中交易成本一类的问题，所以在一定的交易风险范围内，我们希望能够用最少的交易次数来完成既定的交易策略。
+也即我们希望找到一个最小的交易次数$N$来最优化交易成本。
 假设在$t=T$时，交易的误差可表示为$|P(X) - P_{T_N}(X)|$, 而可接受的最大误差为$\epsilon$，我们将采用蒙特卡洛模拟算法，通过$M$次模拟，计算出
 $|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N)$的值大于一个预先设定的概率值时，我们认为$N$是一个可接受的抽样次数。
 算法\ref{alg:bserror} 给出了我们计算验证一个$N$值的串行算法伪代码。
