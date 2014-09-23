@@ -6,11 +6,10 @@
 #include <immintrin.h>
 #include "inc/misc.h"
 
-#define vecsize 8
-
 #define ALIGNED __attribute__((aligned(64)))
 #define N 100000
-#define Nvec 5200 //tunable, multiple of 8
+
+#define Nvec 192 //tunable, multiple of 8
 #define GUIDED_CHUNK 1 //tunable
 
 const double PI = 3.14159265358979323846; /* pi */
@@ -39,14 +38,15 @@ int main(int argc, char *argv[])
   start_timer();
   for (unsigned long long m = 0; m < M; ++m){
     // one-time MC simulation
-#pragma omp parallel default(none) shared(err, rootdt, dt, nCal)
+#pragma omp parallel default(none) shared(err, rootdt, dt, nCal, X0)
     {
       double NRV[Nvec] ALIGNED; // normal distribution random vector
       double BM[Nvec] ALIGNED; // brownian motion
       double PX[Nvec+1] ALIGNED; // price 
       double errloc = 0.0;
       double BMlast = 0.0;
-      double PXlast = 0.0;
+      double PXlast = X0;
+      double PXend;
       double tmp, Tj, upbd;
       int lastk = -1;
       int i,j,k;
@@ -63,71 +63,93 @@ int main(int argc, char *argv[])
 	      tmp += NRV[j];
 	  }//loop Nvec reduction
 	}//loop k-lastk-1
-	if(i!=0){
-	  BMlast += tmp*rootdt - NRV[Nvec-1]*rootdt;
-	  PXlast = X0*exp(-0.5*SIGMA*SIGMA*(k*Nvec)*dt + SIGMA*BMlast);
-	  BMlast += NRV[Nvec-1]*rootdt;
-	}
+	BMlast += tmp*rootdt;
+	PXlast = X0*exp(-0.5*SIGMA*SIGMA*(k*Nvec)*dt + SIGMA*BMlast);
 	vdRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, Nvec, NRV, 0.0f, 1.0f);
 	BM[0] = BMlast + rootdt*NRV[0];
 	PX[0] = PXlast;
+
 	for (i = 1; i < Nvec; ++i){
-	  tmp = BM[0];
-	  for (int j = 1; j <= i; ++j){
+	  tmp = 0.0;
+	  for (j = 1; j <= i; ++j){
 	    tmp += NRV[j];
 	  }
-	  BM[i] = tmp*rootdt;
+	  BM[i] = tmp*rootdt + BM[0];
 	  PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(k*Nvec+i+1)*dt+SIGMA*BM[i]);
 	}//loop Nvec
 	PX[1] = X0*exp(-0.5*SIGMA*SIGMA*(k*Nvec+1)*dt+SIGMA*BM[0]);
+
 	for (i = 0; i < Nvec; ++i){
 	  j = k*Nvec + i;
 	  Tj= j*(double)T/N;
 	  upbd = (log(PX[i]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
-	  errloc += -1/(sqrt(2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
+	  errloc -= 1/(sqrt(2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
 	}
 	BMlast = BM[Nvec-1];
 	PXlast = PX[Nvec];
 	lastk = k;
       }//loop nCal
+      if(lastk == nCal-1)
+	PXend = PX[Nvec];
+
 #pragma omp single 
-      {
-	tmp = 0.0;
-	for (i = 0; i < k-lastk-1; ++i){
-	  vdRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, Nvec, NRV, 0.0f,1.0f);
+      {	
+	if(left!=0){
+	  tmp = 0.0;
+	  for (i = 0; i < nCal-lastk-1; ++i){
+	    vdRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, Nvec, NRV, 0.0f,1.0f);
 #pragma simd reduction(+:tmp) vectorlengthfor(double) assert
-	  for (j = 0; j < Nvec; ++j){
-	    tmp += NRV[j];
-	  }//loop Nvec reduction
-	}//loop k-lastk-1
-	if(i!=0){
-	  BMlast += tmp*rootdt - NRV[Nvec-1]*rootdt;
-	  PXlast = X0*exp(-0.5*SIGMA*SIGMA*(k*Nvec)*dt + SIGMA*BMlast);
-	  BMlast += NRV[Nvec-1]*rootdt;
-	}
-	vdRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, left, NRV, 0.0f, 1.0f);
-	BM[0] = BMlast + rootdt*NRV[0];
-	PX[0] = PXlast;
-	for (i = 1; i < left; ++i){
-	  tmp = BM[0];
-	  for (int j = 1; j <= i; ++j){
-	    tmp += NRV[j];
+	    for (j = 0; j < Nvec; ++j){
+	      tmp += NRV[j];
+	    }//loop Nvec reduction
+	  }//loop k-lastk-1
+	  BMlast += tmp*rootdt;
+	  PXlast = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Nvec)*dt + SIGMA*BMlast);
+	  
+	  vdRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, left, NRV, 0.0f, 1.0f);
+	  BM[0] = BMlast + rootdt*NRV[0];
+	  PX[0] = PXlast;
+	  for (i = 1; i < left; ++i){
+	    tmp = 0.0;
+	    for (j = 1; j <= i; ++j){
+	      tmp += NRV[j];
+	    }
+	    BM[i] = tmp*rootdt + BM[0];
+	    PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Nvec+i+1)*dt+SIGMA*BM[i]);
+	  }//loop Nvec
+	  PX[1] = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Nvec+1)*dt+SIGMA*BM[0]);
+	  
+	  for (i = 0; i < left; ++i){
+	    j = nCal*Nvec + i;
+	    Tj= j*(double)T/N;
+	    upbd = (log(PX[i]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
+	    errloc -= 1/(sqrt(2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
 	  }
-	  BM[i] = tmp*rootdt;
-	  PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Nvec+i+1)*dt+SIGMA*BM[i]);
-	}//loop Nvec
-	PX[1] = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Nvec+1)*dt+SIGMA*BM[0]);
-	for (i = 0; i < left; ++i){
-	  j = nCal*Nvec + i;
-	  Tj= j*(double)T/N;
-	  upbd = (log(PX[i]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
-	  errloc += -1/(sqrt(2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
-	}
+	  PXend = PX[left];
+	}//if
       }//single
+      
+#pragma omp single nowait
+      {
+	upbd = (log(X0/K) + 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
+	errloc -= X0/(sqrt(2*PI))*vNormalIntegral(upbd);
+      }
+#pragma omp single nowait
+      {
+	upbd = (log(X0/K) - 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
+	errloc += K/(sqrt(2*PI))*vNormalIntegral(upbd);
+      }
+#pragma omp single nowait 
+      {
+	if(PXend > K)
+	  errloc += PXend - K;
+      }
 #pragma omp atomic
       err += errloc;
     }//parallel
-    
+    err = fabs(err);
+    if(err < EPSILON)
+      count++;
   }//MC simulations  
   printf ("time %g ms\n", stop_timer());
   printf("err=%.10lf\n",err);

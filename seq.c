@@ -50,12 +50,10 @@ int main(int argc, char *argv[])
     for (int j = 1; j < N; ++j){
       BM[j] = BM[j-1] + sqrt((real)T/N)*NRV[j];
     }
-
     PX[0] = X0;
     for (int j = 1; j < N+1; ++j){
       PX[j] = X0*exp(-0.5*SIGMA*SIGMA*j*dt+SIGMA*BM[j-1]);
     }
-
     for (int j = 0; j < N; ++j){
       real Tj = j*(real)T/N;
       real upbd = (log(PX[j]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
