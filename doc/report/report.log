@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.3-0.9997.5 (TeX Live 2011) (format=xelatex 2011.7.3)  21 SEP 2014 22:56
+This is XeTeX, Version 3.1415926-2.3-0.9997.5 (TeX Live 2011) (format=xelatex 2011.7.3)  23 SEP 2014 00:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1025,24 +1025,29 @@ LaTeX Info: Redefining \nameref on input line 6.
 章节 1.
 (/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/se-ascii-print.def
 File: se-ascii-print.def 2010/03/01 v1.8 stringenc: Printable ASCII characters
-))
-(./chap2/modeling.tex [1
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 4.
 
-
-]
-章节 2.
-[2
-
-]
-LaTeX Font Info:    Try loading font information for U+msa on input line 46.
- (/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsa.fd
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 46.
+LaTeX Font Info:    Try loading font information for U+msb on input line 4.
 
 (/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-) [3]
+)
+File: chap1/Figures/CPU-Scaling.jpg Graphic file (type QTm)
+
+<use  "chap1/Figures/CPU-Scaling.jpg" >
+File: chap1/Figures/top500Perf.png Graphic file (type QTm)
+ <use  "chap1/Figures/top500Perf.png" >) (./chap2/modeling.tex [1
+
+
+] [2] [3]
+章节 2.
+[4
+
+] [5]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
 put line 172.
 
@@ -1051,29 +1056,30 @@ LaTeX Font Warning: Font shape `EU1/HiraginoSansGB(0)/m/sc' undefined
 (Font)              using `EU1/HiraginoSansGB(0)/m/n' instead on input line 181
 .
 
+) (./chap4/experiment.tex [6] [7] [8]
+章节 3.
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 14.
- [4] [5] [6]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 14.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 17.
+ [9
+
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 17.
  (./report.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 14.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 14.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 17.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 17.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 14.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 17.
  ) 
 Here is how much of TeX's memory you used:
- 21386 strings out of 494150
- 339158 string characters out of 3152950
- 491332 words of memory out of 3000000
- 24302 multiletter control sequences out of 15000+200000
+ 21405 strings out of 494150
+ 339434 string characters out of 3152950
+ 491530 words of memory out of 3000000
+ 24311 multiletter control sequences out of 15000+200000
  6287 words of font info for 44 fonts, out of 3000000 for 9000
  1018 hyphenation exceptions out of 8191
  40i,16n,52p,589b,336s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on report.pdf (6 pages).
+Output written on report.pdf (9 pages).
