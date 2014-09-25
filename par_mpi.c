@@ -24,8 +24,7 @@ typedef char HostNameType[128];
 int main(int argc, char *argv[])
 {
   const double Prob = 0.95;
-  //const int Ninit = initialN();
-  const int Ninit = 74;
+  const int Ninit = initialN();
   int countloc, Mloc, seed, len;
   int stop = 0;
   int rptBuf[msgReportLenghth]; //Mloc, countloc
@@ -46,7 +45,8 @@ int main(int argc, char *argv[])
   if(myRank == bossRank){
     int sumM, sumCount;
     int Nglb = Ninit >> 1, Nnew; 
-    int threshold = 20;
+    int threshold = Ninit/1000;
+    double t0, t1;
     requestList = (MPI_Request*)malloc((mpiWorldSize-1)*sizeof(MPI_Request));
     
 
@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
     }
     
     printf("Ninit = %d\n", Ninit);
+    t0 = MPI_Wtime();
     while(!stop){
       sumM = 0; sumCount = 0;
       for (int src = 1; src < mpiWorldSize; ++src){
@@ -104,7 +105,9 @@ int main(int argc, char *argv[])
       }
       printf("iteration %d: N = %d, count=%d, M=%d, prob=%.5lf\n", msgReportTag-1, Nglb, sumCount, sumM, (double)sumCount/sumM);
       msgReportTag++;
-    }
+    }//while
+    t1 = MPI_Wtime();
+    printf("Time: %.6lfs", t1-t0);
     if(stop==1)
       printf("The N should be at least %d\n", Nglb);
     else if(stop==-1)
@@ -112,8 +115,8 @@ int main(int argc, char *argv[])
   }						
   else{//worker   
     int Nloc = Ninit >> 1, Nnew; 
-    const int nslices = 10;
     const int share = M/(mpiWorldSize-1);
+    int nslices = share>=10? 10 : 1;
     int flag = 0;
     int m;
     
@@ -121,8 +124,8 @@ int main(int argc, char *argv[])
     MPI_Send((void*)&myName,hostNameLen,MPI_CHAR,bossRank,msgNameTag,MPI_COMM_WORLD);
     
     Mloc = share;
+    countloc = 0;
     while(1){
-      countloc = 0;
       if(Mloc == share)
 	seed = (myRank-1)*share;
       else
@@ -131,16 +134,16 @@ int main(int argc, char *argv[])
 	// one-time MC simulation
 	oneTimeSimu_OMP2(&countloc, seed+m, Nloc);
       }//loop MC
-      rptBuf[0] = Mloc;
+      rptBuf[0] = share;
       rptBuf[1] = countloc;
-      printf("iteration %d From %s: count=%d, M=%d\n", msgReportTag-1, myName, countloc, Mloc);
+      printf("iteration %d From %s: count=%d, remaining Mloc=%d\n", msgReportTag-1, myName, countloc, Mloc);
       MPI_Isend(rptBuf, msgReportLenghth, MPI_INT, bossRank, msgReportTag, MPI_COMM_WORLD, &requestNull);
       //MPI_Request_free(&requestNull);
       
       countloc = 0;
       Nloc = Nloc >> 1;
       seed = (myRank-1)*share;
-      for (m = 0; m < Mloc/nslices; ++m){
+      for (m = 0; m < share/nslices; ++m){
 	for (int mm = 0; mm < nslices; ++mm){
 	  oneTimeSimu_OMP2(&countloc, seed+m*nslices+mm, Nloc);
 	}
@@ -153,8 +156,12 @@ int main(int argc, char *argv[])
 	break;
       else{
 	Nnew = shdBuf[0];
-	if(Nnew == Nloc)
-	  Mloc = share - (m+1)*nslices;
+	if(Nnew == Nloc){
+	  if(m!=share/nslices)
+	    Mloc = share - (m+1)*nslices;
+	  else
+	    Mloc = 0;
+	}
 	else
 	  Mloc = share;
       }//eles

@@ -209,7 +209,7 @@ void oneTimeSimu_OMP2(int* count, const int seed, const int N)
     vslDeleteStream(&stream);
   }//parallel
   err = fabs(err);
-  printf("err=%.20lf seed=%d\n",err, seed);
+  //printf("err=%.20lf seed=%d\n",err, seed);
   //printf("count=%d\n", *count);
   if(err < EPSILON)
     *count = *count+1;
