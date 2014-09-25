@@ -6,36 +6,37 @@
 #include <immintrin.h>
 #include "inc/misc.h"
 
-#define real double
 #define ALIGNED __attribute__((aligned(64)))
-#define N 100000
-#define Ncache 5200 //tunable
+#define N 12
+#define Ncache 10000 //tunable
+#define NN 2962 //integral interval 
 //suggested Ncache 1301333 for L2
 //81333 for L1
 #define GUIDED_CHUNK 1 //tunable
 
-real NRV[Ncache] ALIGNED; // normal distribution random vector
-real BM[Ncache] ALIGNED; // brownian motion
-real PX[Ncache+1] ALIGNED; // price  
+double NRV[Ncache] ALIGNED; // normal distribution random vector
+double BM[Ncache] ALIGNED; // brownian motion
+double PX[Ncache+1] ALIGNED; // price  
 
-const real PI = 3.14159265358979323846; /* pi */
-const real X0 = 10; //price of risky asset at t0
-const real SIGMA = 0.5; //volatility of risky asset
-const real K = 12; //strike price of the option
-const real T = 1.0; //muaturity time 
+const double PI = 3.14159265358979323846; /* pi */
+const double X0 = 12; //price of risky asset at t0
+const double SIGMA = 0.5; //volatility of risky asset
+const double K = 10; //strike price of the option
+const double T = 1.0; //muaturity time 
 const unsigned long long M = 1; //Monte Carlo Simulation
-//const real EPSILON = X0*1.0E-2; //threshold value
-const real prob = 0.95;
+//const double EPSILON = X0*1.0E-2; //threshold value
+const double prob = 0.95;
 
-real vNormalIntegral(real b);
+double vNormalIntegral(double b);
 
 int main(int argc, char *argv[])
 {
   unsigned long long count = 0;
-  real EPSILON = X0*1.0E-2;
-  real err;
-  const real dt = T/N;
-  const real rootdt = sqrt((real)T/N);
+  double EPSILON = X0*1.0E-2;
+  double err;
+  double PXend;
+  const double dt = T/N;
+  const double rootdt = sqrt((double)T/N);
   int nCal = N/Ncache;
   const int left = N%Ncache;
   VSLStreamStatePtr stream; 
@@ -50,22 +51,26 @@ int main(int argc, char *argv[])
     PX[0] = X0;
     for (int k = 0; k < nCal; ++k){
       //rootdt:firstprivate???
-#pragma omp parallel default(none) shared(NRV, BM, PX, stream, err, rootdt, dt, k)
+#pragma omp parallel default(none) shared(NRV, BM, PX, stream, err, PXend, rootdt, dt, k)
       {
-	real errloc = 0.0;
-	real upbd, tmp;
+	double errloc = 0.0;
+	double upbd, tmp;
 	//GUIDED_CHUNK too large: load imbalance
 	//GUIDED_CHUNK too small: scheduling overhead
 	//#pragma omp for schedule(guided, GUIDED_CHUNK)
 #pragma omp for schedule(guided) //tunable 
 	for (int i = 1; i < Ncache; ++i){
-	  tmp = BM[0]; 
-#pragma simd reduction(+:tmp) vectorlengthfor(real) assert
+	  //tmp = BM[0];
+	  tmp = 0.0;
+#pragma simd reduction(+:tmp) vectorlengthfor(double) assert
 	  for (int j = 1; j <= i; ++j){
-	    tmp += rootdt*NRV[j];
+	    //tmp += rootdt*NRV[j];
+	    tmp += NRV[j];
 	  }
-	  BM[i] = tmp;
-	  PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(k*Ncache+i+1)*dt+SIGMA*tmp);
+	  //BM[i] = tmp;
+	  BM[i] = BM[0] + tmp*rootdt;
+	  //PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(k*Ncache+i+1)*dt+SIGMA*tmp);
+	  PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(k*Ncache+i+1)*dt+SIGMA*BM[i]);
 	}
 #pragma omp single
 	{
@@ -76,7 +81,7 @@ int main(int argc, char *argv[])
 #pragma omp for reduction(+:err) nowait
 	for (int i = 0; i < Ncache; ++i){
 	  int j = k*Ncache+i;
-	  real Tj = j*(real)T/N;
+	  double Tj = j*(double)T/N;
 	  upbd = (log(PX[i]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
 	  //errloc -= 1/(sqrt(2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
 	  err += -1/(sqrt(2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
@@ -90,90 +95,97 @@ int main(int argc, char *argv[])
       BM[0] = BM[Ncache-1] + rootdt*NRV[0];
       PX[0] = PX[Ncache];
     }//for nCal 
+    PXend = PX[Ncache];
 
-#pragma omp parallel default(none) shared(NRV, BM, PX, err, rootdt, dt, nCal, left)
+#pragma omp parallel default(none) shared(NRV, BM, PX, err, rootdt, dt, nCal, left, PXend)
     {
-      real errloc = 0.0;
-      real upbd, tmp;
-      //GUIDED_CHUNK too large: load imbalance
-      //GUIDED_CHUNK too small: scheduling overhead
-      //#pragma omp for schedule(guided, GUIDED_CHUNK)
+      double errloc = 0.0;
+      double upbd, tmp;
+      if(left!=0){
+	//GUIDED_CHUNK too large: load imbalance
+	//GUIDED_CHUNK too small: scheduling overhead
+	//#pragma omp for schedule(guided, GUIDED_CHUNK)
 #pragma omp for schedule(guided) //tunable
-      for (int i = 1; i < left; ++i){
-	tmp = BM[0];
-#pragma simd reduction(+:tmp) vectorlengthfor(real) assert
-	for (int j = 1; j <= i; ++j){
-	  tmp += rootdt*NRV[j];
+	for (int i = 1; i < left; ++i){
+	  //tmp = BM[0];
+	  tmp = 0.0;
+#pragma simd reduction(+:tmp) vectorlengthfor(double) assert
+	  for (int j = 1; j <= i; ++j){
+	    //tmp += rootdt*NRV[j];
+	    tmp += NRV[j];
+	  }
+	  //BM[i] = tmp;
+	  BM[i] = BM[0] + tmp*rootdt;
+	  //PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Ncache+i+1)*dt+SIGMA*BM[i]);
+	  PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Ncache+i+1)*dt+SIGMA*BM[i]);	
 	}
-	BM[i] = tmp;
-	PX[i+1] = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Ncache+i+1)*dt+SIGMA*BM[i]);
-      }
 #pragma omp single
-      {
-	PX[1] = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Ncache+1)*dt+SIGMA*BM[0]);
+	{
+	  PX[1] = X0*exp(-0.5*SIGMA*SIGMA*(nCal*Ncache+1)*dt+SIGMA*BM[0]);
+	  PXend = PX[left];
+	}
+      
+	//maybe vary the scheduling strategy?
+#pragma omp for reduction(+:err) nowait
+	for (int i = 0; i < left; ++i){
+	  int j = nCal*Ncache+i;
+	  double Tj = j*(double)T/N;
+	  upbd = (log(PX[i]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
+	  err += -1/sqrt((2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
+	}
       }
       
-      //maybe vary the scheduling strategy?
-#pragma omp for reduction(+:err) nowait
-      for (int i = 0; i < left; ++i){
-	int j = nCal*Ncache+i;
-	real Tj = j*(real)T/N;
-	upbd = (log(PX[i]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
-	err += -1/sqrt((2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
-      }
-
-#pragma omp sections 
+#pragma omp single nowait
       {
-#pragma omp section
-	{
-	  upbd = (log(X0/K) + 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
-	  errloc -= X0/(sqrt(2*PI))*vNormalIntegral(upbd);
+	upbd = (log(X0/K) + 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
+	errloc -= X0/(sqrt(2*PI))*vNormalIntegral(upbd);
 #pragma omp atomic
-	  err += errloc;
-	}
-#pragma omp section
-	{
-	  upbd = (log(X0/K) - 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
-	  errloc += K/(sqrt(2*PI))*vNormalIntegral(upbd);
+	err += errloc;
+      }
+#pragma omp single nowait
+      {
+	upbd = (log(X0/K) - 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
+	errloc += K/(sqrt(2*PI))*vNormalIntegral(upbd);
 #pragma omp atomic
-	  err += errloc;
-	}
-#pragma omp section
-	{
-	  if(PX[left] > K){
-	    errloc += PX[left] - K;
+	err += errloc;
+      }
+#pragma omp single nowait
+      {
+	if(PXend > K)
+	    errloc += PXend - K;
 #pragma omp atomic
-	    err += errloc;
-	  }
-	}
-      }//sections
+	err += errloc;
+      }
     }//parallel
 
     err = fabs(err);
     if(err < EPSILON)
       count++;
-  }
+    //printf("err=%.10lf\n",err);
+  }//MC simulation
   printf ("time %g ms\n", stop_timer());
   
-  printf("err=%.10lf\n",err);
+  printf("err=%.20lf\n",err);
   
   printf("count=%llu, M=%llu\n", count, M);
-  printf("%.5g\n", (real)count/(real)M);
+  printf("%.5g\n", (double)count/(double)M);
 
+  vslDeleteStream(&stream);
   return 0;
 }
 
 #ifdef __MIC__
-real vNormalIntegral(real b)
+double vNormalIntegral(double b)
 {
   __declspec(align(64)) __m512d vec_cf0, vec_cf1, vec_cf2, vec_s, vec_stp, vec_exp; 
-  
-  const int NN = 1000; //has to be the multiple of 8
+  //NN/2-1 has to be the multiple of 8
+  //NN = (8*LV+1)*2, LV = 20 -> NN = 322
+  //const int NN = 322; //has to be the multiple of 8
   const int vecsize = 8; 
   const int nCal = (NN/2-1)/vecsize;
   //const int left = NN%vecsize;
-  real a = 0.0f;
-  real s, h, sum = 0.0f;
+  double a = 0.0f;
+  double s, h, sum = 0.0f;
   h = (b-a)/NN;
   // add in the first few terms 
   sum += exp(-a*a/2.0) + 4.0*exp(-(a+h)*(a+h)/2.0);
@@ -210,11 +222,11 @@ real vNormalIntegral(real b)
   return sum;
 }
 #else
-real vNormalIntegral(real b)
+double vNormalIntegral(double b)
 {
-  const int NN = 1000;
-  real a = 0.0f;
-  real s, h, sum = 0.0f;
+  //const int NN = 322;//corresponds to vNormalIntegral
+  double a = 0.0f;
+  double s, h, sum = 0.0f;
   h = (b-a)/NN;
   // add in the first few terms 
   sum += exp(-a*a/2.0) + 4.0*exp(-(a+h)*(a+h)/2.0);

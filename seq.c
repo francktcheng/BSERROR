@@ -6,18 +6,19 @@
 
 #define real double
 #define ALIGNED __attribute__((aligned(64)))
-#define N 100000
+#define N 37
+#define NN 2962 //integral interval
 
 real NRV[N] ALIGNED; //normal distribution random vector
 real BM[N] ALIGNED; //brownian motion
 real PX[N+1] ALIGNED; //price
 
 const real PI = 3.14159265358979323846; /* pi */
-const real X0 = 10; //price of risky asset at t0
+const real X0 = 12; //price of risky asset at t0
 const real SIGMA = 0.5; //volatility of risky asset
-const real K = 12; //strike price of the option
+const real K = 10; //strike price of the option
 const real T = 1.0; //muaturity time 
-const unsigned long long M = 1; //Monte Carlo Simulation
+const unsigned long long M = 2; //Monte Carlo Simulation
 //const real EPSILON = 0.5; // threshold value
 const real prob = 0.95;
 
@@ -26,7 +27,7 @@ real NormalIntegral(real b);
 int main(int argc, char *argv[])
 {
   unsigned long long count = 0;
-  real EPSILON = X0*1.0E-2;
+  real EPSILON = X0*1.0E-1;
   real err;
   real upbd1, upbd2;
   const real dt = T/N;
@@ -39,10 +40,10 @@ int main(int argc, char *argv[])
   //For each thread, initialize a random number stream
   VSLStreamStatePtr stream; //stream for random numbers
   //int seed = omp_get_thread_num();
-  int seed = 0;
+  int seed = 2;
   int errcode = vslNewStream(&stream, VSL_BRNG_MT2203, seed);
 
-  start_timer();
+  //start_timer();
   for (unsigned long long i = 0; i < M; ++i){
     err = 0.0;
     vdRngGaussian(VSL_RNG_METHOD_GAUSSIAN_BOXMULLER, stream, N, NRV, 0.0f, 1.0f);
@@ -60,21 +61,25 @@ int main(int argc, char *argv[])
       real Tj = j*(real)T/N;
       real upbd = (log(PX[j]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
       err -= 1/(sqrt(2*PI))*(PX[j+1]-PX[j])*NormalIntegral(upbd); 
+      //printf("de=%.10lf\n",1/(sqrt(2*PI))*(PX[j+1]-PX[j])*NormalIntegral(upbd));
     }
-    //printf("err=%.20lf  ",err);	
     if (PX[N] > K)
       err += PX[N] - K;
+
     upbd1 = (log(X0/K) + 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
     upbd2 = (log(X0/K) - 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
     err += K/(sqrt(2*PI))*NormalIntegral(upbd2) - X0/(sqrt(2*PI))*NormalIntegral(upbd1);
     err = fabs(err);
     if(err < EPSILON)
       count++;
+    printf("i=%llu: err=%.20lf\n", i, err);
   }
-  printf("err=%.10lf\n",err);
-  printf ("time %g ms\n",stop_timer());
+  printf("last time err=%.20lf\n",err);
+  //printf ("time %g ms\n",stop_timer());
   printf("count=%llu, M=%llu\n",count, M);
   printf("%.5g\n", (real)count/(real)M);
+  
+  vslDeleteStream(&stream);
   return 0;
 }
 
@@ -82,7 +87,7 @@ real NormalIntegral(real b)
 {
   //if(b < -10.0) return  0.0f;
   //if(b > 10.0) return 1.0f;
-  int NN = 10000;
+  //const int NN = 322;//correspond to vNormalIntegral
   real a = 0.0f;
   real s, h, sum = 0.0f;
   h = (b-a)/NN;
