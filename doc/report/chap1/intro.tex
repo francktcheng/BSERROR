@@ -33,13 +33,24 @@ exaflop时代($10^{18}$次浮点运算)也即将到来。但是目前能够有�
 	\label{fig:top500Perf}
 \end{figure}
 但是这些峰值运算速度仅仅代表了理论上一台超算集群能够达到的速度，其测试结果也是通过相对简单地基准程序(benchmark)获得的，而真正复杂的应用程序大多数
-还未能在超算集群上跑出好的使用效率。目前的应用
-
+还未能在超算集群上跑出好的使用效率。制约在超算上展开大规模应用的因素有以下几点。
+\begin{enumerate}
+    \item 缺少能极大地提供并行性的算法
+	\item 数据间的通信受制于内存读取速度和处理器间的连接速度。
+	\item 从串行编程模型转到并行编程的学习成本
+\end{enumerate}
+算法的并行性是最为重要的一点，目前的大多数数学模型和对应的算法没有足够的并行性能够充分发挥超算集群的潜力。我们需要的是面向并行建立新的数学模型和
+算法来解决实际问题。同时我们的编程模型和编程语言也需要相应地升级，使之能更自然和原生地支持并行架构。这一点也被认为是同向Exascale计算的关键。
+而对于第二点，目前出现的CPU/coprocessor架构已经迈出了重要的一步。Nvidia公司的GPU和GPGPU编程模型可以充分利用GPU的充足带宽(bandwidth)优化数据并行性德问题
+(Data Parallel, SIMD)，而Intel公司则相应地推出了自己的协处理器Xeon Phi (Many Integrated Core Architecture, MIC Architecture)。Xeon Phi同样拥有强大的
+带宽(382G/s)。此外Xeon Phi在编程难度上相比于GPGPU更有利于初学者掌握，实际上用户可以相对简单地从CPU的串行程序过渡到Xeon Phi的并行代码上。
+本课题的应用即在MIC架构上展开，并在数据通信等方面进行优化。
 
 % section 高兴能计算的产生和发展 (end)
 
 \section{金融领域的超算应用} % (fold)
 \label{sec:intro-finance}
+
 
 % section 金融领域的超算应用 (end)
 
