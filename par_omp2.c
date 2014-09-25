@@ -7,16 +7,16 @@
 #include "inc/misc.h"
 
 #define ALIGNED __attribute__((aligned(64)))
-#define N 100000
-#define NN 322 //integral interval
+#define N 12
+#define NN 2962//integral interval
 
-#define Nvec 192 //tunable, multiple of 8
+#define Nvec 2 //tunable, multiple of 8
 #define GUIDED_CHUNK 1 //tunable
 
 const double PI = 3.14159265358979323846; /* pi */
-const double X0 = 10; //price of risky asset at t0
+const double X0 = 12; //price of risky asset at t0
 const double SIGMA = 0.5; //volatility of risky asset
-const double K = 12; //strike price of the option
+const double K = 10; //strike price of the option
 const double T = 1.0; //muaturity time 
 const unsigned long long M = 1; //Monte Carlo Simulation
 //const double EPSILON = X0*1.0E-2; //threshold value
@@ -27,19 +27,19 @@ double vNormalIntegral(double b);
 int main(int argc, char *argv[])
 {
   unsigned long long count = 0;
-  double EPSILON = X0*1.0E-2;
-  double err = 0.0;
+  double EPSILON = X0*1.0E-1;
+  double err = 0.0; 
+  double PXend; //better be a shared variable!!!
   const double dt = T/N;
   const double rootdt = sqrt((double)T/N);
   int nCal = N/Nvec;
   const int left = N%Nvec;
-  VSLStreamStatePtr stream; 
-  int errcode = vslNewStream(&stream, VSL_BRNG_MT2203, 0);//seed=0
 
   start_timer();
   for (unsigned long long m = 0; m < M; ++m){
+    err = 0.0; //todo: resolve the random number generation problem
     // one-time MC simulation
-#pragma omp parallel default(none) shared(err, rootdt, dt, nCal, X0)
+#pragma omp parallel default(none) shared(err, PXend, rootdt, dt, nCal, X0, m)
     {
       double NRV[Nvec] ALIGNED; // normal distribution random vector
       double BM[Nvec] ALIGNED; // brownian motion
@@ -47,12 +47,11 @@ int main(int argc, char *argv[])
       double errloc = 0.0;
       double BMlast = 0.0;
       double PXlast = X0;
-      double PXend;
       double tmp, Tj, upbd;
       int lastk = -1;
       int i,j,k;
       VSLStreamStatePtr stream;
-      int errcode = vslNewStream(&stream, VSL_BRNG_MT2203, 0);//seed=0
+      int errcode = vslNewStream(&stream, VSL_BRNG_MT2203, m);//seed=m
 #pragma omp for schedule(guided, GUIDED_CHUNK) nowait
       for (k = 0; k < nCal; ++k){
 	//update BM to the questioned position
@@ -90,7 +89,7 @@ int main(int argc, char *argv[])
 	PXlast = PX[Nvec];
 	lastk = k;
       }//loop nCal
-      if(lastk == nCal-1)
+      if(lastk == nCal-1 && !left)
 	PXend = PX[Nvec];
 
 #pragma omp single 
@@ -147,13 +146,17 @@ int main(int argc, char *argv[])
       }
 #pragma omp atomic
       err += errloc;
+
+      vslDeleteStream(&stream);
     }//parallel
+
     err = fabs(err);
     if(err < EPSILON)
       count++;
+    //printf("err=%.10lf\n",err);
   }//MC simulations  
   printf ("time %g ms\n", stop_timer());
-  printf("err=%.10lf\n",err);
+  printf("err=%.20lf\n",err);
   printf("count=%llu, M=%llu\n", count, M);
   printf("%.5g\n", (double)count/(double)M);
 
