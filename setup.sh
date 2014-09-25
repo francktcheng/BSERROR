@@ -27,4 +27,6 @@
 #mpiicc -Wall -std=c99 -mkl -openmp par_mpi.c -O2 -o mpi.mic -mmic 
 #mpiicc -Wall -std=c99 -mkl -openmp par_mpi.c -O2 -o mpi.cpu 
 
-    mpirun -np 1 -host localhost ./mpi.cpu : -np 1 -host mic0 ./mpi.mic : -np 1 -host mic1 ./mpi.mic
+    mpirun -np 1 -host localhost ./mpi.cpu : \
+    -np 1 -host mic0 -env OMP_NUM_THREADS 60 -env KMP_PLACE_THREADS 60c,1t ./mpi.mic : \
+    -np 1 -host mic1 -env OMP_NUM_THREADS 60 -env KMP_PLACE_THREADS 60c,1t ./mpi.mic
