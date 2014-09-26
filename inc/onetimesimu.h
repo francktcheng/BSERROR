@@ -215,13 +215,13 @@ void oneTimeSimu_OMP2(int* count, const int seed, const int N)
     *count = *count+1;
 }
 
-int initialN(void)
+int initialN(const double prob)
 {
   const double EPSILON = X0*relEPSILON; //threshold value 
   double tmp;
   tmp = (log(X0/K)+0.5*SIGMA*SIGMA*T)*sqrt(2*PI);
   tmp = pow(T,0.25)*sqrt(SIGMA/tmp);
-  tmp = log(0.05*exp(0.25)/tmp);
+  tmp = log((1.0-prob)*exp(0.25)/tmp);
   tmp = tmp*tmp*tmp;
   return (int)ceil(tmp*(-8.0)*exp(3.0)*X0*X0*16*exp(SIGMA*SIGMA)/(27.0*EPSILON*EPSILON*PI));
 }

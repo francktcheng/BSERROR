@@ -24,8 +24,9 @@ typedef char HostNameType[128];
 int main(int argc, char *argv[])
 {
   const double Prob = 0.95;
-  const int Ninit = initialN();
+  const int Ninit = initialN(Prob);
   int countloc, Mloc, seed, len;
+  int Nloc, Nnew, Nup, Ndown; 
   int stop = 0;
   int rptBuf[msgReportLenghth]; //Mloc, countloc
   int shdBuf[msgSchedLength]; //Nloc, stop
@@ -44,7 +45,6 @@ int main(int argc, char *argv[])
   
   if(myRank == bossRank){
     int sumM, sumCount;
-    int Nglb = Ninit >> 1, Nnew; 
     int threshold = Ninit/1000;
     double t0, t1;
     requestList = (MPI_Request*)malloc((mpiWorldSize-1)*sizeof(MPI_Request));
@@ -58,6 +58,9 @@ int main(int argc, char *argv[])
       printf("worker:\t%16s has joined.\n",workerName[src-1]);
     }
     
+    
+    Ndown = 0; Nup = Ninit;
+    Nloc = Ninit >> 1;
     printf("Ninit = %d\n", Ninit);
     t0 = MPI_Wtime();
     while(!stop){
@@ -70,7 +73,7 @@ int main(int argc, char *argv[])
       Mloc = M%(mpiWorldSize-1);
       seed = M-Mloc;
       for (int m = 0; m < Mloc; ++m){
-	oneTimeSimu_OMP2(&countloc, seed+m, Nglb);
+	oneTimeSimu_OMP2(&countloc, seed+m, Nloc);
       }//loop MC
 
       sumM = Mloc; sumCount = countloc; 
@@ -83,38 +86,39 @@ int main(int argc, char *argv[])
 	//printf("From the process %d: count = %d, M = %d\n", index+1, rptBuf[1], rptBuf[0]);
       }
       if ((double)sumCount/sumM > Prob){
-	Nnew = Nglb >> 1;
-	if(abs(Nglb-Nnew) < threshold){
-	  printf("Nglb=%d, Nnew=%d, diff=%d\n", Nglb, Nnew, abs(Nglb-Nnew));
+	Nup = Nloc;
+	Nnew = (Nup+Ndown) >> 1;
+	if(abs(Nloc-Nnew) < threshold){
+	  printf("Nloc=%d, Nnew=%d, diff=%d\n", Nloc, Nnew, abs(Nloc-Nnew));
 	  stop = 1;
 	}
       }
       else{
-	Nnew = (Nglb+Ninit)/2;
-	if(abs(Nnew-Nglb) < threshold){
-	  printf("Nglb=%d, Nnew=%d, diff=%d\n", Nglb, Nnew, abs(Nglb-Nnew));
+	Ndown = Nloc;
+	Nnew = (Nup+Ndown) >> 1;
+	if(abs(Nnew-Nloc) < threshold){
+	  printf("Nloc=%d, Nnew=%d, diff=%d\n", Nloc, Nnew, abs(Nloc-Nnew));
 	  stop = -1;
 	}
       }
-      Nglb = Nnew;
-      shdBuf[0] = Nglb;
+      Nloc = Nnew;
+      shdBuf[0] = Nloc;
       shdBuf[1] = stop;
       for (int dest = 1; dest < mpiWorldSize; ++dest){
 	MPI_Isend((void*)&shdBuf[0], msgSchedLength, MPI_INT, dest, msgSchedTag, MPI_COMM_WORLD, &requestNull);
 	//MPI_Request_free(&requestNull);
       }
-      printf("iteration %d: N = %d, count=%d, M=%d, prob=%.5lf\n", msgReportTag-1, Nglb, sumCount, sumM, (double)sumCount/sumM);
+      printf("iteration %d: N = %d, count=%d, M=%d, prob=%.5lf\n", msgReportTag-1, Nloc, sumCount, sumM, (double)sumCount/sumM);
       msgReportTag++;
     }//while
     t1 = MPI_Wtime();
-    printf("Time: %.6lfs", t1-t0);
+    printf("Time: %.6lfs\n", t1-t0);
     if(stop==1)
-      printf("The N should be at least %d\n", Nglb);
+      printf("The N should be at least %d\n", Nloc);
     else if(stop==-1)
       printf("Something must be wrong. We don't find any approriate N.\n");
   }						
   else{//worker   
-    int Nloc = Ninit >> 1, Nnew; 
     const int share = M/(mpiWorldSize-1);
     int nslices = share>=10? 10 : 1;
     int flag = 0;
@@ -123,6 +127,8 @@ int main(int argc, char *argv[])
     MPI_Get_processor_name(&myName[0], &len);
     MPI_Send((void*)&myName,hostNameLen,MPI_CHAR,bossRank,msgNameTag,MPI_COMM_WORLD);
     
+    Ndown = 0; Nup = Ninit;
+    Nloc = Ninit >> 1;
     Mloc = share;
     countloc = 0;
     while(1){
@@ -141,7 +147,7 @@ int main(int argc, char *argv[])
       //MPI_Request_free(&requestNull);
       
       countloc = 0;
-      Nloc = Nloc >> 1;
+      Nloc = (Nloc+Nup) >> 1;//tends to calculate a heavier task in advance
       seed = (myRank-1)*share;
       for (m = 0; m < share/nslices; ++m){
 	for (int mm = 0; mm < nslices; ++mm){
@@ -156,6 +162,11 @@ int main(int argc, char *argv[])
 	break;
       else{
 	Nnew = shdBuf[0];
+	if(Nnew < Nloc)
+	  Nup = Nloc;
+	else 
+	  Ndown = Nloc;
+
 	if(Nnew == Nloc){
 	  if(m!=share/nslices)
 	    Mloc = share - (m+1)*nslices;
