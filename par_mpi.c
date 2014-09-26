@@ -47,7 +47,6 @@ int main(int argc, char *argv[])
     int sumM, sumCount;
     int threshold = 2;//Ninit/1000;
     int lastvalid = -1;
-    int Nprecal;
     double t0, t1;
     requestList = (MPI_Request*)malloc((mpiWorldSize-1)*sizeof(MPI_Request));
     
@@ -122,6 +121,7 @@ int main(int argc, char *argv[])
     int nslices = share>=10? 10 : 1;
     int flag = 0;
     int m;
+    int Nprecal;
     
     MPI_Get_processor_name(&myName[0], &len);
     MPI_Send((void*)&myName,hostNameLen,MPI_CHAR,bossRank,msgNameTag,MPI_COMM_WORLD);
