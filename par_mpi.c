@@ -173,9 +173,11 @@ int main(int argc, char *argv[])
 	  else
 	    Mloc = 0;
 	}
-	else
+	else{
 	  Mloc = share;
-      }//eles
+	  countloc = 0;
+	}
+      }//else
       msgReportTag++;
     }
   }//else worker 
