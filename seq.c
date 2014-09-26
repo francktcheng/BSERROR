@@ -19,15 +19,15 @@ const real SIGMA = 0.5; //volatility of risky asset
 const real K = 10; //strike price of the option
 const real T = 1.0; //muaturity time 
 const unsigned long long M = 2; //Monte Carlo Simulation
-//const real EPSILON = 0.5; // threshold value
+const real relEPSILON = 1.0E-1; // threshold value
 const real prob = 0.95;
 
-real NormalIntegral(real b);
+real NormalIntegral(real);
 
 int main(int argc, char *argv[])
 {
   unsigned long long count = 0;
-  real EPSILON = X0*1.0E-1;
+  const real EPSILON = X0*relEPSILON;
   real err;
   real upbd1, upbd2;
   const real dt = T/N;
@@ -106,3 +106,5 @@ real NormalIntegral(real b)
   sum = 0.5*sqrt(2*PI) + h*sum/3.0;
   return sum;
 }
+
+
