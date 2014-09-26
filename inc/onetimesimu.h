@@ -9,12 +9,12 @@ const double X0 = 12; //price of risky asset at t0
 const double SIGMA = 0.5; //volatility of risky asset
 const double K = 10; //strike price of the option
 const double T = 1.0; //muaturity time 
-const double relEPSILON = 1.0E-1; //relative proportion to X0
+const double relEPSILON = 5.0E-2; //relative proportion to X0
 
 
 //NN/2-1 has to be the multiple of 8
 //NN = (8*LV+1)*2, LV = 20 -> NN = 322 
-const int NN = 2962; //integral intervals
+const int NN = 16002;//2962; //integral intervals
 const int GUIDED_CHUNK = 1; 
 
 
@@ -90,14 +90,13 @@ double vNormalIntegral(double b)
 void oneTimeSimu_OMP2(int* count, const int seed, const int N)
 {
   double err = 0.0;
-  double PXend; //better a shared variable!!!
   const double dt = T/N;
   const double rootdt = sqrt((double)T/N);
   const int nCal = N/Nvec;
   const int left = N%Nvec;
   const double EPSILON = X0*relEPSILON; //threshold value 
   
-#pragma omp parallel default(none) shared(err, PXend, rootdt, dt, nCal, X0, seed)
+#pragma omp parallel default(none) shared(err, rootdt, dt, nCal, X0, seed)
   {
     double NRV[Nvec] ALIGNED; // normal distribution random vector
     double BM[Nvec] ALIGNED; // brownian motion
@@ -148,8 +147,10 @@ void oneTimeSimu_OMP2(int* count, const int seed, const int N)
       lastk = k;
     }//loop nCal
     
-    if(lastk == nCal-1 && !left)
-      PXend = PX[Nvec];
+    if(lastk == nCal-1 && !left){
+      if(PX[Nvec] > K)
+	errloc += PX[Nvec] - K;
+    }
     
 #pragma omp single 
     {	
@@ -184,7 +185,8 @@ void oneTimeSimu_OMP2(int* count, const int seed, const int N)
 	  upbd = (log(PX[i]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
 	  errloc -= 1/(sqrt(2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
 	}
-	PXend = PX[left];
+	if(PX[left] > K)
+	  errloc += PX[left] - K;
       }//if
     }//single
 
@@ -197,11 +199,6 @@ void oneTimeSimu_OMP2(int* count, const int seed, const int N)
     {
       upbd = (log(X0/K) - 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
       errloc += K/(sqrt(2*PI))*vNormalIntegral(upbd);
-    }
-#pragma omp single nowait 
-    {
-      if(PXend > K)
-	errloc += PXend - K;
     }
 #pragma omp atomic
     err += errloc;

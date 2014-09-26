@@ -7,10 +7,10 @@
 #include "inc/misc.h"
 
 #define ALIGNED __attribute__((aligned(64)))
-#define N 12
-#define NN 2962//integral interval
+#define N 7
+#define NN 16002//integral interval
 
-#define Nvec 2 //tunable, multiple of 8
+#define Nvec 3 //tunable, multiple of 8
 #define GUIDED_CHUNK 1 //tunable
 
 const double PI = 3.14159265358979323846; /* pi */
@@ -18,7 +18,7 @@ const double X0 = 12; //price of risky asset at t0
 const double SIGMA = 0.5; //volatility of risky asset
 const double K = 10; //strike price of the option
 const double T = 1.0; //muaturity time 
-const unsigned long long M = 1; //Monte Carlo Simulation
+const unsigned long long M = 10; //Monte Carlo Simulation
 //const double EPSILON = X0*1.0E-2; //threshold value
 const double prob = 0.95;
 
@@ -27,9 +27,8 @@ double vNormalIntegral(double b);
 int main(int argc, char *argv[])
 {
   unsigned long long count = 0;
-  double EPSILON = X0*1.0E-1;
+  double EPSILON = X0*5.0E-2;
   double err = 0.0; 
-  double PXend; //better be a shared variable!!!
   const double dt = T/N;
   const double rootdt = sqrt((double)T/N);
   int nCal = N/Nvec;
@@ -39,7 +38,7 @@ int main(int argc, char *argv[])
   for (unsigned long long m = 0; m < M; ++m){
     err = 0.0; //todo: resolve the random number generation problem
     // one-time MC simulation
-#pragma omp parallel default(none) shared(err, PXend, rootdt, dt, nCal, X0, m)
+#pragma omp parallel default(none) shared(err, rootdt, dt, nCal, X0, m)
     {
       double NRV[Nvec] ALIGNED; // normal distribution random vector
       double BM[Nvec] ALIGNED; // brownian motion
@@ -89,9 +88,11 @@ int main(int argc, char *argv[])
 	PXlast = PX[Nvec];
 	lastk = k;
       }//loop nCal
-      if(lastk == nCal-1 && !left)
-	PXend = PX[Nvec];
-
+      if(lastk == nCal-1 && !left){
+	if(PX[Nvec] > K)
+	  errloc += PX[Nvec] - K;
+      }
+	
 #pragma omp single 
       {	
 	if(left!=0){
@@ -125,7 +126,8 @@ int main(int argc, char *argv[])
 	    upbd = (log(PX[i]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
 	    errloc -= 1/(sqrt(2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
 	  }
-	  PXend = PX[left];
+	  if(PX[left] > K)
+	    errloc += PX[left] - K;
 	}//if
       }//single
       
@@ -138,11 +140,6 @@ int main(int argc, char *argv[])
       {
 	upbd = (log(X0/K) - 0.5*SIGMA*SIGMA*T)/(SIGMA*sqrt(T));
 	errloc += K/(sqrt(2*PI))*vNormalIntegral(upbd);
-      }
-#pragma omp single nowait 
-      {
-	if(PXend > K)
-	  errloc += PXend - K;
       }
 #pragma omp atomic
       err += errloc;

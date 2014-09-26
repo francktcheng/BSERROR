@@ -8,13 +8,13 @@
 #include "inc/misc.h"
 #include "inc/onetimesimu.h"
 
-#define M 3 //Monte Carlo simulation
+#define M 100 //Monte Carlo simulation
 
 // constants for MPI communication
 const int bossRank = 0;
 const int msgReportLenghth = 2; //Mloc, countloc
 int msgReportTag = 2; //variable to control the reception of different iteration
-const int msgSchedLength = 2; //Nloc, go 
+const int msgSchedLength = 2; //Nloc, stop
 const int msgSchedTag = 1; 
 const int msgNameTag = 0;
 const int hostNameLen = 128;
@@ -24,7 +24,7 @@ typedef char HostNameType[128];
 int main(int argc, char *argv[])
 {
   const double Prob = 0.95;
-  const int Ninit = initialN(Prob);
+  const int Ninit = 2000;//initialN(Prob);
   int countloc, Mloc, seed, len;
   int Nloc, Nnew, Nup, Ndown; 
   int stop = 0;
@@ -45,7 +45,8 @@ int main(int argc, char *argv[])
   
   if(myRank == bossRank){
     int sumM, sumCount;
-    int threshold = Ninit/1000;
+    int threshold = 2;//Ninit/1000;
+    int lastvalid = -1;
     double t0, t1;
     requestList = (MPI_Request*)malloc((mpiWorldSize-1)*sizeof(MPI_Request));
     
@@ -86,21 +87,19 @@ int main(int argc, char *argv[])
 	//printf("From the process %d: count = %d, M = %d\n", index+1, rptBuf[1], rptBuf[0]);
       }
       if ((double)sumCount/sumM > Prob){
+	lastvalid = Nloc;
 	Nup = Nloc;
 	Nnew = (Nup+Ndown) >> 1;
-	if(abs(Nloc-Nnew) < threshold){
-	  printf("Nloc=%d, Nnew=%d, diff=%d\n", Nloc, Nnew, abs(Nloc-Nnew));
-	  stop = 1;
-	}
       }
       else{
 	Ndown = Nloc;
 	Nnew = (Nup+Ndown) >> 1;
-	if(abs(Nnew-Nloc) < threshold){
-	  printf("Nloc=%d, Nnew=%d, diff=%d\n", Nloc, Nnew, abs(Nloc-Nnew));
-	  stop = -1;
-	}
       }
+      if(abs(Nup-Ndown) < threshold){
+	printf("Nloc=%d, Nnew=%d, diff=%d\n", Nloc, Nnew, abs(Nloc-Nnew));
+	stop = 1;
+      }
+      printf("iteration %d: N = %d, count=%d, M=%d, prob=%.5lf\n", msgReportTag-1, Nloc, sumCount, sumM, (double)sumCount/sumM);
       Nloc = Nnew;
       shdBuf[0] = Nloc;
       shdBuf[1] = stop;
@@ -108,14 +107,13 @@ int main(int argc, char *argv[])
 	MPI_Isend((void*)&shdBuf[0], msgSchedLength, MPI_INT, dest, msgSchedTag, MPI_COMM_WORLD, &requestNull);
 	//MPI_Request_free(&requestNull);
       }
-      printf("iteration %d: N = %d, count=%d, M=%d, prob=%.5lf\n", msgReportTag-1, Nloc, sumCount, sumM, (double)sumCount/sumM);
       msgReportTag++;
     }//while
     t1 = MPI_Wtime();
     printf("Time: %.6lfs\n", t1-t0);
-    if(stop==1)
-      printf("The N should be at least %d\n", Nloc);
-    else if(stop==-1)
+    if(lastvalid!=-1)
+      printf("The N should be at least %d\n", lastvalid);
+    else
       printf("Something must be wrong. We don't find any approriate N.\n");
   }						
   else{//worker   
@@ -132,33 +130,29 @@ int main(int argc, char *argv[])
     Mloc = share;
     countloc = 0;
     while(1){
-      if(Mloc == share)
-	seed = (myRank-1)*share;
-      else
-	seed = (myRank-1)*share + share - Mloc;
+      seed = (myRank-1)*share + share - Mloc;
       for (m = 0; m < Mloc; ++m){
 	// one-time MC simulation
 	oneTimeSimu_OMP2(&countloc, seed+m, Nloc);
       }//loop MC
       rptBuf[0] = share;
       rptBuf[1] = countloc;
-      printf("iteration %d From %s: count=%d, remaining Mloc=%d\n", msgReportTag-1, myName, countloc, Mloc);
+      printf("iteration %d From %s: count=%d, remaining Mloc=%d, Nloc=%d\n", msgReportTag-1, myName, countloc, Mloc, Nloc);
       MPI_Isend(rptBuf, msgReportLenghth, MPI_INT, bossRank, msgReportTag, MPI_COMM_WORLD, &requestNull);
       //MPI_Request_free(&requestNull);
       
       countloc = 0;
-      Nloc = (Nloc+Nup) >> 1;//tends to calculate a heavier task in advance
       seed = (myRank-1)*share;
       for (m = 0; m < share/nslices; ++m){
 	for (int mm = 0; mm < nslices; ++mm){
-	  oneTimeSimu_OMP2(&countloc, seed+m*nslices+mm, Nloc);
-	}
+	  oneTimeSimu_OMP2(&countloc, seed+m*nslices+mm, (Nloc+Nup) >> 1);
+	}//tends to calculate a heavier task in advance
 	MPI_Iprobe(bossRank, msgSchedTag, MPI_COMM_WORLD, &flag, &mpiStatus);
 	if(flag)
 	  break;
       }
       MPI_Recv(shdBuf, msgSchedLength, MPI_INT, bossRank, msgSchedTag, MPI_COMM_WORLD, &mpiStatus);
-      if(shdBuf[1]==1 || shdBuf[1]==-1)
+      if(shdBuf[1]==1)
 	break;
       else{
 	Nnew = shdBuf[0];
@@ -177,6 +171,7 @@ int main(int argc, char *argv[])
 	  Mloc = share;
 	  countloc = 0;
 	}
+	Nloc = Nnew;
       }//else
       msgReportTag++;
     }
