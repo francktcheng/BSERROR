@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     int sumM, sumCount;
     int threshold = 2;//Ninit/1000;
     int lastvalid = -1;
+    int Nprecal;
     double t0, t1;
     requestList = (MPI_Request*)malloc((mpiWorldSize-1)*sizeof(MPI_Request));
     
@@ -143,9 +144,10 @@ int main(int argc, char *argv[])
       
       countloc = 0;
       seed = (myRank-1)*share;
+      Nprecal = (Nloc+Ndown) >> 1;
       for (m = 0; m < share/nslices; ++m){
 	for (int mm = 0; mm < nslices; ++mm){
-	  oneTimeSimu_OMP2(&countloc, seed+m*nslices+mm, (Nloc+Nup) >> 1);
+	  oneTimeSimu_OMP2(&countloc, seed+m*nslices+mm, Nprecal);
 	}//tends to calculate a heavier task in advance
 	MPI_Iprobe(bossRank, msgSchedTag, MPI_COMM_WORLD, &flag, &mpiStatus);
 	if(flag)
@@ -161,7 +163,7 @@ int main(int argc, char *argv[])
 	else 
 	  Ndown = Nloc;
 
-	if(Nnew == Nloc){
+	if(Nnew == Nprecal){
 	  if(m!=share/nslices)
 	    Mloc = share - (m+1)*nslices;
 	  else
