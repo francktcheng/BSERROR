@@ -6,8 +6,8 @@
 
 #define real double
 #define ALIGNED __attribute__((aligned(64)))
-#define N 37
-#define NN 2962 //integral interval
+#define N 7
+#define NN 16002 //integral interval
 
 real NRV[N] ALIGNED; //normal distribution random vector
 real BM[N] ALIGNED; //brownian motion
@@ -18,8 +18,8 @@ const real X0 = 12; //price of risky asset at t0
 const real SIGMA = 0.5; //volatility of risky asset
 const real K = 10; //strike price of the option
 const real T = 1.0; //muaturity time 
-const unsigned long long M = 2; //Monte Carlo Simulation
-const real relEPSILON = 1.0E-1; // threshold value
+const unsigned long long M = 10; //Monte Carlo Simulation
+const real relEPSILON = 5.0E-2; // threshold value
 const real prob = 0.95;
 
 real NormalIntegral(real);

@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 	  upbd = (log(PX[i]/K)+0.5*SIGMA*SIGMA*(T-Tj))/(SIGMA*sqrt(T-Tj));
 	  err += -1/sqrt((2*PI))*(PX[i+1]-PX[i])*vNormalIntegral(upbd);
 	}
-      }
+      }//if
       
 #pragma omp single nowait
       {
