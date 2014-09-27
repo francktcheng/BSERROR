@@ -1,67 +1,70 @@
 \chapter{参数选择及收敛条件}
 \label{chp:3}
-我们进行 M 次模特卡罗模拟实验，对于每一次模拟，选取某个 $N$, 计算相应的误差$M_T^N$, 我们希望该误差小于可接受的最大误差 $\epsilon=X0*10^{-3}$。 
-我们用蒙特卡洛的方法计算 $M_T^N\leq \epsilon$ 的概率，并希望该概率能超过某一个特定值: $Prob=95\%$。 
-在这个问题中 $M$ 和 $N$ 的初始值以及其更新方法至关重要。 对$M$ 而言， 一方面较大的 $M$ 会增大模特卡罗方法以及通过此方法计算出来的概率的可信度，另一方面
-$M$ 过大，将不可避免的造成更高的资源和硬件的要求，如何在保持一定可行度的条件下选择一个较小的 $M$ 需要一个精巧的方法。
-对 $N$ 而言，较大的 $N$ 会使得逼近更准确，从而误差 $M_T^N$ 较小，但也会造成资源的浪费和迭代收敛的过程冗长。
-较大或者较小的 $M$ 和 $N$ 的初始值将导致收敛缓慢甚至不收敛。
-如何选择合适的 $M$ 和 $N$ 的初始值，
+我们进行 M 次模特卡罗模拟实验， 对于每一次模拟， 选取某个$N$， 计算相应的误差$M_T^N$， 我们希望该误差小于可接受的最大误差$\epsilon=X0*10^{-2}$。 
+我们用蒙特卡洛的方法计算 $M_T^N\leq \epsilon$ 的概率， 并希望该概率能超过某一个特定值：$Prob=95\%$。 
+在这个问题中$M$和$N$的初始值以及其更新方法至关重要。 对$M$而言， 一方面较大的$M$会增大模特卡罗方法以及通过此方法计算出来的概率的可信度， 另一方面
+$M$过大， 将不可避免的造成更高的资源和硬件的要求， 如何在保持一定可行度的条件下选择一个较小的$M$需要一个精巧的方法。
+对$N$而言， 较大的$N$会使得逼近更准确， 从而误差$M_T^N$较小， 但也会造成资源的浪费和迭代收敛的过程冗长。
+较大或者较小的$M$和$N$的初始值将导致收敛缓慢甚至不收敛。
+如何选择合适的$M$和$N$的初始值，
 如何让它们互相迭代更新， 以及怎样判断收敛与否是本章所需要解决的问题。
-\section{参数 N} % (fold)
+\section{参数优化} % (fold)
 \label{sec:N}
-关于 $N$ 的初始值的选取，一个首要的问题是，数值模拟中，$M$ 会影响我们对 $N$ 的判断，甚至一个选取不好的 $M$ 会给出错误的 $N$ 的更新方向，从而导致问题
-得不到收敛。为了避免这种问题， 我们在这里给出一种不依赖于 $M$ 的 $N$ 的初始值选定方法。
+关于$N$的初始值的选取， 一个首要的问题是， 数值模拟中， $M$会影响我们对$N$的判断， 甚至一个选取不好的$M$会给出错误的$N$的更新方向，
+从而导致问题得不到收敛。 为了避免这种问题， 我们在这里给出一种不依赖于$M$的$N$的初始值选定方法。
 
-我们需要一个尽可能小的 $N$, 使得存在某个关于 $N$ 的函数 $P(N)$，如下不等式成立：
+我们需要一个尽可能小的$N$， 使得存在某个关于$N$的函数$P(N)$，如下不等式成立：
 \begin{equation}
 Probability(M_T^N\geq\epsilon)=\mathbb{P}(M_T^N\geq\epsilon)<P(N)。
 \end{equation}
-若我们能发现这样的函数$P(N)$，则所有满足不等式：
+若我们能发现这样的函数$P(N)$， 则所有满足不等式：
 \begin{equation}
 P(N)\leq 1-Prob=5\% 
 \end{equation}
-的正整数 $N$, 都满足 $\mathbb{P}(M_T^N<\epsilon)>Prob=95\%$。
-我们只需要取满足不等式的最小的正整数 $N$ 即可。此时 $N$ 的选取独立于 $M$, 也即无论我们选取怎样的$M$, 理论上都会有 $\mathbb{P}(M_T^N<\epsilon)>Prob$ 成立。
+的正整数$N$， 都满足$\mathbb{P}(M_T^N<\epsilon)>Prob=95\%$。
+我们只需要取满足不等式的最小的正整数$N$即可。 此时$N$的选取独立于$M$， 也即无论我们选取怎样的$M$， 理论上都会有$\mathbb{P}(M_T^N<\epsilon)>Prob$成立。
 
-为了寻找函数 $P(N)$, 我们先引入两个引理，
-
-\textbf{(Burkholder-Davis-Gundy inequality)}
-令 $T>0$，$(M_t)_{0\leq t\leq T}$ 为一个局部的鞅，且 $M_0=0$. 则对于所有的 $0<p<+\infty$, 存在独立于 $T$ 和 $(M_t)_{0\leq t\leq T}$ 的常数
-$c_p$，$C_p$, 使得 
+为了寻找函数 $P(N)$， 我们先引入两个引理：
+\begin{lemma}{(Burkholder-Davis-Gundy inequality)}
+令$T>0$，$(M_t)_{0\leq t\leq T}$ 为一个局部的鞅， 且$M_0=0$。 则对于所有的$0<p<+\infty$， 存在独立于$T$和$(M_t)_{0\leq t\leq T}$的常数
+$c_p$， $C_p$使得 
 \begin{equation}
 c_p\mathbb{E}[\left \langle M \right \rangle_T^{\frac{p}{2}}]\leq \mathbb{E}[(sup_{0\leq t\leq T}|M_t|)^p]\leq C_p\mathbb{E}[\left \langle M \right \rangle_T^{\frac{p}{2}}]
 \end{equation}
-证明：见\cite{MouvementBrownien}.
+\end{lemma}
+证明：见\cite{MouvementBrownien}。
 
-在文章中\cite{LPEstimates}中，作者证明了 $C_p\leq (2\sqrt{p})^p$.
+在文章中\cite{LPEstimates}中， 作者证明了$C_p\leq (2\sqrt{p})^p$.
 
-\textbf{(Generalized Minkowski inequality)}
-设 $(S_1,\mu_1)$ 和 $(S_2,\mu_2)$ 是两个可测空间，且 $F : S_1\times S_2\rightarrow R$ 为可测映射. 
+\begin{lemma}{(Generalized Minkowski inequality)}
+设$(S_1,\mu_1)$和$(S_2,\mu_2)$是两个可测空间， 且$F : S_1\times S_2\rightarrow R$为可测映射。 
 则广义的Minkowski 积分不等式是：
 \begin{equation}
 (\int_{S_2}|\int_{S_1}F(x,y)d\mu_1(x)|^pd\mu_2(y))^{\frac{1}{p}}\leq \int_{S_1}(\int_{S_2}|F(x,y)|^pd\mu_2(y))^{\frac{1}{p}}d\mu_1(x), \forall p\geq 1
 \end{equation}
-证明：见\cite{SingularIntegrals}
+\end{lemma}
+证明：见\cite{SingularIntegrals}。
 
-不失一般性, 在以下的计算中我们设 $r=0$, $\sigma(X_t)=constant=\sigma>0$ 回报函数 $f(x)=(x-K)^{+}, K>0$.  
+不失一般性， 在以下的计算中我们设$r=0$， $\sigma(X_t)=constant=\sigma>0$， 回报函数$f(x)=(x-K)^{+}, K>0$。  
 
-由 Chebyshev 不等式, 我们有 
-$$\mathbb{P}(M_T^n\geq \gamma)\leq \frac{E[(M_T^n)^p]}{\gamma^p}, \forall p>0$$
+由Chebyshev不等式， 我们有： 
+\begin{equation}
+\mathbb{P}(M_T^n\geq \gamma)\leq \frac{E[(M_T^n)^p]}{\gamma^p}, \forall p>0
+\end{equation}
 
 再由 Burkholder-Davis-Gundy 不等式有： 
 \begin{equation}
 \mathbb{E}[(M_T^n)^p]\leq C(p)\mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]
 \end{equation}
-这里我们用已知最优的结果 $C(p)=(2\sqrt{p})^p$.
+这里我们用已知最优的结果 $C(p)=(2\sqrt{p})^p$。
 
-对方程(2.7), 关于 $x$ 微分，我们有
+对方程（2.7）， 关于$x$ 微分， 我们有：
 \begin{equation}
 \frac{\partial^2 u}{\partial t \partial x}(t, x) +\frac{1}{2}\sigma^2x^2\frac{\partial^3}{\partial x^3}u(t,x)=
 -\sigma^2x\frac{\partial^2u}{\partial x^2}(t, x)
 \end{equation}
-对$\frac{\partial u}{\partial x}(t, X_t)-\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})$ ，从 $\varphi(t)$ 到 $t$ 使用 It$\hat{o}$ 公式。
-结合方程 (3.6), 我们有
+对$\frac{\partial u}{\partial x}(t, X_t)-\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})$ ，从$\varphi(t)$到$t$使用It$\hat{o}$公式。
+结合方程 （3.7）， 我们有：
 \begin{equation}
 \begin{split}
 &\frac{\partial u}{\partial x}(t, X_t)-\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})\\
@@ -80,7 +83,7 @@ M_T^n=\int_0^T\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\t
 \left \langle M^n \right \rangle_T=\int_0^T(\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta (dW_\theta-\sigma d\theta))^2\sigma^2 X_t^2 dt
 \end{equation}
 
-我们假设 $p\geq 2$. 由广义 Minkowshi 不等式， 我们有：
+我们假设$p\geq 2$。 由广义Minkowshi不等式， 我们有：
 \begin{equation}
 \begin{split} 
 \mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]
@@ -92,14 +95,14 @@ M_T^n=\int_0^T\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\t
 \begin{equation}
 \frac{d\widetilde{\mathbb{Q}}}{d\mathbb{Q}}=e^{\sigma W_t-\frac{\sigma^2t}{2}}=\frac{X_t}{X_0}
 \end{equation}
-则在此新的概率$\widetilde{\mathbb{Q}}$ 下，$\widetilde{W}_t=W_t-\sigma t$ 是一个布朗运动。
+则在此新的概率$\widetilde{\mathbb{Q}}$ 下，$\widetilde{W}_t=W_t-\sigma t$是一个布朗运动。
 
-由Cauchy 不等式，在概率 $\widetilde{\mathbb{Q}}$ 下, 我们有:
+由Cauchy 不等式，在概率$\widetilde{\mathbb{Q}}$下， 我们有：
 \begin{equation}
 \mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]\leq x_0
 (\int_0^T(\mathbb{E}_{\widetilde{\mathbb{Q}}}[(\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta d\widetilde{W}_\theta)^{2p}])^{\frac{1}{p}}(\mathbb{E}[\sigma^{2p} X_t^{2p-2}] )^{\frac{1}{p}}dt)^{\frac{p}{2}}
 \end{equation}
-再次使用Burkholder-Davis-Gundy 不等式和广义 Minkowski 不等式，我们有:
+再次使用Burkholder-Davis-Gundy不等式和广义Minkowski不等式，我们有：
 \begin{equation}
 \begin{split}
 \mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]&\leq x_0
@@ -115,7 +118,7 @@ M_T^n=\int_0^T\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\t
 X_0^{2p-2}e^{\sigma^2p}, \forall p\in [2, +\infty)\\
 \end{split}
 \end{equation}
-定义$\widetilde{C}(p)$ 如下 
+定义$\widetilde{C}(p)$如下： 
 \begin{equation}
 \widetilde{C}(p)=
 X_0^{2p-2}e^{\sigma^2p}, \forall p\in  [2, +\infty)
@@ -128,14 +131,14 @@ X_0^{2p-2}e^{\sigma^2p}, \forall p\in  [2, +\infty)
 \begin{equation}
 N(x)=\frac{1}{\sqrt{2\pi}}e^{\frac{-x^2}{2}}, d_1(\theta)=\frac{1}{\sigma\sqrt{T-\theta}}(log(\frac{X_\theta}{K})+\frac{1}{2}(T-\theta))
 \end{equation}
-记 $d_2(\theta)=\frac{1}{\sigma\sqrt{T-\theta}}(log(\frac{X_\theta}{K})-\frac{1}{2}(T-\theta))$, 此定义将在后面用到.
+记$d_2(\theta)=\frac{1}{\sigma\sqrt{T-\theta}}(log(\frac{X_\theta}{K})-\frac{1}{2}(T-\theta))$， 此记号将在后面用到。
 
-由$X_t=x_0exp(\sigma \widetilde{W}_t+\frac{1}{2}\sigma^2t)$, 我们有:
+由$X_t=x_0exp(\sigma \widetilde{W}_t+\frac{1}{2}\sigma^2t)$， 我们有：
 \begin{equation}
 \mathbb{E}_{\widetilde{\mathbb{Q}}}[ (\frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta)^{2p}]
 =(\frac{1}{2\pi(T-\theta)})^p\mathbb{E}_{\widetilde{\mathbb{Q}}}[exp(-p(\frac{log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T+\sigma\widetilde{W}_{\theta}}{\sigma\sqrt{T-\theta}})^2)]
 \end{equation}
-定义常数$\lambda$ 如下： $\lambda=log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T$, 则不等式为:
+定义常数$\lambda$如下： $\lambda=log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T$， 则不等式为：
 \begin{equation}
 \begin{split}
 \mathbb{E}_{\widetilde{\mathbb{Q}}}[ (\frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta)^{2p}]
@@ -162,7 +165,7 @@ N(x)=\frac{1}{\sqrt{2\pi}}e^{\frac{-x^2}{2}}, d_1(\theta)=\frac{1}{\sigma\sqrt{T
  &=(2p)^{\frac{p}{2}}(\frac{T}{n})^{\frac{2p+1}{4}}(\sum_{i=1}^{n}i^{\frac{1}{2p}}-\frac{2p}{2p+1}n^{\frac{2p+1}{2p}})^{\frac{p}{2}}\\
  \end{split}
  \end{equation}
- 由于$0<\frac{1}{2p}=q<1$, 我们知道函数 $g(x)=x^q$ 是凹函数(concave). 由$g(x)$的凹性质，我们有:
+ 由于$0<\frac{1}{2p}=q<1$， 我们知道函数$g(x)=x^q$是凹函数(concave function)。 由$g(x)$的凹性质，我们有：
  \begin{equation}
  \sum_{i=1}^{n-1}i^q+\sum_{i=1}^{n-1}\frac{(i+1)^q-i^q}{2}<\int_1^{n}x^qdx
  \end{equation}
@@ -181,7 +184,7 @@ N(x)=\frac{1}{\sqrt{2\pi}}e^{\frac{-x^2}{2}}, d_1(\theta)=\frac{1}{\sigma\sqrt{T
  \begin{equation}
  \sum_{i=1}^{n}i^{\frac{1}{2p}}-\frac{2p}{2p+1}n^{\frac{2p+1}{2p}}<\frac{n^{\frac{1}{2p}}}{2}
  \end{equation}
- 因此:
+ 因此：
  \begin{equation}
  \begin{split}
  \mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]
@@ -189,25 +192,25 @@ N(x)=\frac{1}{\sqrt{2\pi}}e^{\frac{-x^2}{2}}, d_1(\theta)=\frac{1}{\sigma\sqrt{T
  (2p)^{\frac{p}{2}}(\frac{T}{n})^{\frac{2p+1}{4}}(\frac{1}{2})^{\frac{p}{2}}n^{\frac{1}{4}}\\
  \end{split}
  \end{equation}
- 故而对于 $p\geq 2$,
+ 故而对于$p\geq 2$，
  \begin{equation}
  \mathbb{P}(M_T^n\geq \gamma)\leq L(p)=C_0\frac{1}{\gamma^p}C(p)x_0^pC(2p)^{\frac{1}{2}}(\frac{1}{2\pi})^{\frac{p}{2}}e^{\frac{\sigma^2p}{2}}
  p^{\frac{p}{2}}(\frac{T}{n})^{\frac{p}{2}}
  \end{equation}
  这里
- $C_0=T^{\frac{1}{4}}(\frac{\sigma}{\lambda\sqrt{2\pi}})^{\frac{1}{2}}e^{-\frac{1}{4}}$ 是一个与$p, n$ 无关的常数。  
- 通过令等式 $\frac{\partial \log(L(p))}{\partial p}=0$ 成立。 我们找到最优的 $p$。
+ $C_0=T^{\frac{1}{4}}(\frac{\sigma}{\lambda\sqrt{2\pi}})^{\frac{1}{2}}e^{-\frac{1}{4}}$是一个与$p, n$无关的常数。  
+ 通过令等式$\frac{\partial \log(L(p))}{\partial p}=0$成立。 我们找到最优的$p$。
  \begin{equation}
  \log(L(p))=\frac{3}{2}p\log(p)+\log(C_0)-\frac{p}{2}\log(C_1n)
  \end{equation}
- 这里 $C_1=\frac{\gamma^2\pi e^{-\sigma^2}}{16x_0^2T}$ 是与 $p, n$ 无关的常数。
+ 这里$C_1=\frac{\gamma^2\pi e^{-\sigma^2}}{16x_0^2T}$是与$p, n$无关的常数。
  \begin{equation}
  0=\frac{\partial\log(L(p))}{\partial p}=\frac{1}{2}(3+3\log(p)-\log(C_1n)) 
  \end{equation}
  \begin{equation}
  p=\frac{(C_1n)^{\frac{1}{3}}}{e}
  \end{equation}
- 最优的$p$ 是 $p*$：
+ 最优的$p$是$p*$：
  \begin{equation}
  p*=
  \begin{cases}
@@ -215,7 +218,7 @@ N(x)=\frac{1}{\sqrt{2\pi}}e^{\frac{-x^2}{2}}, d_1(\theta)=\frac{1}{\sigma\sqrt{T
  \frac{(C_1n)^{\frac{1}{3}}}{e}, \quad \log(C_1n)\geq 3\log(2)+3\\
  \end{cases}
  \end{equation}
- 因此 $L(p)$ 的最小值是:
+ 因此$L(p)$的最小值是：
  \begin{equation}
  L(p*)=
  \begin{cases}
@@ -223,8 +226,9 @@ N(x)=\frac{1}{\sqrt{2\pi}}e^{\frac{-x^2}{2}}, d_1(\theta)=\frac{1}{\sigma\sqrt{T
  C_0e^{-\frac{3(C_1n)^{\frac{1}{3}}}{2e}}, \quad \log(C_1n)\geq 3\log(2)+3\\
  \end{cases}
  \end{equation}
- 现在我们得到了一个 $N$ 的估界：
- \textbf{Proposition}
+ 现在我们得到了一个$N$的估界：
+ \begin{theorem}
+ 假设如上文，我们有：
  \begin{equation}
  \mathbb{P}(M_T^n\geq \gamma)\leq 
  \begin{cases}
@@ -232,22 +236,22 @@ N(x)=\frac{1}{\sqrt{2\pi}}e^{\frac{-x^2}{2}}, d_1(\theta)=\frac{1}{\sigma\sqrt{T
  T^{\frac{1}{4}}(\frac{\sigma}{(\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T)\sqrt{2\pi}})^{\frac{1}{2}}e^{-\frac{1}{4}}e^{-\frac{3\gamma^{\frac{2}{3}}\pi^{\frac{1}{3}}}{2ex_0^{\frac{2}{3}}T^{\frac{1}{3}}16^{\frac{1}{3}}e^{\frac{\sigma^2}{3}}}n^{\frac{1}{3}}}, \quad \log(C_1n)\geq 3\log(2)+3\\
  \end{cases}
  \end{equation}
-
+\end{theorem}
 
 % section 参数N (end)
 
-\section{参数M} % (fold)
+\section{迭代算法} % (fold)
 \label{sec:M}
-在确定了 $N$ 的迭代初始值之后 $N_0$，我们可以使用该值来确定一个合适大小的 $M$ 的迭代初始值。
-一个合适的 $M$ 的初始值应该满足如下条件：在 $N$ 为其初始迭代值时， $M$ 的值应该使得模特卡罗模拟出的概率 $\mathbb{P}(M_T^N<\epsilon)$ 收敛稳定。
-也即，固定$N$ 为其初始值不变，当 $M$ 在其迭代初始值附近扰动时，相应的 $\mathbb{P}(M_T^N<\epsilon)$ 也只是微小扰动。动态调优的技术可以被应用在这里。
+在由上面定理确定了$N$的迭代初始值之后$N_0$， 我们可以使用该值来确定一个合适大小的$M$的迭代初始值。
+一种选取方式是在$N$为其初始迭代值时， 选取尽量小的$M$的值应该使得模特卡罗模拟出的概率$\mathbb{P}(M_T^N<\epsilon)$收敛稳定。
+也即， 固定$N$ 为其初始值不变， 当$M$ 在其迭代初始值附近扰动时， 相应的$\mathbb{P}(M_T^N<\epsilon)$也只是在可接受范围内微小扰动。
 
-在我们的问题背景下，通过动态调优和经验发现，一个较为恰当的 $M$ 初始值可以为 $M=10^6$, 我们通过比较 $M=10^6+i*100$, $i=0,...,10$ 
-所对应的 $\mathbb{P}(M_T^N<\epsilon)$来调整 $M$, 若对应的概率在 $10^{-3}$范围内，则将$M$ 减小为原先的一半，否则增大 $M$ 为原先的两倍。
-重复此过程，知道发现满足条件的最小的 $M$。 我们然后固定这个最优的 $M$， 然后尝试找出最优的 $N$。
+在我们的问题背景下， 通过动态调优和经验发现， 一个较为恰当的$M$初始值可以为$M=10^5$， 我们通过比较$M=10^5+i*1000$， $i=0,...,10$。 
+所对应的$\mathbb{P}(M_T^N<\epsilon)$来调整$M$， 若对应的概率在 $10^{-2}$范围内， 则将$M$ 减小为原先的一半， 否则增大$M$为原先的两倍。
+重复此过程， 知道发现满足条件的最小的 $M$。 我们然后固定这个最优的$M$， 然后尝试找出最优的$N$。
 
-根据前面的理论，最优的 $N$ 存在于 $[0, N_0]$ 区间内。我们仍然使用二分法寻找最优的$N$, 首先我们令 $N_1=N_0/2$, 在此参数下模拟相应的
-$\mathbb{P}(M_T^N<\epsilon)$, 若此模拟概率大于 $Prob$, 则令 $N_2=N_1/2$, 反之，则令 $N_2=\frac{N_0+N_1}{2}$。
+根据前面的理论， 最优的$N$存在于$[0, N_0]$区间内。 我们仍然使用二分法寻找最优的$N$, 首先我们令$N_1=N_0/2$， 在此参数下模拟相应的
+$\mathbb{P}(M_T^N<\epsilon)$， 若此模拟概率大于$Prob$， 则令 $N_2=N_1/2$， 反之， 则令 $N_2=\frac{N_0+N_1}{2}$。
 重复此过程直至找到最优的$N$。
 
 % section 参数M (end)
