@@ -11,16 +11,6 @@ Paul~Kree. Eric~Carlen.
 \newblock {Lp Estimates on Iterated Stochastic Integrals.}
 \newblock {\em The Annals of Probability}, 19(1):1354--368, January 1991.
 
-\bibitem{DiscreteTimeHedgingErrors}
-Emmanuel Gobet and Emmanuel Temam.
-\newblock Discrete time hedging errors for options with irregular payoffs.
-\newblock {\em Finance and Stochastics}, 5(3):357--367, February 2001.
-
-\bibitem{Hayashi05evaluatinghedging}
-Takaki Hayashi and Per~A. Mykland.
-\newblock Evaluating hedging errors: An asymptotic approach.
-\newblock {\em Math. Finance}, 15:309--343, 2005.
-
 \bibitem{MouvementBrownien}
 Jean-Francois Le~Gall.
 \newblock {\em {Mouvement brownien, martingales et calcul stochastique}}.
