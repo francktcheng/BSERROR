@@ -167,7 +167,7 @@ double vNormalIntegral(double b)
   //NN/2-1 has to be the multiple of 8
   //NN = (8*LV+1)*2, LV = 20 -> NN = 322 
   //const int NN = 322; //has to be the multiple of 8
-  //const int vecsize = 8; 
+  const int vecsize = 8; 
   const int nCal = (NN/2-1)/vecsize;
   //const int left = NN%vecsize;
   double a = 0.0f;
