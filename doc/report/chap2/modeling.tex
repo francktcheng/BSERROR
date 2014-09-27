@@ -42,6 +42,8 @@ Black-Scholes 公式是一个偏微分方程，用于预测期权价格随时间
 我们知道现实生活中，交易只能发生在一些离散的时间点上, 即交易员只能在一系列相继的时刻点上交易。
 一个总所周知的事实是，实际中想要完美的复制实现一个给定的连续时间策略是不可能的。
 本课题研究的就是离散时间版本的Delta 对冲策略与理论上的Delta 对冲策略之间的误差及风险控制。
+文章\cite{WhenIsTimeContinuous,Hayashi05evaluatinghedging,DiscreteTimeHedgingErrors} 研究了连续时间和离散时间金融交易模型的关系，
+但这些文章更多的关注了两者的渐进性质而没有考虑如何最优的复制连续时间策略。本文将弥补这一空白。
 
 在一般化的 Black-Scholes 模型中， 假设在时刻$t$, 期权所基于的风险资产价格为 $X_t$， 另外有一无风险资产价格为 $S_t^0$。
 $X_t$ 满足如下的一维随机偏微分方程：
@@ -64,13 +66,15 @@ dX_t=rX_tdt+\sigma(X_t)X_tdW_t
 \end{equation}
 我们假设考虑的问题满足如下两个条件：
 
-$(\mathcal{H}_1)$ $\mu$ 和 $\sigma$ 有限的, 两次连续可微且二次偏微分满足 H\"{o}lder 条件. 更准确的来说, 令 $\hat{\mu}(x)=\mu(exp(x))$， $\hat{\sigma}(x)=\sigma(exp(x))$, 且 $\delta\in (0,1)$， $K>0$, 对任意 $(x,x')\in \mathbb{R}^2$, 我们有：
-$$|\hat{\mu}'(x)|+|\hat{\mu}''(x)|+\frac{|\hat{\mu}''(x)-\hat{\mu}''(x')|}{|x-x'|^\delta}+|\hat{\sigma}'(x)|+|\hat{\sigma}''(x)|+\frac{|\hat{\sigma}''(x)-\hat{\sigma''}(x')|}{|x-x'|^\delta}<K.$$ 
+$(\mathcal{H}_1)$ $\mu$ 和 $\sigma$ 有限的, 两次连续可微且二次偏微分满足 Holder 条件. 更准确的来说, 令 $\hat{\mu}(x)=\mu(exp(x))$， $\hat{\sigma}(x)=\sigma(exp(x))$, 且 $\delta\in (0,1)$， $K>0$, 对任意 $(x,x')\in \mathbb{R}^2$, 我们有：
+\begin{equation}
+|\hat{\mu}'(x)|+|\hat{\mu}''(x)|+\frac{|\hat{\mu}''(x)-\hat{\mu}''(x')|}{|x-x'|^\delta}+|\hat{\sigma}'(x)|+|\hat{\sigma}''(x)|+\frac{|\hat{\sigma}''(x)-\hat{\sigma''}(x')|}{|x-x'|^\delta}<K.
+\end{equation}
 
 $(\mathcal{H}_2)$ 存在$\sigma_0>0$ 使得对任意 $x>0$ 有$|\sigma(x)|\geq \sigma_0$。
 
 在这两个条件下
-若欧洲期权的回报函数为 $f\in L^2(X_t)$, 则该期权在0 时刻的价格由下面公式给出：
+若欧洲期权的回报函数为 $f\in L^2(X_t)$, 则该期权在$0$ 时刻的价格由下面公式给出：
 \begin{equation}
 h(f)(x_0)=\mathbb{E}(exp(-rT)f(X_T)|X_0=x_0).
 \end{equation}
@@ -106,7 +110,7 @@ $t\in [0, T]$ 的时间内无时不刻的交易， 并且使自己在时刻 $t$ 
 M_T^N
 &=e^{-rT}f(X_T)-(u(0,x)+\int_0^T\frac{\partial u}{\partial x}(\varphi(t), 
 X_{\varphi_t}))d\widetilde{X}_t\\
-&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\    partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t\\
+&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t\\
 &=(X_T-K)^+-\mathbb{E}[(X_T-K)^+]-\int_0^T\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})dX_t\\
 &=(X_T-K)^+-x_0N(d_1(0))+KN(d_2(0))-\sum_{i=0}^{n-1}N(d_1(t_i))(X_{t_{i+1}}-X_{t_i})\\
 &=(X_T-K)^+-\frac{x_0}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T}
@@ -123,7 +127,7 @@ $M_T^N$ 在概率上趋向于0:
 M_T^N\xlongrightarrow[N\rightarrow +\infty]{\mathbb{P}}0
 \end{equation}
 %\end{Theorem}
-See XXXXXX
+证明：见\cite{ContinuousMartingaleAndBrownianMotion}
 %\begin{Theorem}
 
 令 $X_t$ 随机偏微分方程 $dX_t=\sigma(X_t)X_tdW_t$ 的解所对应的随机过程, $u$ 如前文定义, 则我们有 
@@ -132,8 +136,7 @@ See XXXXXX
 \end{equation}
 这里 $\tau=\frac{1}{2}\int_0^T(\frac{\partial^2 u}{\partial x^2}(t,X_t))^2\sigma^4(X_t)X_t^4dt$, 且 $\hat{W}$ 是一个独立于 $\tau$另一个布朗运动.
 %\end{Theorem}
-
-See XXXXXX
+证明：见\cite{rootzen1980}
 
 上面的两条渐进性质不仅告诉我们随着 $N$的增大，离散对冲策略的逼近将越来越成功，两者相差的误差将在概率意义下趋于零，而且还告诉我们此误差的渐进表现
 类似于一个系数逐渐变小的布朗运动。特别的，我们从中可知，通过增大 $N$, 在概率意义下，离散化的Delta 对冲策略可以任意程度的逼近完美Delta 对冲策略。
