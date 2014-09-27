@@ -5,12 +5,47 @@
 并行程序的性能优化和普通串行程序有许多共通之处。具体来说主要分为两个大类：针对内存使用的优化和针对for循环的改进。
 由于日益增长的处理器速度和发展相对较缓的内存速度之间逐渐拉开了差距，内存通常成为程序蓄能的瓶颈。现代处理器通常采用分层内存体系，高带宽，低延迟（lower latency），低能耗的高速缓存对提升数据局部性(data locality)至关重要。针对缓存优化的方法有很多，例如对齐数据（data alignment）使得缓存的加载更有效率，依据缓存的大小处理相应的数据块（cache blocking），预读取（prefetching）提前将需要处理的数据加载到缓存中，或者通过流式存储技术（streaming store）将非时间相关（nontemporal）的计算结果"绕过"缓存直接写入主内存从而避免"污染"缓存其他数据等。和数据代码缓存一样，页表缓存（Translation Lookaside Buffer）也是影响性能的一个因素。页表缓存存储了一部分标签页表条目，用于改进从虚拟内存地址到物理地址的转译速度，对于特定问题，通过使用不同尺寸的页面大小，重构数据可以避免页表缓存中的热点。
 针对for循环优化的一般技术包括循环展开（loop unrolling）,分块循环（loop tiling）, 循环互换（loop interchange），循环合并（loop fusion），循环偏移（loop skewing），循环剥离（loop peeling）等。这些改进很多时候也是为了更好地使用内存或者为进一步并行化做准备。
-目前绝对意义上的串行程序在实际中已不多见，因为在编译过程中编译器会或多或少引入不同程度的并行化处理。然而由于编译器优化的前提是基于代码的正确性，串行程序的编写和调试难度远低于并行程序。本章将详细介绍。。
+目前绝对意义上的串行程序在实际中已不多见，因为在编译过程中编译器会或多或少引入不同程度的并行化处理。然而由于编译器优化的前提是基于代码的正确性，串行程序的逻辑遵循一个绝对的代码执行顺序，因而其编写和调试难度远低于并行程序。并行程序的运行由于同时驱动不同的逻辑运算单元，容易出现数据的竞态条件（race condition）等导致最终结果不确定的因素。本章将着重描述几种针对本课题不同的并行方案，及其具体实现。
+
+\section{并行性分析}
+\label{sec:parallelism}
+算法\ref{alg:bserror}描述了
 
 
-通过充分使用高速缓存以提高数据的局部性(data locality)，
 
-包括locality, alignment, prefetching, streaming store 
 
-对于多次compute intensive的优化
-充分考虑处理器片上高速存储单元和通信带宽，
+
+
+
+
+
+
+\section{N的最优化搜索}
+\label{sec:researchN}
+在获得一个可接受的$N$值后，我们可以继续寻找满足条件的更小的$N$值，一般初始的$N$值取的较大，所以这种最优化的寻找可以通过一个二分法的搜寻算法来实现。
+\begin{algorithm}
+	\caption{最优$N$值的搜索算法}
+	\label{alg:searchN}
+	\begin{algorithmic}[1]
+		\State 参数 $M0$ \Comment{蒙特卡洛模拟的次数，$M0$越大模拟结果可信度越高}
+		\Procedure{NBSECT}{$N0$, $\lambda$} \Comment{$N0$是初始化抽样次数，$\lambda$是最优解的置信区间}
+		\State $nL \gets 1$ \Comment{设置$n$值的初始下界} 
+		\State $nU \gets N0$ \Comment{设置$n$值的初始上界}
+		\State $n \gets 0.5\cdot (nL + nU)$
+		\While {$|nU - nL| > \lambda$} 
+		\If {$BSERROR(M0,n) < n$} \Comment{缩小搜索范围}
+		\State $nU \gets n$
+		\State $n \gets 0.5\cdot(nL + nU)$ 		
+		\Else  \Comment{扩大搜索范围}
+		\State $nL \gets n$
+		\State $n \gets 0.5\cdot(nL + nU)$ 		
+		\EndIf
+		\EndWhile
+		\State return $n, nU, nL$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+在算法 \ref{alg:searchN} 中我们设置的收敛条件为$|nU - nL| \le \lambda$ 这是因为蒙特卡洛模拟本身具有一定的随机性。在$N$的收敛过程中会出现波动，导致无法
+收敛到一个单一的值上，在$BSERROR$中给定了置信概率$Prob$的情况下，我们很自然地就能利用置信区间这一概念来表述我们取到的最优值$N$。在实际应用中，
+$N$的初始值通常需要取得很大，然后通过二分法来逐步缩小范围取得最优值。此外蒙特卡洛模拟得次数$M$也需要取一个很大的值来保证其精确性。如果$N$和$M$的取值
+都较大，就会极大地增加计算时间和内存空间需求。这时串行程序在普通的计算机上就难以满足问题的需求，我们将需要转而开发并行程序并使其运行在超级计算机上。
