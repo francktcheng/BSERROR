@@ -18,14 +18,37 @@
 %\renewcommand\partname{}
 %\renewcommand\refname{}
 
-%\usepackage{amsthm}%可以用*去处编号
+\usepackage[thmmarks]{ntheorem}
+% 定理类环境宏包，其中 amsmath 选项
+% 用来兼容 AMS LaTeX 的宏包
+ 
+ %=== 配合上面的ntheorem宏包产生各种定理结构,重定义一些
+ %正文相关标题 ===
+ %\theoremstyle{plain}
+ %\theoremheaderfont{\normalfont\rmfamily\CJKfamily{hei}}
+ %\theorembodyfont{\normalfont\rm\CJKfamily{kai}} \theoremindent0em
+ %\theoremseparator{\hspace{1em}} \theoremnumbering{arabic}
+ %\theoremsymbol{}          %定理结束时自动添加的标志
+ \newtheorem{definition}{\hspace{2em}定义}[section]
+ %\newtheorem{definition}{\hei 定义}[section]
+ %!!!注意当section为中国数字时，[section]不可用！
+ \newtheorem{proposition}{\hspace{2em}命题}[section]
+ \newtheorem{property}{\hspace{2em}性质}[section]
+ \newtheorem{lemma}{\hspace{2em}引理}[section]
+ %\newtheorem{lemma}[definition]{引理}
+ \newtheorem{theorem}{\hspace{2em}定理}[section]
+ \newtheorem{axiom}{\hspace{2em}公理}[section]
+ \newtheorem{corollary}{\hspace{2em}推论}[section]
+ \newtheorem{exercise}{\hspace{2em}习题}[section]
+ \theoremsymbol{$\blacksquare$}
+ \newtheorem{example}{\hspace{2em}例}[section]
+ \theoremstyle{nonumberplain}
+ %\theoremheaderfont{\CJKfamily{hei}\rmfamily}
+ %\theorembodyfont{\normalfont \rm \CJKfamily{song}} \theoremindent0em
+ \theoremseparator{\hspace{1em}} \theoremsymbol{$\blacksquare$}
+ \newtheorem{proof}{\hspace{2em}证明}
+  
 \usepackage{bbm}%可以使用空心数字
-%\usepackage[titletoc]{appendix}
-%\newtheorem{thm}{Theorem}
-%\newtheorem*{pro}{Proposition}
-%\newtheorem{lem}{Lemma}
-%\newtheorem{remark}{Remark}
-%\setlength\parindent{0pt}% Removes all indentation from paragraphs
 \usepackage{extarrows}%long arrow
 
 
