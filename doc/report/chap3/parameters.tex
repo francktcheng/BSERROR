@@ -32,9 +32,9 @@ $c_p$，$C_p$, 使得
 \begin{equation}
 c_p\mathbb{E}[\left \langle M \right \rangle_T^{\frac{p}{2}}]\leq \mathbb{E}[(sup_{0\leq t\leq T}|M_t|)^p]\leq C_p\mathbb{E}[\left \langle M \right \rangle_T^{\frac{p}{2}}]
 \end{equation}
-See XXXXXX.
+证明：见\cite{MouvementBrownien}.
 
-In paper XXXXXX, 作者证明了 $C_p\leq (2\sqrt{p})^p$.
+在文章中\cite{LPEstimates}中，作者证明了 $C_p\leq (2\sqrt{p})^p$.
 
 \textbf{(Generalized Minkowski inequality)}
 设 $(S_1,\mu_1)$ 和 $(S_2,\mu_2)$ 是两个可测空间，且 $F : S_1\times S_2\rightarrow R$ 为可测映射. 
@@ -42,7 +42,7 @@ In paper XXXXXX, 作者证明了 $C_p\leq (2\sqrt{p})^p$.
 \begin{equation}
 (\int_{S_2}|\int_{S_1}F(x,y)d\mu_1(x)|^pd\mu_2(y))^{\frac{1}{p}}\leq \int_{S_1}(\int_{S_2}|F(x,y)|^pd\mu_2(y))^{\frac{1}{p}}d\mu_1(x), \forall p\geq 1
 \end{equation}
-See XXXXXX for a proof
+证明：见\cite{SingularIntegrals}
 
 不失一般性, 在以下的计算中我们设 $r=0$, $\sigma(X_t)=constant=\sigma>0$ 回报函数 $f(x)=(x-K)^{+}, K>0$.  
 
@@ -50,19 +50,19 @@ See XXXXXX for a proof
 $$\mathbb{P}(M_T^n\geq \gamma)\leq \frac{E[(M_T^n)^p]}{\gamma^p}, \forall p>0$$
 
 再由 Burkholder-Davis-Gundy 不等式有： 
-\[
+\begin{equation}
 \mathbb{E}[(M_T^n)^p]\leq C(p)\mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]
-\]
+\end{equation}
 这里我们用已知最优的结果 $C(p)=(2\sqrt{p})^p$.
 
-对方程XXXXXXX, 关于 $x$ 微分，我们有
+对方程(2.7), 关于 $x$ 微分，我们有
 \begin{equation}
 \frac{\partial^2 u}{\partial t \partial x}(t, x) +\frac{1}{2}\sigma^2x^2\frac{\partial^3}{\partial x^3}u(t,x)=
 -\sigma^2x\frac{\partial^2u}{\partial x^2}(t, x)
 \end{equation}
 对$\frac{\partial u}{\partial x}(t, X_t)-\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})$ ，从 $\varphi(t)$ 到 $t$ 使用 It$\hat{o}$ 公式。
-结合方程 XXXXXX, 我们有
-\[
+结合方程 (3.6), 我们有
+\begin{equation}
 \begin{split}
 &\frac{\partial u}{\partial x}(t, X_t)-\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})\\
 &=\int_{\varphi(t)}^t (\frac{\partial^2 u}{\partial x\partial t}(\theta, 
@@ -70,90 +70,90 @@ X_\theta)+\frac{1}{2}\frac{\partial^3 u}{\partial x^3}(\theta, X_\theta)\sigma^2
 + \int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta dW_\theta\\
 &=  \int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta (dW_\theta-\sigma d\theta)\\
 \end{split}
-\]
+\end{equation}
 
 所以
-\[
+\begin{equation}
 M_T^n=\int_0^T\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta (dW_\theta-\sigma d\theta)\sigma X_t dW_t
-\]
-\[
+\end{equation}
+\begin{equation}
 \left \langle M^n \right \rangle_T=\int_0^T(\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta (dW_\theta-\sigma d\theta))^2\sigma^2 X_t^2 dt
-\]
+\end{equation}
 
 我们假设 $p\geq 2$. 由广义 Minkowshi 不等式， 我们有：
-\[
+\begin{equation}
 \begin{split} 
 \mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]
 &=\mathbb{E}[(\int_0^T(\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta (dW_\theta-\sigma d\theta))^2\sigma^2 X_t^2 dt)^{\frac{p}{2}}]\\
 &\leq (\int_0^T(\mathbb{E}[(\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta (dW_\theta-\sigma d\theta))^p\sigma^p X_t^p] )^{\frac{2}{p}}dt)^{\frac{p}{2}}\\
 \end{split}
-\]
+\end{equation}
 考虑一个满足下面条件的新的概率$\widetilde{\mathbb{Q}}$： 
-$$\frac{d\widetilde{\mathbb{Q}}}{d\mathbb{Q}}=e^{\sigma W_t-\frac{\sigma^2t}{2}}=\frac{X_t}{X_0}$$ 
+\begin{equation}
+\frac{d\widetilde{\mathbb{Q}}}{d\mathbb{Q}}=e^{\sigma W_t-\frac{\sigma^2t}{2}}=\frac{X_t}{X_0}
+\end{equation}
 则在此新的概率$\widetilde{\mathbb{Q}}$ 下，$\widetilde{W}_t=W_t-\sigma t$ 是一个布朗运动。
 
 由Cauchy 不等式，在概率 $\widetilde{\mathbb{Q}}$ 下, 我们有:
-\[
+\begin{equation}
 \mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]\leq x_0
 (\int_0^T(\mathbb{E}_{\widetilde{\mathbb{Q}}}[(\int_{\varphi(t)}^t \frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta d\widetilde{W}_\theta)^{2p}])^{\frac{1}{p}}(\mathbb{E}[\sigma^{2p} X_t^{2p-2}] )^{\frac{1}{p}}dt)^{\frac{p}{2}}
-\]
+\end{equation}
 再次使用Burkholder-Davis-Gundy 不等式和广义 Minkowski 不等式，我们有:
-\[
+\begin{equation}
 \begin{split}
 \mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]&\leq x_0
 (\int_0^T(C(2p)\mathbb{E}_{\widetilde{\mathbb{Q}}}[(\int_{\varphi(t)}^t (\frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta)^2 d\theta)^{p}])^{\frac{1}{p}}(\mathbb{E}[\sigma^{2p} X_t^{2p-2}] )^{\frac{1}{p}}dt)^{\frac{p}{2}}\\
 &\leq x_0C(2p)^{\frac{1}{2}}(\int_0^T(\int_{\varphi(t)}^t(\mathbb{E}_{\widetilde{\mathbb{Q}}}[ (\frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta)^{2p}])^{\frac{1}{p}} d\theta)(\mathbb{E}[\sigma^{2p} X_t^{2p-2}] )^{\frac{1}{p}}dt)^{\frac{p}{2}}\\
 \end{split}
-\]
-\[
+\end{equation}
+\begin{equation}
 \begin{split}
 \mathbb{E}[X_t^{2p-2}]&=X_0^{2p-2}\mathbb{E}[e^{(2\sigma W_t-\sigma^2t)(p-1)}]\\
 &=X_0^{2p-2}e^{2t(p-1)^2\sigma^2-p(t-1)\sigma^2}\\
 &\leq
 X_0^{2p-2}e^{\sigma^2p}, \forall p\in [2, +\infty)\\
 \end{split}
-\]
+\end{equation}
 定义$\widetilde{C}(p)$ 如下 
-\[
+\begin{equation}
 \widetilde{C}(p)=
 X_0^{2p-2}e^{\sigma^2p}, \forall p\in  [2, +\infty)
-\]
+\end{equation}
 另一方面我们有：
-\[
+\begin{equation}
 \mathbb{E}_{\widetilde{\mathbb{Q}}}[ (\frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta)^{2p}]=\frac{1}{(T-\theta)^p}\mathbb{E}_{\widetilde{\mathbb{Q}}}[N(d_1(\theta))^{2p}]
-\]
+\end{equation}
 这里
-\[
+\begin{equation}
 N(x)=\frac{1}{\sqrt{2\pi}}e^{\frac{-x^2}{2}}, d_1(\theta)=\frac{1}{\sigma\sqrt{T-\theta}}(log(\frac{X_\theta}{K})+\frac{1}{2}(T-\theta))
-\]
+\end{equation}
 记 $d_2(\theta)=\frac{1}{\sigma\sqrt{T-\theta}}(log(\frac{X_\theta}{K})-\frac{1}{2}(T-\theta))$, 此定义将在后面用到.
-\textbf{注} 
-For more details, see \cite{mathematique}
 
 由$X_t=x_0exp(\sigma \widetilde{W}_t+\frac{1}{2}\sigma^2t)$, 我们有:
-\[
+\begin{equation}
 \mathbb{E}_{\widetilde{\mathbb{Q}}}[ (\frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta)^{2p}]
 =(\frac{1}{2\pi(T-\theta)})^p\mathbb{E}_{\widetilde{\mathbb{Q}}}[exp(-p(\frac{log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T+\sigma\widetilde{W}_{\theta}}{\sigma\sqrt{T-\theta}})^2)]
-\]
+\end{equation}
 定义常数$\lambda$ 如下： $\lambda=log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T$, 则不等式为:
-\[
+\begin{equation}
 \begin{split}
 \mathbb{E}_{\widetilde{\mathbb{Q}}}[ (\frac{\partial^2 u}{\partial x^2}(\theta, X_\theta)\sigma X_\theta)^{2p}]
 &=(\frac{1}{2\pi(T-\theta)})^p\int^{+\infty}_{-\infty}\frac{1}{\sqrt{2\pi\theta}}e^{-\frac{z^2}{2\theta}}e^{-\frac{p}{T-\theta}(z+\frac{\lambda}{\sigma})^2}dz\\
 &=(\frac{1}{2\pi(T-\theta)})^p\sqrt{\frac{T-\theta}{T-\theta+2p\theta}}e^{-\frac{p}{T-\theta+2p\theta}\frac{\lambda^2}{\sigma^2}}\\
 &\leq \frac{\sqrt{T-\theta}}{(2\pi(T-\theta))^p}\frac{\sigma}{\lambda\sqrt{2p}}e^{-\frac{1}{2}}\\
 \end{split}
-\]
+\end{equation}
 所以 
-\[
+\begin{equation}
 \begin{split}
 \mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]&\leq
  x_0C(2p)^{\frac{1}{2}}(\int_0^T(\int_{\varphi(t)}^t (T-\theta)^{\frac{1}{2p}-1} d\theta)\frac{1}{2\pi}(\frac{\sigma}{\sqrt{2p}\lambda}e^{-\frac{1}{2}})^{\frac{1}{p}}x_0^{2-\frac{2}{p}}e^{\sigma^2}dt)^{\frac{p}{2}}\\
  &=x_0^pC(2p)^{\frac{1}{2}}(\frac{1}{2\pi})^{\frac{p}{2}}(\frac{\sigma}{\lambda\sqrt{2\pi}})^{\frac{1}{2}}e^{\frac{2\sigma^2p-1}{4}}
  (\int_0^T\int_{\varphi(t)}^t (T-\theta)^{\frac{1}{2p}-1} d\theta dt)^{\frac{p}{2}}\\
  \end{split}
- \]
- \[
+ \end{equation}
+ \begin{equation}
  \begin{split}
  (\int_0^T\int_{\varphi(t)}^t (T-\theta)^{\frac{1}{2p}-1} d\theta dt)^{\frac{p}{2}}
  &=(2p\int_0^T((T-\varphi(t))^{\frac{1}{2p}}-(T-t)^{\frac{1}{2p}}) dt)^{\frac{p}{2}}\\
@@ -161,77 +161,77 @@ For more details, see \cite{mathematique}
  &=(2p)^{\frac{p}{2}}(\frac{T}{n})^{\frac{2p+1}{4}}(\sum_{i=1}^{n}i^{\frac{1}{2p}}-\int_0^n(n-v)^{\frac{1}{2p}} dv)^{\frac{p}{2}}\\
  &=(2p)^{\frac{p}{2}}(\frac{T}{n})^{\frac{2p+1}{4}}(\sum_{i=1}^{n}i^{\frac{1}{2p}}-\frac{2p}{2p+1}n^{\frac{2p+1}{2p}})^{\frac{p}{2}}\\
  \end{split}
- \]
+ \end{equation}
  由于$0<\frac{1}{2p}=q<1$, 我们知道函数 $g(x)=x^q$ 是凹函数(concave). 由$g(x)$的凹性质，我们有:
- \[
+ \begin{equation}
  \sum_{i=1}^{n-1}i^q+\sum_{i=1}^{n-1}\frac{(i+1)^q-i^q}{2}<\int_1^{n}x^qdx
- \]
+ \end{equation}
  所以
- \[
+ \begin{equation}
  \begin{split}
  \sum_{i=1}^{n-1}i^q
  &<\frac{1}{q+1}(n^{q+1}-1)-\frac{1}{2}(n^q-1)\\
  &<\frac{n^{q+1}}{q+1}-\frac{n^q}{2}\\
  \end{split}
- \]
- \[
+ \end{equation}
+ \begin{equation}
  \sum_{i=1}^{n}i^q=\sum_{i=1}^{n-1}i^q+n^q<\frac{n^{q+1}}{q+1}+\frac{n^q}{2}
- \]
+ \end{equation}
 
- \[
+ \begin{equation}
  \sum_{i=1}^{n}i^{\frac{1}{2p}}-\frac{2p}{2p+1}n^{\frac{2p+1}{2p}}<\frac{n^{\frac{1}{2p}}}{2}
- \]
+ \end{equation}
  因此:
- \[
+ \begin{equation}
  \begin{split}
  \mathbb{E}[\left \langle M^n \right \rangle_T^{\frac{p}{2}}]
  &\leq x_0^pC(2p)^{\frac{1}{2}}(\frac{1}{2\pi})^{\frac{p}{2}}(\frac{\sigma}{\lambda\sqrt{2\pi}})^{\frac{1}{2}}e^{\frac{2\sigma^2p-1}{4}}
  (2p)^{\frac{p}{2}}(\frac{T}{n})^{\frac{2p+1}{4}}(\frac{1}{2})^{\frac{p}{2}}n^{\frac{1}{4}}\\
  \end{split}
- \]
+ \end{equation}
  故而对于 $p\geq 2$,
- \[
+ \begin{equation}
  \mathbb{P}(M_T^n\geq \gamma)\leq L(p)=C_0\frac{1}{\gamma^p}C(p)x_0^pC(2p)^{\frac{1}{2}}(\frac{1}{2\pi})^{\frac{p}{2}}e^{\frac{\sigma^2p}{2}}
  p^{\frac{p}{2}}(\frac{T}{n})^{\frac{p}{2}}
- \]
+ \end{equation}
  这里
  $C_0=T^{\frac{1}{4}}(\frac{\sigma}{\lambda\sqrt{2\pi}})^{\frac{1}{2}}e^{-\frac{1}{4}}$ 是一个与$p, n$ 无关的常数。  
  通过令等式 $\frac{\partial \log(L(p))}{\partial p}=0$ 成立。 我们找到最优的 $p$。
- \[
+ \begin{equation}
  \log(L(p))=\frac{3}{2}p\log(p)+\log(C_0)-\frac{p}{2}\log(C_1n)
- \]
+ \end{equation}
  这里 $C_1=\frac{\gamma^2\pi e^{-\sigma^2}}{16x_0^2T}$ 是与 $p, n$ 无关的常数。
- \[
+ \begin{equation}
  0=\frac{\partial\log(L(p))}{\partial p}=\frac{1}{2}(3+3\log(p)-\log(C_1n)) 
- \]
- \[
+ \end{equation}
+ \begin{equation}
  p=\frac{(C_1n)^{\frac{1}{3}}}{e}
- \]
+ \end{equation}
  最优的$p$ 是 $p*$：
- \[
+ \begin{equation}
  p*=
  \begin{cases}
  2, \quad  \log(C_1n)<3\log(2)+3\\
  \frac{(C_1n)^{\frac{1}{3}}}{e}, \quad \log(C_1n)\geq 3\log(2)+3\\
  \end{cases}
- \]
+ \end{equation}
  因此 $L(p)$ 的最小值是:
- \[
+ \begin{equation}
  L(p*)=
  \begin{cases}
  \frac{8C_0}{C_1n}, \quad \log(C_1n)<3\log(2)+3\\
  C_0e^{-\frac{3(C_1n)^{\frac{1}{3}}}{2e}}, \quad \log(C_1n)\geq 3\log(2)+3\\
  \end{cases}
- \]
+ \end{equation}
  现在我们得到了一个 $N$ 的估界：
  \textbf{Proposition}
- \[
+ \begin{equation}
  \mathbb{P}(M_T^n\geq \gamma)\leq 
  \begin{cases}
  \frac{128\sigma^{\frac{1}{2}}x_0^2T^{\frac{5}{4}}e^{\sigma^2}}{e^{\frac{1}{4}}\gamma^2\pi (\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T)^{\frac{1}{2}}(2\pi)^{\frac{1}{4}}}\frac{1}{n}, \quad \log(C_1n)<3\log(2)+3\\
  T^{\frac{1}{4}}(\frac{\sigma}{(\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T)\sqrt{2\pi}})^{\frac{1}{2}}e^{-\frac{1}{4}}e^{-\frac{3\gamma^{\frac{2}{3}}\pi^{\frac{1}{3}}}{2ex_0^{\frac{2}{3}}T^{\frac{1}{3}}16^{\frac{1}{3}}e^{\frac{\sigma^2}{3}}}n^{\frac{1}{3}}}, \quad \log(C_1n)\geq 3\log(2)+3\\
  \end{cases}
- \]
+ \end{equation}
 
 
 % section 参数N (end)
