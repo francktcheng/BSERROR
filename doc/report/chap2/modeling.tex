@@ -42,7 +42,7 @@ Black-Scholes 公式是一个偏微分方程，用于预测期权价格随时间
 我们知道现实生活中，交易只能发生在一些离散的时间点上, 即交易员只能在一系列相继的时刻点上交易。
 一个总所周知的事实是，实际中想要完美的复制实现一个给定的连续时间策略是不可能的。
 本课题研究的就是离散时间版本的Delta 对冲策略与理论上的Delta 对冲策略之间的误差及风险控制。
-文章\cite{WhenIsTimeContinuous,Hayashi05evaluatinghedging,DiscreteTimeHedgingErrors} 研究了连续时间和离散时间金融交易模型的关系，
+文章\cite{WhenIsTimeContinuous,DiscreteTimeHedgingErrors,Hayashi05evaluatinghedging} 研究了连续时间和离散时间金融交易模型的关系，
 但这些文章更多的关注了两者的渐进性质而没有考虑如何最优的复制连续时间策略。本文将弥补这一空白。
 
 在一般化的 Black-Scholes 模型中， 假设在时刻$t$, 期权所基于的风险资产价格为 $X_t$， 另外有一无风险资产价格为 $S_t^0$。
@@ -151,7 +151,7 @@ $|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N)$的值大于
   \caption{欧式期权对冲策略误差控制的串行算法}
   \label{alg:bserror}
 	\begin{algorithmic}[1]
-	 \Require $X0$ \Comment{金融产品在$t=0$时的初始价格}
+	 \Require $X_0$ \Comment{金融产品在$t=0$时的初始价格}
 	 \Require $\sigma$ \Comment{市场波动性}
 	 \Require $K$ \Comment{期权合约价格}
 	 \Require $T$ \Comment{期权到期时间}
@@ -167,13 +167,13 @@ $|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N)$的值大于
 	 \State $\delta t \gets T/N$ \Comment{时间间隔}
 	 \State $count \gets 0$ \Comment{在$M$次模拟中$N$被接受的次数}
          \State $N \gets N_0$
-	  \ForAll{$m=1:M$} \Comment{M次蒙特卡洛模拟}
+	  \For{$m=1:M$} \Comment{M次蒙特卡洛模拟}
           \State $error \gets 0$ \Comment{离散策略和连续策略的误差}
-	  \For {all $NRV[j]$}
+	  \ForAll {$NRV[j]$}
 	     $NRV[j] \gets GaussianNumGenerator()$
 	  \EndFor
 	  \State $BM[0] \gets NRV[0] \cdot \sqrt{\delta t}$ 
-	  \For {all $BM[j]$}
+	  \ForAll {$BM[j]$}
 	     $BM[j] \gets BM[j-1] + NRV[j]\cdot \sqrt{\delta t}$ 
 	  \EndFor
 	  \State $PX[0] \gets X0$
