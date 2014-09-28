@@ -1,5 +1,54 @@
+<<<<<<< HEAD
 
 
+=======
+\chapter{模型验证及实验结果分析}
+\label{chap:exp}
+
+在实验中，我们利用CPU集群和多块Xeon Phi针对模型及其多种并行实现方法进行了运行时间，扩展性测试，
+以及最优化的参数设置调试。我们的测试将先从单块的Xeon Phi Knight Corner处理器和Xeon E52670(Sandybridge)处理器开始，用它们来测试我们的单块并行算法
+Omp1和Omp2，我们的测试集中在两个方面，一是对比算法在CPU平台和Xeon Phi平台上的表现；二是测试和比较两种算法的优, 
+并利用6块Xeon Phi Knight Corner来进行我们的扩展性测试。最后我们利用\textsl{Maison de la Simulation}的CPU集群\textsl{Poincare}
+来测试我们的算法收敛性。
+% \begin{table}[htbp]
+% \caption{Xeon Phi 参数列表}
+% \label{tab:MIC}
+% \centering
+% \resizebox{\linewidth}{!}{\footnotesize
+% 	\begin{tabular}{|c|c|c|c|c|} 
+% 	\hline
+% 	\hline
+% 	\end{tabular}
+% \end{table}
+\section{单块Xeon Phi和CPU的实验对比} % (fold)
+\label{sec:singleMIC-CPU}
+单块Xeon Phi的并行方案是多块Xeon Phi并行方案的基础，同时单块Xeon Phi方案的性能依赖于参数的
+选取。我们的实验将给出重要参数的优化取值范围，同时通过与相同代码在CPU下地性能对比来验证
+Xeon Phi架构对我们的模型的重要性。
+
+\subsection{单机并行方案一的实验} % (fold)
+\label{sub:bsV1}
+单机并行方案中最重要的参数是Ncache值和Chunk值的选取(见算法\ref{alg:omp1})，
+Ncache的取值大小将影响缓存的效率，而Chunk值的选取则会影响不同的线程任务分配方案。
+我们首先测试在不给定Chunk值（采用系统自己的线程任务分配方案）时Ncache值对算法的影响。
+在图\ref{fig:v1-chunck-Ncache} 中，我们
+在X轴上选取不同的Ncache值，同时给出5组选取不同Chunk值的时间曲线。该测试中得时间均为没做一次蒙特卡洛模拟的平均时间。
+为了缩短测试时间，我们取蒙特卡洛模拟的次数较小($M=10$)，这就会使我们的测试时间有一定的波动性，因为蒙特卡洛模拟具有随机的性质。但是
+从趋势上来看，我们仍然可以给出分析结果。
+\begin{figure}[!t]
+   \centering
+   \includegraphics[width=\textwidth]{chap5/Figures/bsV1-6-mic-cpu-Time-Chunck-0.pdf}
+   \caption{算法Omp1在不同Ncache值下的运行时间, $N=10^6$, $M=10$, 图中Omp1的运行时间随着Ncache的值先降低后增加，表明Ncache有一个
+   最佳的取值范围。图中也可以看出同样地参数下算法在Xeon Phi平台上表现得比CPU平台下更好。由于M的取值较小，曲线具有一定的波动性。}
+   \label{fig:v1-Ncache}
+\end{figure}
+
+我们发现算法在Xeon Phi上的表现优于CPU上的表现，并且当$10^4 < Ncache < 10^5$时，算法\ref{alg:omp1}在CPU和Xeon Phi上都存在一个最优化时间的窗口, 
+这分别对应了CPU和Xeon Phi上的缓存大小，只有当
+每次任务所需内存接近这个缓存大小时才能充分发挥性能。当我们考察Chunk值对算法的影响时，我们从图
+\ref{fig:v1-mic-chunck-Ncache} \ref{fig:v1-cpu-chunck-Ncache} 中可以看到，取不同的Chunk值，
+对算法的性能并没有明显的影响。
+>>>>>>> 273a3bb7d70cc9a59776fc0ca9bf7751e6256e24
 \begin{figure}[!t]
    \centering
    \includegraphics[width=\textwidth]{chap5/Figures/bsV1-mic-Time-Chunck.pdf}
