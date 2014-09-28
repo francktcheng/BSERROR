@@ -32,31 +32,33 @@
 
 \section{单机并行算法}
 \label{sec:monoparallel}
-根据上节\ref{sec:parallelism}的分析，我们在这里给出两种单机并行思路的具体实现细节。在实际中，我们采用Intel MKL（Math Kernel Library）提供的高斯分布随机数发生器。该发生器基于梅森旋转算法。每次可生成单个或多个随机数。
+根据上节\ref{sec:parallelism}的分析，我们分别在算法\label{alg:omp1}，\label{alg:omp2_1}和\label{alg:omp2_2}中给出两种单机并行思路的具体实现细节。在实际中，我们采用Intel MKL（Math Kernel Library）提供的高斯分布随机数发生器。该发生器基于梅森旋转算法。每次可生成单个或多个随机数。
 \subsection{方案一}
-该方案将整段N分为相邻连续的子集，分段对每一段子集进行并行处理。
+该方案将整段N分为相邻的子集，子集内部连续，所有线程依次对每一段子集进行并行处理。
 \begin{algorithm}
-  \caption{基于多线程（multithreading）和矢量化（vectorization）的单机并行算法(单次蒙特卡洛模拟)}
+  \caption{基于多线程（multithreading）和矢量化（vectorization）的单机并行算法一(单次蒙特卡洛模拟)}
   \label{alg:omp1}
   \begin{algorithmic}[1]
-    \Require $X_0, \sigma, K, T, \epsilon, Prob, N_0, M$ (参见算法\ref{alg:bserror})
+    \Require $X_0, \sigma, K, T, \epsilon, N_0, M$ (参见算法\ref{alg:bserror})
     \Require $N_{cache}$ \Comment{依序并行处理的子集大小}
-    \Procedure{$mono_1$}{$N_{cache}$}
+    \Ensure $count$
+    \Procedure{$MONO_1$}{$N_{cache}$}
     \State $error \gets 0$
-    \State $NRV[N_{cache}] \gets vdRngGaussian(N_{cache})$ \Comment{一次生成$N_{cache}$个符合高斯分布的随机数}
-    \State $BM[N_{cache}]$
-    \State $PX[N_{cache}]$
+    \State $count \gets 0$
+    \State $NRV[N_{cache}] \gets vdRngGaussian(N_{cache})$ \Comment{一次生成$N_{cache}$个符合高斯分布的随机数，赋给线程共享的NRV数组}
+    \State $BM[N_{cache}]$ \Comment{线程共享的BM数组}
+    \State $PX[N_{cache}+1]$ \Comment{线程共享的PX数组}
     \State $PX[0] \gets 0$
     \State $\delta t \gets T/N$
     \State $BM[0] \gets \sqrt{\delta t} \times NRV[0]$
     \For{$k=1:(int)N/N_{cache}$}
-    \State \textbf{Start parallel region}
+    \State \textbf{Start parallel for region} \Comment{调度器将不同的i分配给不同线程}
     \For{$i=1:N_{cache}$}
-    \State $BM[i] = BM[0] + reduce\_add(NRV[1:i])$ \Comment{SIMD reduction操作}
+    \State $BM[i] = BM[0] + \sqrt{\delta t}\times reduce\_add(NRV[1:i])$ \Comment{闭区间SIMD reduction操作}
     \State $PX[i+1] = X_0 \times \exp(-0.5 \sigma^2 \times (kN_{cache}+i+1) \times \delta t + \sigma \times BM[i])$
     \EndFor
-    \State \textbf{End parallel region}
-    $PX[1] = X_0 \times \exp(-0.5 \sigma^2 \times (kN_{cache}+1) \times \delta t + \sigma \times BM[i])$
+    \State \textbf{End parallel for region}
+    \State $PX[1] = X_0 \times \exp(-0.5 \sigma^2 \times (kN_{cache}+1) \times \delta t + \sigma \times BM[0])$
     \State \textbf{Start parallel region reduction(+:error) nowait}
     \For{$i=0:N_{cache}$} 
     \State $j \gets kN_{cache}+1$
@@ -64,54 +66,312 @@
     \State $Upper = (\log(PX[i]/K)+0.5\times \sigma^2 \times (T-T_j))/(\sigma \times \sqrt{T-T_j})$
     \State $error \gets error - \frac{1}{\sqrt{2\pi}}\times (PX[i+1]-PX[i])\times \int_{-\infty}^{Upper1}e^{-\frac{t^2}{2}}dt$
     \EndFor
-    \State \textbf{End parallel region}
+    \State \textbf{End parallel region reduction(+:error) nowait}
     \State $NRV[N_{cache}] \gets vdRngGaussian(N_{cache})$ 
     \State $BM[0] = BM[N_{cache}-1] + \sqrt{\delta t}\times NRV[0]$
     \State $PX[0] \gets PX[Ncache]$
     \EndFor
+    \State $以类似方式处理剩余的N\%N_{cache}次循环$
+    \State $error = error + K/\sqrt{2\pi} \cdot \int_{-\infty}^{Upper2}e^{-\frac{t^2}{2}}dt -X0/\sqrt{2\pi}\cdot \int_{-\infty}^{Upper1}e^{-\frac{t^2}{2}}dt$
+    \If{$PX[end]>K$}
+    \State $error \gets error + (PX[end]-K)$
+    \EndIf
+    \If{$abs(err) < \epsilon$}
+    \State $count \gets 1$
+    \EndIf
+    
+    \State $return count$
     
     \EndProcedure
   \end{algorithmic}
 \end{algorithm}
+方案一中，每次模拟中$N$维的向量（$NRV, BM, PX$）被分成大小为$N_{cache}$（$PX$维度高一）的紧邻相连的子集。每个子集被分配给全体线程共同计算，子集间仍保持一个绝对的顺序。多线程环境下，$NRV$,$BM$,$PX$由全体CPU核心共享。因此该并行算法性能提升的关键在于调节$N_{cache}$的大小使得共享数据可以填充缓存。数据在缓存内，存取延迟小带宽高，和CPU计算速度匹配。如果共享数据不够大，没有充分利用缓存空间，所需的循环次数相对较多，则相应的线程调度开销（scheduling overheads）就会偏大。如果共享数据过大，缓存无法完整包含，则会导致与主内存频繁的数据交换，亦会降低程序的性能。
+
+在MIC架构下，每个核心拥有两级缓存。$L2$缓存完整包含$L1$缓存的内容。单个核心拥有的$L2$缓存的大小是$512K$，这些缓存通过片上环形网络相连。同时与环形网络相连的还有一个标签目录系统（tag directories），它的存在使得整个L2缓存保持一致（coherent）。因此当数据存在任何核心的$L2$缓存下，都可以相对较快地被其他核心调用。$L2$缓存的全部容量是$512K\times 61 = 31M$，最优的共享数据尺寸应和该大小相符。关于$N_{cache}$在CPU和MIC上的调优，我们将在下章\ref{sec:exp}中详细论述。
+
+\subsection{方案二}
+该方案将整段N分为相邻的子集，每段子集内部连续，不同子集被分配给不同线程并发地处理。
+\begin{algorithm}
+  \caption{基于多线程（multithreading）和矢量化（vectorization）的单机并行算法二(单次蒙特卡洛模拟)，第一部分}
+  \label{alg:omp2_1}
+  \begin{algorithmic}[1]
+    \Require $X_0, \sigma, K, T, \epsilon, N_0, M$ (参见算法\ref{alg:bserror})
+    \Require $N_{vec}$ \Comment{分配给某线程的某子集的大小}
+    \Ensure $count$
+
+    \Procedure{$MONO_2$}{$N_{vec}$}
+    \State $error \gets 0$
+    \State $count \gets 0$
+    \State \textbf{Start parallel region} 
+    \State $NRV[N_{vec}] \gets vdRngGaussian(N_{vec})$ \Comment{线程私有的NRV数组} 
+    \State $BM[N_{vec}]$ \Comment{线程私有的BM数组}
+    \State $PX[N_{vec}+1]$ \Comment{线程私有的PX数组}
+    \State $errloc \gets 0$ \Comment{线程私有误差记录}
+    \State $BMlast \gets 0$ \Comment{线程私有，记录前一次计算的BM（布朗运动）的终态}
+    \State $PXlast \gets 0$ \Comment{线程私有，记录前一次计算的PX（离散价格）的终态}
+    \State $lastk \gets -1$ \Comment{线程私有，记录前一次处理的子集的序号}
+    \State $stream(seed)$ \Comment{线程私有，以seed为种子随机数发生流}
+    \State \textbf{Start parallel for region} \Comment{调度器将不同k分配给不同线程}
+    \For{$k=0:(int)N/N_{vec}$}
+    \State $tmp \gets 0$
+    \For{$i=0:k-lastk-1$}
+    \State $NRV[N_{vec}] \gets vdRngGaussian(N_{vec})$ \Comment{一次生成$N_{vec}$个符合高斯分布的随机数}
+    \State $tmp \gets tmp + reduce\_add(NRV[0:N_{vec}-1])$ \Comment{闭区间SIMD reduction操作}
+    \EndFor
+    \State $BMlast = BMlast + \sqrt{\delta t}\times tmp$
+    \State $PXlast = X_0 \times \exp(-0.5 \sigma^2 \times (kN_{vec}) \times \delta t + \sigma \times BMlast)$
+    \State $NRV[N_{vec}] \gets vdRngGaussian(N_{vec})$ \Comment{一次生成$N_{vec}$个符合高斯分布的随机数}
+    \State $BM[0] \gets BMlast + \sqrt{\delta t}\times NRV[0]$
+    \State $PX[0] \gets PXlast$
+
+    \For{$i=1:N_{vec}$}
+    \State $BM[i] = BM[0] + reduce\_add(NRV[1:i])$ \Comment{SIMD reduction操作}
+    \State $PX[i+1] = X_0 \times \exp(-0.5 \sigma^2 \times (kN_{vec}+i+1) \times \delta t + \sigma \times BM[i])$
+    \EndFor
+    \State $PX[1] = X_0 \times \exp(-0.5 \sigma^2 \times (kN_{vec}+1) \times \delta t + \sigma \times BM[0])$
+
+    \For{$i=0:N_{vec}$}
+    \State $j \gets k\times N_{vec}+i$
+    \State $T_j \gets j\times T/N$
+    \State $Upper = (\log(PX[i]/K)+0.5\times \sigma^2 \times (T-T_j))/(\sigma \times \sqrt{T-T_j})$
+    \State $error \gets error - \frac{1}{\sqrt{2\pi}}\times (PX[i+1]-PX[i])\times \int_{-\infty}^{Upper1}e^{-\frac{t^2}{2}}dt$
+    \EndFor
+    
+    \State $BMlast \gets BM[N_{vec}-1]$
+    \State $PXlast \gets PX[N_{vec}]$
+    \State $lastk \gets k$
+
+    \EndFor
+    \State \textbf{End parallel for region}
+
+    \If {$lastk=nCal \land N\%Nvec=0$}
+    \If {$PX[Nvec]>K$}
+    \State $errloc \gets errloc + PX[N_{vec}] - K$ 
+    \EndIf
+    \EndIf
+
+    \algstore{break}
+    \end{algorithmic}
+  \end{algorithm}
+
+方案一中，每次模拟中$N$维的向量（$NRV, BM, PX$）被分成大小为$N_{vec}$（$PX$维度高一）的子集。每个子集被分配给一个线程单独处理，以私有的方式存储。另外，每个线程也保有一条私有的随机数发生流。因此该并行算法性能提升的关键在于调节$N_{vec}$的大小使得数据可以填充缓存线程所在核心的缓存。和算法\label{alg:omp1}一样，数据在缓存内，存取延迟小带宽高，和CPU计算速度匹配。如果$N_{vec}$太小，没有充分利用缓存空间，所需的循环次数相对较多，则相应的线程调度开销（scheduling overheads）就会偏大。如果$N_{vec}$过大，单个核心的缓存无法完整包含，则会导致与主内存频繁的数据交换，亦会降低程序的性能。
+
+在MIC架构下，每个核心拥有$L1$缓存包括$32K$的数据缓存和$32K$的代码缓存，以及$512K$的$L2$缓存，由代码和数据共同分享。最优的$N_{vec}$应使各线程私有数据尺寸和$L2$缓存大小相符。关于$N_{vec}$在CPU和MIC上的调优，我们将在下章\ref{chap:exp}中详细论述。
 
 
+\begin{algorithm}
+  \caption{基于多线程（multithreading）和矢量化（vectorization）的单机并行算法二(单次蒙特卡洛模拟)，第二部分}
+  \label{alg:omp2_2}
+  \begin{algorithmic}[1]
+
+    \algrestore{break}
+    \State $以类似方式处理剩余的N\%N_{vec}次循环并相应更新errloc如果PX[N\%Nvec]>K$
+    
+    \State \textbf{Start single} \Comment{单线程操作}
+    \State $errloc = errloc + K/\sqrt{2\pi} \cdot \int_{-\infty}^{Upper2}e^{-\frac{t^2}{2}}dt$
+    \State \textbf{End single}
+
+    \State \textbf{Start single} \Comment{单线程操作}
+    \State $errloc = errloc - X0/\sqrt{2\pi}\cdot \int_{-\infty}^{Upper1}e^{-\frac{t^2}{2}}dt$
+    \State \textbf{End single}
+
+    
+    \State \textbf{Start atomic operation} \Comment{原子操作}
+    \State $error \gets error + errloc$
+    \State \textbf{End atomic operation}
+
+    \State \textbf{End Parallel region}    
+
+    \If{$abs(err) < \epsilon$}
+    \State $count \gets 1$
+    \EndIf
+    
+    \State $return count$
+
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+\section{矢量化积分运算}
+\label{sec:vecintegral}
+在算法\ref{alg:omp1}，\ref{alg:omp2_1}和\ref{alg:omp2_2}中大量使用了如下一个积分：
+
+\begin{equation}
+f(x)=\int_{-\infty}^{x}e^{-\frac{t^2}{2}}dt
+\end{equation}
+
+这实际上是一个高斯分布概率密度的积分。毋庸置疑，计算这个积分的效率将直接影响整个程序的性能和精度。结合我们在上节中叙述的并行算法，需要计算这个积分的通常是单个线程。因此我们这里介绍一个矢量化（vectorized）的并行积分计算。
+利用辛普森积分法（Simpson's rule）
+\begin{equation}
+\label{eq:simpson}
+\int_{a}^{b}f(x)dx\approx \frac{h}{3}\left[f(x_0)+2\sum\limits_{j=1}^{n/2-1}f(x_{2j})+4\sum\limits_{j=1}^{n/2}f(x_{2j-1})+f(x_n)\right]
+\end{equation}
+又已知高斯积分结果有
+\begin{equation}
+\label{eq:gauss}
+f(x)=\int_{-\infty}^{x}e^{-\frac{t^2}{2}}dt=0.5\times \sqrt{2\pi} + \int_{0}^{x}e^{-\frac{t^2}{2}}dt
+\end{equation}
+
+由公式\ref{eq:simpson}和\ref{eq:gauss}，我们可得以下串行算法\ref{alg:simpson_ser}。
+
+\begin{algorithm}
+  \caption{基于Simpson公式的高斯积分串行算法}
+  \label{alg:simpson_ser}
+  \begin{algorithmic}[1]
+    \Require $N$ \Comment{积分区间细分程度}
+    \Ensure $sum$
+    \Procedure{$NormalIntegral$}{$b$}
+    \State $a \gets 0$
+    \State $sum \gets 0$
+    \State $h \gets \frac{b-a}{NN}$
+    \State $sum \gets sum + exp(-\frac{a^2}{2}) + 4exp(-\frac{(a+h)^2}{2} + exp(-\frac{b^2}{2}))$
+    \For{$i=1:N/2$}
+    \State $s \gets a+2\times i \times h$
+    \State $sum \gets sum + 2exp(-\frac{s^2}{2})$
+    \State $s \gets s + h$
+    \State $sum \gets sum + 4exp(-\frac{s^2}{2})$
+    \EndFor
+    \State $sum \gets 0.5\times \sqrt{2\pi} + h\times sum/3$
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+得益于级数天然的矢量形式，我们利用包装汇编代码的内部函数（Intrinsic function）将算法\ref{alg:simpson_ser}改写为直观的矢量形式，以期获得更好的性能。算法表述如\ref{alg:simpson_par}。
+
+\begin{algorithm}
+  \caption{基于Simpson公式的高斯积分矢量化算法}
+  \label{alg:simpson_par}
+  \begin{algorithmic}[1]
+    \Require $N$ \Comment{积分区间细分程度}
+    \Require $vecsize$ \Comment{矢量位长}
+    \Ensure $sum$
+    \Procedure{$vNormalIntegral$}{$b$}
+    \State $vec_{cf0}, vec_{cf1}, vec_{cf2}, vec_{s}, vec_{stp}, vec_{exp}$
+    \State $a \gets 0$
+    \State $sum \gets 0$
+    \State $h \gets \frac{b-a}{N}$
+    \State $sum \gets sum + exp(-\frac{a^2}{2}) + 4exp(-\frac{(a+h)^2}{2} + exp(-\frac{b^2}{2}))$
+    \State $vec_{cf0} \gets set1(a)$ \Comment{$矢量寄存器置a$}
+    \State $vec_{cf1} \gets set1(2\times h)$ \Comment{$矢量寄存器置2\times h$}
+    \State $vec_{cf2} \gets set1(-0.5)$ \Comment{$矢量寄存器置-0.5$}
+
+    \State $vec_{s} \gets set(8,7,6,5,4,3,2,1)$ \Comment{$将矢量寄存器从高到低置8到1$}
+    \State $vec_{s} \gets mul(vec_s, vec_{cf1})$ \Comment{$矢量对应项相乘： 16h, 14h, ..., 2h$}
+    \State $vec_{s} \gets add(vec_{cf0}, vec_s)$ \Comment{$矢量对应项相加：a+16h, ..., a+2h$}
+    
+    \State $vec_{stp} \gets set1(2h\times vecsize - h)$ \Comment{$循环中vec_s的增量步长$}
+    \State $vec_{cf0} \gets set1(h)$ \Comment{$矢量寄存器置h$}
+
+    \For{$i\gets0:(N/2-1)/vecsize$}
+    \State $vec_{exp} \gets mul(vec_s, vec_s)$
+    \State $vec_{exp} \gets mul(vec_{exp}, vec_{cf2})$
+    \State $vec_{cf1} \gets exp(vec_{exp})$
+    \State $sum \gets sum + 2\times reduce\_add(vec_{cf1})$
+    
+    \State $vec_{s} \gets add(vec_{s}, vec_{cf0})$ \Comment{$s=s+h$}
+    \State $vec_{exp} \gets mul(vec_{s}, vec_{s})$ 
+    \State $vec_{exp} \gets mul(vec_{exp}, vec_{cf2})$ 
+    \State $vec_{cf1} \gets exp(vec_{exp})$
+    \State $sum \gets sum + 4\times reduce\_add(vec_{cf1})$
+
+    \State $vec_{s} \gets add(vec_{s}, vec_{stp})$ \Comment{$s=s+2h\times vecsize - h$}
+    \EndFor
+    \State $sum \gets 0.5\times \sqrt{2\pi} + h\times sum/3$
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+这里积分区间的细分程度$N$需要根据算法\ref{alg:bserror}中每次蒙特卡洛模拟选取的$N$相匹配。蒙特卡洛模拟中选取的$N$越大，则需要将高斯积分区间分得越细来满足精度要求。
+经过矢量化的高斯积分计算函数在实际中对比未经矢量化的版本，在CPU和MIC上的性能均有显著提高。具体性能分析请参见第\ref{chap:exp}
 
 
-
-
-
-
-
-
-
-$N$值的选择
 
 \section{N的最优化搜索}
 \label{sec:researchN}
-在获得一个可接受的$N$值后，我们可以继续寻找满足条件的更小的$N$值，一般初始的$N$值取的较大，所以这种最优化的寻找可以通过一个二分法的搜寻算法来实现。
+算法\ref{alg:bserror}的最终目的是寻找一个最小的$N$值以满足离散策略误差可容忍下限。本文一个核心贡献即是第\ref{chap:3}章中的一个原创结果，该结果给出了一个优于以往任何文献发表的对于$N$值的估计。该估计给出了与误差同阶的上界，将问题转化在有限闭区间中最优解的搜索，使得二分法的应用成为可能。
+
+二分法广泛应用于各个科学工程领域，它将搜索的复杂度从$O(N)$降为$O(log(N))$，这和我们给出的上界是分不开的。
+
+从上界$N_0$开始，在获得一个可接受的$N$值后，我们可以继续寻找满足条件的更小的$N$值，直至算法收敛。二分的过程其实就是不断修正搜索的上界和下界的过程。当上界和下界的差值小于我们预设的门限，则判定算法收敛，停止搜索。算法\ref{alg:searchN}给出了当前语境下二分法的具体实现。
 \begin{algorithm}
 	\caption{最优$N$值的搜索算法}
 	\label{alg:searchN}
 	\begin{algorithmic}[1]
-		\State 参数 $M0$ \Comment{蒙特卡洛模拟的次数，$M0$越大模拟结果可信度越高}
-		\Procedure{NBSECT}{$N0$, $\lambda$} \Comment{$N0$是初始化抽样次数，$\lambda$是最优解的置信区间}
-		\State $nL \gets 1$ \Comment{设置$n$值的初始下界} 
-		\State $nU \gets N0$ \Comment{设置$n$值的初始上界}
-		\State $n \gets 0.5\cdot (nL + nU)$
-		\While {$|nU - nL| > \lambda$} 
-		\If {$BSERROR(M0,n) < n$} \Comment{缩小搜索范围}
-		\State $nU \gets n$
-		\State $n \gets 0.5\cdot(nL + nU)$ 		
-		\Else  \Comment{扩大搜索范围}
-		\State $nL \gets n$
-		\State $n \gets 0.5\cdot(nL + nU)$ 		
-		\EndIf
-		\EndWhile
-		\State return $n, nU, nL$
-		\EndProcedure
+	  \Require $M$ \Comment{蒙特卡洛模拟的次数，$M$越大模拟结果可信度越高}
+          \Require $Prob$ \Comment{离散策略误差可接受概率下限}
+	  \Procedure{NBSECT}{$N_0$, $\lambda$} \Comment{$N_0$是初始抽样次数，$\lambda$是收敛判定门限}
+          \State $lastvalid \gets -1$ \Comment{$最近一次满足条件的N值$}
+	  \State $nL \gets 0$ \Comment{设置$n$值的初始下界} 
+	  \State $nU \gets N_0$ \Comment{设置$n$值的初始上界}
+	  \State $n \gets \frac{nL + nU}{2}$
+	  \While {$|nU - nL| > \lambda$} 
+	  \If {$BSERROR(M,n) > Prob$} \Comment{修改上界，搜索更小的N}
+          \State $lastvalid \gets n$
+	  \State $nU \gets n$
+	  \State $n \gets \frac{nU + nL}{2}$		
+	  \Else  \Comment{修改下界，搜索更大的N}
+	  \State $nL \gets n$
+	  \State $n \gets \frac{nU + nL}{2}$
+	  \EndIf
+	  \EndWhile
+          \If{$lastvalid!=-1$}
+	  \State return $n$
+          \Else 
+          \State $未搜索到满足条件的N值$ 
+          \EndIf 
+	  \EndProcedure
 	\end{algorithmic}
 \end{algorithm}
-在算法 \ref{alg:searchN} 中我们设置的收敛条件为$|nU - nL| \le \lambda$ 这是因为蒙特卡洛模拟本身具有一定的随机性。在$N$的收敛过程中会出现波动，导致无法
-收敛到一个单一的值上，在$BSERROR$中给定了置信概率$Prob$的情况下，我们很自然地就能利用置信区间这一概念来表述我们取到的最优值$N$。在实际应用中，
-$N$的初始值通常需要取得很大，然后通过二分法来逐步缩小范围取得最优值。此外蒙特卡洛模拟得次数$M$也需要取一个很大的值来保证其精确性。如果$N$和$M$的取值
-都较大，就会极大地增加计算时间和内存空间需求。这时串行程序在普通的计算机上就难以满足问题的需求，我们将需要转而开发并行程序并使其运行在超级计算机上。
+在算法 \ref{alg:searchN} 中我们设置的收敛条件为$|nU - nL| \le \lambda$，$lambda$可根据计算资源，实际应用中要求的精度进行调整。由于蒙特卡洛模拟本身有其随机性，当$M$值较小时在$N$的收敛过程中会出现波动，可能导致无法每次试验无法收敛到单一的$N$值上。因此在实际中我们需要取一个相对较大的$M$来保证蒙特卡洛模拟的结果是可信的。当$M$增大到一定程度每次$N$收敛的值趋于稳定，我们可认为该$M$值是有效的。当然，更大的$M$值从数值上带来更好的近似程度，然而却需要更多的计算资源。关于如何选取一个合适的$M$详见下章。
+
+\section{多机并行}
+\label{sec:multiparallel}
+如\ref{sec:parallelism}中所述，多机并行采用消息传递模型，实现上使用Intel MPI。算法上我们采用Master-Slave模型，在一个或多个节点上由CPU来扮演boss的角色，而其余的机器则完成worker的工作。具体来说，从初始的$N$值开始，多机在$M$（蒙特卡洛模拟次数）这个维度上并行。每一次除掉boss，其余worker平分$M$并发地计算一个给定$N$值下的蒙特卡洛模拟，而boss则分担$M$除以worker数量无法除尽的余数。当worker的数量不是非常多的时候，boss分担的任务是十分有限的，因为他的主要任务是接受来自其他worker的结果，并作出判断决定下次迭代的$N$值。他将从不同worker发来的$M$和$count$（$M$次中满足条件的次数）加总之后利用算法\ref{alg:searchN}得到一个新的$N$值，并随后将这个$N$值分发给各个worker。假如搜索算法已满足收敛条件，则boss将停止工作的讯息发给各个worker使后者停止正在行进的工作。作为worker来说，如果boss分配$N$值对应的$M$和$count$已经计算完毕，他将自行根据之前的上下界计算一个更小的$N$值。计算时每间隔一段时间检查是否收到boss的讯息。收到boss讯息之后，停止计算，对比自己计算的$N$是否和boss发来的一致，如果一致，则下一次迭代减少相应的计算次数，如果不一致，则舍弃已获得的计算结果，重新开始计算一个新的$N$值，同时更新上下界。在实际中$M$值一般较大，所有的worker可能由于通信，网络等各种因素随机地出现延迟，但本文描述的这种设计可以避免预先完成的worker浪费机时等待指令。与此同时，我们采用非阻塞通信来沟通boss和worker，因此woker可以以极高的效率投入计算当中。
+预先完成的worker自行计算一个更小的$N$的策略在实际中往往获得非常好的效果。具体分析请见第\ref{chap:exp}章。
+算法\ref{alg:mpi}描述的是多机并行的实现细节。
+\begin{algorithm}
+	\caption{基于MPI的多机并行算法}
+	\label{alg:mpi}
+	\begin{algorithmic}[1]
+	  \Require $M$ \Comment{蒙特卡洛模拟的次数，$M$越大模拟结果可信度越高}
+          \Require $N_0$ \Comment{由理论给出的上界}
+          \Require $Prob$ \Comment{离散策略误差可接受概率下限}
+          \Require $mpiWorldSize$ \Comment{参与计算的进程数}
+          \Require $myRank$ \Comment{进程id}
+	  \Procedure{MULTI}{$N_0$, $\lambda$} \Comment{$N_0$是初始抽样次数，$\lambda$是收敛判定门限}
+          \If{myRank==0} \Comment{第一个进程为boss}
+          \While {$!stop$}
+          \State $sumM \gets 0$
+          \State $sumCount \gets 0$
+          \For{src=1:mpiWorldSize}
+          \State 从src非阻塞接收
+          \EndFor
+          
+          \EndWhile
+          \EndIf
+
+
+
+          \State $lastvalid \gets -1$ \Comment{$最近一次满足条件的N值$}
+	  \State $nL \gets 0$ \Comment{设置$n$值的初始下界} 
+	  \State $nU \gets N_0$ \Comment{设置$n$值的初始上界}
+	  \State $n \gets \frac{nL + nU}{2}$
+	  \While {$|nU - nL| > \lambda$} 
+	  \If {$BSERROR(M,n) > Prob$} \Comment{修改上界，搜索更小的N}
+          \State $lastvalid \gets n$
+	  \State $nU \gets n$
+	  \State $n \gets \frac{nU + nL}{2}$		
+	  \Else  \Comment{修改下界，搜索更大的N}
+	  \State $nL \gets n$
+	  \State $n \gets \frac{nU + nL}{2}$
+	  \EndIf
+	  \EndWhile
+          \If{$lastvalid!=-1$}
+	  \State return $n$
+          \Else 
+          \State $未搜索到满足条件的N值$ 
+          \EndIf 
+	  \EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
