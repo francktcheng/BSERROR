@@ -148,7 +148,7 @@ $|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N)$的值大于
 算法\ref{alg:bserror} 给出了我们计算验证一个$N$值的串行算法伪代码。
 
 \begin{algorithm}
-  \caption{欧式期权对冲策略误差控制的串行算法}
+  \caption{欧式期权对冲策略误差判断的串行算法}
   \label{alg:bserror}
 	\begin{algorithmic}[1]
 	 \Require $X_0$ \Comment{金融产品在$t=0$时的初始价格}
@@ -156,8 +156,8 @@ $|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N)$的值大于
 	 \Require $K$ \Comment{期权合约价格}
 	 \Require $T$ \Comment{期权到期时间}
 	 \Require $\epsilon$ \Comment{可接受的误差上限}
-         \Require $N_{0}$ \Comment{理论给出的初始离散抽样次数上界}
          \Require $M$ \Comment{蒙特卡洛模拟次数}
+         \Require $N$ \Comment{离散抽样次数}
          \Ensure $prob$
 	 \Procedure{BSERROR}{M, N}
          \State $error \gets 0$ \Comment{离散策略和连续策略的误差}
@@ -166,7 +166,6 @@ $|P(X) - P_{T_N}(X)| < \epsilon$的概率$Prob(M,N)$, 当$Prob(M,N)$的值大于
          \State $PX[N+1]$ \Comment{在离散时间点的期权价格}
 	 \State $\delta t \gets T/N$ \Comment{时间间隔}
 	 \State $count \gets 0$ \Comment{在$M$次模拟中$N$被接受的次数}
-         \State $N \gets N_0$
 	  \For{$m=1:M$} \Comment{M次蒙特卡洛模拟}
           \State $error \gets 0$ \Comment{离散策略和连续策略的误差}
 	  \ForAll {$NRV[j]$}

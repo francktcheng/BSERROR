@@ -10,6 +10,9 @@
 
 #define M 100 //Monte Carlo simulation
 
+FILE* output=0;
+char outputName[100];
+
 // constants for MPI communication
 const int bossRank = 0;
 const int msgReportLenghth = 2; //Mloc, countloc
@@ -110,11 +113,30 @@ int main(int argc, char *argv[])
       msgReportTag++;
     }//while
     t1 = MPI_Wtime();
+
+	sprintf(outputName, "par-M-%d-np-%d.out", M, mpiWorldSize);
+	output = fopen(outputName, "a+");
+
+	fprintf(output, "%d, %d, ", mpiWorldSize, M);
+	
     printf("Time: %.6lfs\n", t1-t0);
+
+	fprintf(output, "%.6lf, ", t1-t0);
+
+	fprintf(output, "%d, ", Ninit);
+
     if(lastvalid!=-1)
+	{
       printf("The N should be at least %d\n", lastvalid);
+	  fprintf(output, "%d\n", lastvalid);
+	}
     else
+	{
       printf("Something must be wrong. We don't find any approriate N.\n");
+	  fprintf(output, "%d\n", 0);
+	}
+
+	fclose(output);
   }						
   else{//worker   
     const int share = M/(mpiWorldSize-1);
