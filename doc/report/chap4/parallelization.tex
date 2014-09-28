@@ -39,10 +39,10 @@
   \caption{基于多线程（multithreading）和矢量化（vectorization）的单机并行算法一(单次蒙特卡洛模拟)}
   \label{alg:omp1}
   \begin{algorithmic}[1]
-    \Require $X_0, \sigma, K, T, \epsilon, N_0, M$ (参见算法\ref{alg:bserror})
+    \Require $X_0, \sigma, K, T, \epsilon, M, N$ (参见算法\ref{alg:bserror})
     \Require $N_{cache}$ \Comment{依序并行处理的子集大小}
     \Ensure $count$
-    \Procedure{$MONO_1$}{$N_{cache}$}
+    \Procedure{$MONO_1$}{M, N}
     \State $error \gets 0$
     \State $count \gets 0$
     \State $NRV[N_{cache}] \gets vdRngGaussian(N_{cache})$ \Comment{一次生成$N_{cache}$个符合高斯分布的随机数，赋给线程共享的NRV数组}
@@ -80,7 +80,7 @@
     \State $count \gets 1$
     \EndIf
     
-    \State $return count$
+    \State return $count$
     
     \EndProcedure
   \end{algorithmic}
@@ -95,11 +95,11 @@
   \caption{基于多线程（multithreading）和矢量化（vectorization）的单机并行算法二(单次蒙特卡洛模拟)，第一部分}
   \label{alg:omp2_1}
   \begin{algorithmic}[1]
-    \Require $X_0, \sigma, K, T, \epsilon, N_0, M$ (参见算法\ref{alg:bserror})
+    \Require $X_0, \sigma, K, T, \epsilon, M, N$ (参见算法\ref{alg:bserror})
     \Require $N_{vec}$ \Comment{分配给某线程的某子集的大小}
     \Ensure $count$
 
-    \Procedure{$MONO_2$}{$N_{vec}$}
+    \Procedure{$MONO_2$}{$M, N$}
     \State $error \gets 0$
     \State $count \gets 0$
     \State \textbf{Start parallel region} 
@@ -186,7 +186,7 @@
     \State $count \gets 1$
     \EndIf
     
-    \State $return count$
+    \State return $count$
 
     \EndProcedure
   \end{algorithmic}
@@ -299,6 +299,7 @@ f(x)=\int_{-\infty}^{x}e^{-\frac{t^2}{2}}dt=0.5\times \sqrt{2\pi} + \int_{0}^{x}
 	\begin{algorithmic}[1]
 	  \Require $M$ \Comment{蒙特卡洛模拟的次数，$M$越大模拟结果可信度越高}
           \Require $Prob$ \Comment{离散策略误差可接受概率下限}
+          \Ensure $n$ 
 	  \Procedure{NBSECT}{$N_0$, $\lambda$} \Comment{$N_0$是初始抽样次数，$\lambda$是收敛判定门限}
           \State $lastvalid \gets -1$ \Comment{$最近一次满足条件的N值$}
 	  \State $nL \gets 0$ \Comment{设置$n$值的初始下界} 
@@ -330,48 +331,102 @@ f(x)=\int_{-\infty}^{x}e^{-\frac{t^2}{2}}dt=0.5\times \sqrt{2\pi} + \int_{0}^{x}
 预先完成的worker自行计算一个更小的$N$的策略在实际中往往获得非常好的效果。具体分析请见第\ref{chap:exp}章。
 算法\ref{alg:mpi}描述的是多机并行的实现细节。
 \begin{algorithm}
-	\caption{基于MPI的多机并行算法}
+	\caption{基于MPI的多机并行算法，boss部分}
 	\label{alg:mpi}
 	\begin{algorithmic}[1]
 	  \Require $M$ \Comment{蒙特卡洛模拟的次数，$M$越大模拟结果可信度越高}
-          \Require $N_0$ \Comment{由理论给出的上界}
+          \Require $N_0$ \Comment{由理论给出的离散抽样次数上界}
+          \Require $\lambda$ \Comment{收敛判定门限}
           \Require $Prob$ \Comment{离散策略误差可接受概率下限}
           \Require $mpiWorldSize$ \Comment{参与计算的进程数}
           \Require $myRank$ \Comment{进程id}
+          \Ensure $n$ \Comment{满足条件的最小的N}
 	  \Procedure{MULTI}{$N_0$, $\lambda$} \Comment{$N_0$是初始抽样次数，$\lambda$是收敛判定门限}
+          \State $Nloc, Nnew, Nup, Ndown$ \Comment{当前的N，下一次的N，N搜索的上界，N搜索的下界}
           \If{myRank==0} \Comment{第一个进程为boss}
+          \State $Nup \gets N_0$
+          \State $Ndown \gets 0$
+          \State $Nloc \gets \frac{Nup+Ndown}{2}$
+          \State $lastvalid \gets -1$ \Comment{最近一次满足条件的N值}
+          \State $stop \gets 0$
           \While {$!stop$}
-          \State $sumM \gets 0$
+          \State $sumM \gets M\%(mpiWorldSize-1)$
           \State $sumCount \gets 0$
           \For{src=1:mpiWorldSize}
-          \State 从src非阻塞接收
+          \State $从src非阻塞接收Mloc, countloc$
           \EndFor
           
-          \EndWhile
+          \For{m=0:M\%(mpiWorldSize-1)}
+          \State $sumCount \gets sumCount + MONO_2(M, Nloc)$
+          \EndFor 
+          
+          \For{i=1:mpiWorldSize}
+          \State 等待任何未达的消息Mloc, countloc
+          \State $sumM \gets sumM + Mloc$
+          \State $sumCount \gets sumCount + countloc$
+          \EndFor
+          
+          \If{sumCount/sumM > Prob}
+          \State $lastvalid \gets Nloc$
+          \State $Nup \gets Nloc$
+          \State $Nnew \gets \frac{Nup+Ndown}{2}$
+          \Else
+          \State $Ndown \gets Nloc$
+          \State $Nnew \gets \frac{Nup+Ndown}{2}$
           \EndIf
+          \If{$abs(Nup - Ndown) < \lambda$}
+          \State $stop = 1$
+          \EndIf
+          \State $Nloc \gets Nnew$
+          \State $非阻塞发送Nloc和stop给其他worker$
+          \EndWhile
+          \If{lastvalid != -1}
+          \State $n \gets lastvalid$
+          \State return $n$
+          \Else
+          \State 未搜索到合适的N值
+          \EndIf
+          \algstore{breakagain}
+        \end{algorithmic}
+\end{algorithm}
+          
+\begin{algorithm}
+  \caption{基于MPI的多机并行算法，worker部分}
+  \label{alg:mpi}
+  \begin{algorithmic}[1]
+    \algrestore{breakagain}
+    \Else 
+    \State $Nup \gets N_0$
+    \State $Ndown \gets 0$
+    \State $Nloc \gets \frac{Nup+Ndown}{2}$
+    \State $countloc \gets 0$
+    \While{$true$}
+    
+    \For{m=0:(int)M/(mpiWorldSize-1)}
+    \State $countloc \gets countloc + MONO_2(M, Nloc)$
+    \EndFor 
+    
+    \State 非阻塞发送(int)M/(mpiWorldSize-1), countloc给boss
+    \State $countloc \gets 0$
+    
+    \For{m=0:(int)M/(mpiWorldSize-1)}
+    \State $countloc \gets countloc + MONO_2(M, (Nloc+Ndown)/2)$
+    \If{m\%10=0}
+    \State 检测是否收到boss的消息，如果是则$break$
+    \EndIf
+    \EndFor
+    
+    \State 阻塞接受来自boss的消息Nnew, stop
+    
+    \If{$stop=1$}
+    \State $break$
+    \Else
+    \State $对比Nnew和(Nloc+Ndown)/2，相应地更新Mloc, Nloc$
+    \EndIf
 
-
-
-          \State $lastvalid \gets -1$ \Comment{$最近一次满足条件的N值$}
-	  \State $nL \gets 0$ \Comment{设置$n$值的初始下界} 
-	  \State $nU \gets N_0$ \Comment{设置$n$值的初始上界}
-	  \State $n \gets \frac{nL + nU}{2}$
-	  \While {$|nU - nL| > \lambda$} 
-	  \If {$BSERROR(M,n) > Prob$} \Comment{修改上界，搜索更小的N}
-          \State $lastvalid \gets n$
-	  \State $nU \gets n$
-	  \State $n \gets \frac{nU + nL}{2}$		
-	  \Else  \Comment{修改下界，搜索更大的N}
-	  \State $nL \gets n$
-	  \State $n \gets \frac{nU + nL}{2}$
-	  \EndIf
-	  \EndWhile
-          \If{$lastvalid!=-1$}
-	  \State return $n$
-          \Else 
-          \State $未搜索到满足条件的N值$ 
-          \EndIf 
-	  \EndProcedure
+    \EndWhile
+    \EndIf
+    \EndProcedure
 	\end{algorithmic}
 \end{algorithm}
 
