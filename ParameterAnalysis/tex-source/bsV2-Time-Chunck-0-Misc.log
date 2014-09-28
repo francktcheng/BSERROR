@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  28 SEP 2014 03:18
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  28 SEP 2014 03:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**bsmpi-mic-scale.tex
-(./bsmpi-mic-scale.tex
+**bsV2-Time-Chunck-0-Misc.tex
+(./bsV2-Time-Chunck-0-Misc.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
 rman-x-2009-06-19, ngerman-x-2009-06-19, afrikaans, ancientgreek, ibycus, arabi
@@ -441,8 +441,8 @@ Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
 \extratabsurround=\skip43
 \backup@length=\skip44
 ))
-No file bsmpi-mic-scale.aux.
-\openout1 = `bsmpi-mic-scale.aux'.
+No file bsV2-Time-Chunck-0-Misc.aux.
+\openout1 = `bsV2-Time-Chunck-0-Misc.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
 LaTeX Font Info:    ... okay on input line 14.
@@ -517,38 +517,37 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-PGFPlots: reading {../CSV-Scale/BSMPI-scale.csv}
+PGFPlots: reading {../CSV/bsV2-CPU-Chunck-0-Data.csv}
+PGFPlots: reading {../CSV/bsV2-mic-Chunck-0-Data.csv}
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 35.
+(Font)              <7> on input line 44.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 35.
+(Font)              <5> on input line 44.
 
-Overfull \hbox (6.86275pt too wide) in paragraph at lines 36--37
+Overfull \hbox (16.85542pt too wide) in paragraph at lines 45--46
 [][] 
  []
 
 [1
 
 {/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-(./bsmpi-mic-scale.aux) ) 
+(./bsV2-Time-Chunck-0-Misc.aux) ) 
 Here is how much of TeX's memory you used:
- 15414 strings out of 493633
- 360557 string characters out of 3143378
- 437979 words of memory out of 3000000
- 18432 multiletter control sequences out of 15000+200000
+ 15419 strings out of 493633
+ 360777 string characters out of 3143378
+ 447380 words of memory out of 3000000
+ 18435 multiletter control sequences out of 15000+200000
  3939 words of font info for 15 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 63i,17n,93p,601b,1653s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/local/texlive/2011/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmr7.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmr9.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy10.pfb>
-Output written on bsmpi-mic-scale.pdf (1 page, 50082 bytes).
+ 63i,17n,93p,609b,1653s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2011/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr9.pfb>
+Output written on bsV2-Time-Chunck-0-Misc.pdf (1 page, 37509 bytes).
 PDF statistics:
- 31 PDF objects out of 1000 (max. 8388607)
- 22 compressed objects within 1 object stream
+ 23 PDF objects out of 1000 (max. 8388607)
+ 16 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

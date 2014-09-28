@@ -9,10 +9,11 @@
 \thispagestyle{empty}
 
 \begin{tikzpicture} \begin{axis}[
-	title={BS time performance threads' scalability},
-	width=0.8\textwidth,
-	height=8cm,
-    ybar=5pt,
+	title={Omp1 and Omp2 time on MIC with different number of threads},
+	% width=0.8\textwidth,
+	% height=8cm,
+    ybar=6pt,
+	ymax=100,
 	enlargelimits=0.45,
 	legend style={at={(0.5,-0.2)},
 		anchor=north,legend columns=-1},
@@ -24,29 +25,33 @@
 		nodes near coords align={vertical},
 		]
 
-\pgfmathparse{359.397/584.813}
-\let \sp1=\pgfmathresult;
-\pgfmathparse{359.397/598.037}
-\let \sp2=\pgfmathresult;
-\pgfmathparse{359.397/573.578}
-\let \sp3=\pgfmathresult;
-\pgfmathparse{359.397/572.876}
-\let \sp4=\pgfmathresult;
+\pgfkeys{/pgf/fpu=true}
+\pgfmathparse{47410/584.813}
+\let \spa=\pgfmathresult;
+\pgfmathparse{47410/598.037}
+\let \spb=\pgfmathresult;
+\pgfmathparse{47410/573.578}
+\let \spc=\pgfmathresult;
+\pgfmathparse{47410/572.876}
+\let \spd=\pgfmathresult;
+\pgfkeys{/pgf/fpu=false}
 
-\addplot coordinates {(60,\sp1) (120,\sp2) (180,\sp3) (240,\sp4)};
+\addplot coordinates {(60,\spa) (120,\spb) (180,\spc) (240,\spd)};
 
-\pgfmathparse{359.397/503.778}
-\let \sp1=\pgfmathresult;
-\pgfmathparse{359.397/528.707}
-\let \sp2=\pgfmathresult;
-\pgfmathparse{359.397/497.974}
-\let \sp3=\pgfmathresult;
-\pgfmathparse{359.397/502.8}
-\let \sp4=\pgfmathresult;
+\pgfkeys{/pgf/fpu=true}
+\pgfmathparse{47410/503.778}
+\let \spa=\pgfmathresult;
+\pgfmathparse{47410/528.707}
+\let \spb=\pgfmathresult;
+\pgfmathparse{47410/497.974}
+\let \spc=\pgfmathresult;
+\pgfmathparse{47410/502.8}
+\let \spd=\pgfmathresult;
+\pgfkeys{/pgf/fpu=false}
 
-\addplot coordinates {(60,\sp1) (120,\sp2) (180,\sp3) (240,\sp4)};
+\addplot coordinates {(60,\spa) (120,\spb) (180,\spc) (240,\spd)};
 
-\legend{bsV1, bsV2}
+\legend{Omp1, Omp2}
 \end{axis}
 \end{tikzpicture}
 

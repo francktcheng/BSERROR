@@ -16,7 +16,7 @@
 \begin{tikzpicture} 
 	%\begin{axis}[
 	\begin{axis}[
-			title=Strong Scaling Test of Time on Xeon Phi,
+			title=Strong Scaling Time Test of Omp2 on multi-Xeon Phi,
 			xlabel={number of Xeon Phi},
 			ylabel={Time(/s)},
 		    % log ticks with fixed point,	
@@ -25,8 +25,9 @@
 			% xtick={0,10,20,...,130},
 			grid=major,
 			% legend style={at={(1,0.5)},anchor=west,legend cell align=left,font=\tiny},
-			legend style={at={(0.8, 1)},font=\small, fill=none},
-			legend entries={BS-MPI},
+			legend pos =north east,
+			legend style={font=\small, fill=none},
+			legend entries={Omp2Parallel},
 		]
 		\addplot table[x=NP,y=Time, col sep=comma] {../CSV-Scale/BSMPI-scale.csv};
         				

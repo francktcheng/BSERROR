@@ -16,7 +16,7 @@
 \begin{tikzpicture} 
 	%\begin{axis}[
 	\begin{semilogxaxis}[
-			title=Convergency of the Nlast value,
+			title=Omp2 convergency test with $M$,
 			xlabel={M iterations of monte carlo},
 			ylabel={Nlast},
 		    % log ticks with fixed point,	
@@ -25,7 +25,8 @@
 			% xtick={0,10,20,...,130},
 			grid=major,
 			% legend style={at={(1,0.5)},anchor=west,legend cell align=left,font=\tiny},
-			legend style={at={(0.8, 1)},font=\small, fill=none},
+			legend pos = north east,
+			legend style={font=\small, fill=none},
 			legend entries={Nlast the smallest N},
 		]
 		\addplot table[x=M,y=Nlast, col sep=comma] {../CSVN/bs-M-N.csv};
