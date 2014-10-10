@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-
-=======
 \chapter{模型验证及实验结果分析}
 \label{chap:exp}
 
@@ -48,7 +44,6 @@ Ncache的取值大小将影响缓存的效率，而Chunk值的选取则会影响
 每次任务所需内存接近这个缓存大小时才能充分发挥性能。当我们考察Chunk值对算法的影响时，我们从图
 \ref{fig:v1-mic-chunck-Ncache} \ref{fig:v1-cpu-chunck-Ncache} 中可以看到，取不同的Chunk值，
 对算法的性能并没有明显的影响。
->>>>>>> 273a3bb7d70cc9a59776fc0ca9bf7751e6256e24
 \begin{figure}[!t]
    \centering
    \includegraphics[width=\textwidth]{chap5/Figures/bsV1-mic-Time-Chunck.pdf}
@@ -67,7 +62,7 @@ Ncache的取值大小将影响缓存的效率，而Chunk值的选取则会影响
 据此，我们可以直接利用系统自己智能非配的线程任务策略，而不同自己人为设定Chunk的大小。
 \subsection{单机并行方案二的实验} % (fold)
 \label{sub:bsV2}
-在第二种单机并行方案中同样有两个重要的可调节参数，Nvec和Chunk值的大小（见算法\ref{alg:omp2}）
+在第二种单机并行方案中同样有两个重要的可调节参数，Nvec和Chunk值的大小（见算法\ref{alg:omp2_1}和\ref{alg:omp2_2}）
 同样的，我们先使用系统自己的线程任务分配机制（不设置Chunk值）。图\label{fig:v2-Nvec}中显示
 算法在Xeon Phi上的性能优于CPU上的性能，并且当Nvec取值在500左右时可以使Xeon Phi发挥出最好的性能。
 \begin{figure}[!t]
@@ -107,16 +102,16 @@ Ncache的取值大小将影响缓存的效率，而Chunk值的选取则会影响
    \caption{Omp1, Omp2相对串行算法在MIC上的加速对比, Chunk 采用系统默认模式, $N=251988$, $M=100$, $Ncache=2000$, $Nvec=376$}
    \label{fig:compareV1V2}
 \end{figure}
-我们看到算法\ref{alg:omp2}明显优于算法\ref{alg:omp1}。算法\ref{alg:omp2}最大的加速比达到来了95倍。同时算法\ref{alg:omp1}在Xeon Phi 平台上也获得了
+我们看到算法\ref{alg:omp2_1}和\ref{alg:omp2_2}明显优于算法\ref{alg:omp1}。算法\ref{alg:omp2_1}和\ref{alg:omp2_2}最大的加速比达到来了95倍。同时算法\ref{alg:omp1}在Xeon Phi 平台上也获得了
 不错的加速比（80x)。考察单块Xeon Phi上的线程数对性能的影响，我们发现我们的算法在采用不同线程数（单核1线程，2线程，3线程和4线程）时性能的差别不是
 很显著。主要原因是我们调优了两种算法的参数Ncache 和 Nvec。对于算法\ref{alg:omp1}来说，因为所有的数据都存储在Xeon Phi的缓存区，所以线程总数的改变
-不会显著影响性能；对于算法\ref{alg:omp2}, 通过前面的分析，我们采用一个较小的Nvec值，可以使单个线程的任务装进单个核的缓存中，即使线程数量增加，也能
+不会显著影响性能；对于算法\ref{alg:omp2_1}和\ref{alg:omp2_2}, 通过前面的分析，我们采用一个较小的Nvec值，可以使单个线程的任务装进单个核的缓存中，即使线程数量增加，也能
 较好地发挥缓存的作用。
 
 \section{多块Xeon Phi的并行结果分析} % (fold)
 \label{sec:multiMIC}
-在之前的分析基础上，我们认为算法\ref{alg:omp2}的表现优于算法\ref{alg:omp1}, 同时Xeon Phi平台的表现优于CPU平台。在这一小节中我们就要测试和分析
-算法\ref{alg:omp2}在多个Xeon Phi环境下的严格扩展性(Strong Scalability)。受限制与实验设备，我们的Xeon Phi测试平台只有6块Xeon Phi处理器，并且
+在之前的分析基础上，我们认为算法\ref{alg:omp2_1}和\ref{alg:omp2_2}的表现优于算法\ref{alg:omp1}, 同时Xeon Phi平台的表现优于CPU平台。在这一小节中我们就要测试和分析
+算法\ref{alg:omp2_1}和\ref{alg:omp2_2}在多个Xeon Phi环境下的严格扩展性(Strong Scalability)。受限制与实验设备，我们的Xeon Phi测试平台只有6块Xeon Phi处理器，并且
 Xeon Phi处理器之间的连接速度并不理想。根据Pingpang测试的结果，我们发现两块Xeon Phi之间的通信速度只有307Mbyte/s，
 但是由图\ref{fig:scale}中可知，我们的算法获得了超线性(superlinear)的扩展性。
 \begin{figure}[!t]

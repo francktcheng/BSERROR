@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#@ class            = clallmds+                   
+#@ job_name         = bserror           
+#@ total_tasks      = 50                    
+#@ node             = 50                    
+#@ node_usage       = not_shared
+#@ wall_clock_limit = 20:00:00            
+#@ output           = log_bserror/$(job_name).$(jobid).log 
+#@ error            = log_error_bserror/$(job_name).$(jobid).log  
+#@ environment      = COPY_ALL                  
+#@ job_type         = mpich                    
+#@ queue                                      
+
+module load intel
+module load mkl
+module load intelmpi 
+
+#run mpi
+#ppn process per node
+mpirun -np 50 -ppn 1 -env KMP_AFFINITY "granularity=thread,scatter" -env OMP_NUM_THREADS 16 -env KMP_PLACE_THREADS "16c,1t" ./par_mpi.cpu 
+
