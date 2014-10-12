@@ -1,0 +1,44 @@
+The source files includes 4 files
+1) seq.c:   sequential version of one time monte carlo simulation
+2) par_omp.c: first parallel version for a single CPU/MIC for monte carlo simulation
+3) par_omp2.c: second parallel version for a single CPU/MIC for monte carlo simulation
+4) par_mpi.c: second parallel version for multi-cpu/multi-MIC for finding the optimal N value in model
+5) inc/misc.h: auxillary functions like timer(), etc 
+6) inc/onetimesimulation.h: compile with par_mpi.c file, including second parallel version of monte carlo simulation
+
+To compile, please use the follwing package and compiler
+1) Intel icc
+2) Intelmpi
+3) mkl
+
+#an example of compilation:
+
+#compile for mic 
+mpiicc -Wall -std=c99 -mkl -openmp par_mpi.c -O2 -o mpi.mic -mmic 
+
+#compile for cpu
+mpiicc -Wall -std=c99 -mkl -openmp par_mpi.c -O2 -o mpi.cpu 
+
+#an example of compiling and running via bash:
+
+#!/bin/sh
+
+source /opt/intel/composerxe/bin/compilervars.sh intel64
+source /opt/intel/impi/5.0.1.035/bin64/mpivars.sh
+export I_MPI_MIC=1
+export I_MPI_FALLBACK=1
+export I_MPI_DAPL_PROVIDER_LIST=ofa-v2-mcm-1,ofa-v2-scif0
+#export I_MPI_DAPL_PROVIDER_LIST=ofa-v2-scif0
+export I_MPI_FABRICS=dapl
+
+export IMBHOST=${I_MPI_ROOT}/bin64/IMB-MPI1
+export IMBMIC=${I_MPI_ROOT}/mic/bin/IMB-MPI1
+ulimit -s unlimited
+
+mpiicc -Wall -std=c99 -mkl -openmp par_mpi.c -O2 -o mpi.mic -mmic 
+mpiicc -Wall -std=c99 -mkl -openmp par_mpi.c -O2 -o mpi.cpu 
+
+mpirun -np 1 -host localhost ./mpi.cpu : \
+		   -np 1 -host mic0 -env OMP_NUM_THREADS 60 -env KMP_PLACE_THREADS 60c,1t ./mpi.mic : \
+		   -np 1 -host mic1 -env OMP_NUM_THREADS 60 -env KMP_PLACE_THREADS 60c,1t ./mpi.mic
+
