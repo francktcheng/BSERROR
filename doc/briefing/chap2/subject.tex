@@ -1,7 +1,65 @@
-\chapter{Subject introduction}
+\chapter{Subject description}
 \label{chp:2}
 
-Blah blah blah...
+The subject choosing is free to all participants. The goal is to provide a parallel application with a sound scalability. 
+What we chose to do is a financial problem. In the real practice a hedging process can only be carried out in discrete time 
+points. Then an error could be generated when the model is continuous. We want to lower the trading frequency 
+(discretisation of the studied timeline) in hedging while 
+retaining the error within an acceptable level. A mathematical lowest upper bound was raised in this work, which's the best 
+estimation for the time being. We then use the Monte Carlo Simulation to heuristically find the best suited discretisation of 
+the underlying problem. 
+
+\section{Mathematical modeling of the project}
+Equation~\ref{onetimesimu} gives the discrete time hedging error for one time simulation. The goal is to simulate M times where M is 
+sufficiently large so that the $Prob$ tends to be stable. The $Prob$ is defined as the number of times out of M when error is less than 
+an accepted value $\epsilon$. 
+\begin{equation}
+\label{onetimesimu}
+\begin{split}
+M_T^N
+&=e^{-rT}f(X_T)-(u(0,x)+\int_0^T\frac{\partial u}{\partial x}(\varphi(t), 
+X_{\varphi_t}))d\widetilde{X}_t\\
+&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t\\
+&=(X_T-K)^+-\mathbb{E}[(X_T-K)^+]-\int_0^T\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})dX_t\\
+&=(X_T-K)^+-x_0N(d_1(0))+KN(d_2(0))-\sum_{i=0}^{n-1}N(d_1(t_i))(X_{t_{i+1}}-X_{t_i})\\
+&=(X_T-K)^+-\frac{x_0}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T}
+{\sigma\sqrt{T}}}e^{-\frac{v^2}{2}}dv+\frac{K}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{x_0}{K})-\frac{1}{2}\sigma^2T}{\sigma\sqrt{T}}}e^{-\frac{v^2}{2}}dv\\
+&-\sum_{i=0}^{n-1}\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{X_{t_i}}{K})+\frac{1}{2}\sigma^2(T-t_i)}{\sigma\sqrt{T-t_i}}}e^{-\frac{v^2}{2}}dv(X_{t_{i+1}}-X_{t_i})\\
+\end{split}
+\end{equation}
+
+The $X_{t}$ is the price of the underlying asset for the option, which is assumed to evolve in time according to the stochastic equation
+\begin{equation}
+  dX(t) = \mu X(t)dt + \sigma X(t)dB(t)
+\end{equation}
+
+In this equation, $\mu$ is the drift of the asset, $\sigma$ is the option volatility, and $B(t)$ is a standard Brownian motion.
+
+The solution of this stochastic differential equation can be written as 
+\begin{equation}
+  X_{t_i}=X_{t_{i-1}}e^{(\mu-\sigma^2/2)\delta t+\sigma\sqrt{\delta t}\chi}
+\end{equation}
+where $\chi$ is a normally distributed random variable with zero mean and unit standard deviation, and \\$\delta t = t_i - t_{i-1}$.
+
+
+By our unpublished theory, the upper bound of $N$ (discrete intervals of hedging) is given by Equation~\ref{upperbound}, which's the best estimation (the lowest upper bound) for the time being. 
+\begin{equation}
+\label{upperbound}
+  N_{max} = \log^3{(1-Prob)e^{\frac{1}{4}}\frac{1}{T^{\frac{1}{4}}\sqrt{\frac{\epsilon}{(\log{\frac{X_0}{K}}+0.5\sigma^2T)\sqrt{2\pi}}}}}\cdot(-\frac{8e^3X_0^2\cdot 16 \cdot e^{\sigma^2}}{27\epsilon^2\pi})
+\end{equation}
+
+There's one more thing to mention, we've implemented our own gaussian integral function using Simpson's rule. See equations~\ref{simpson} and \ref{gauss}.
+
+\begin{equation}
+\label{simpson}
+\int_{a}^{b}f(x)dx\approx \frac{h}{3}\left[f(x_0)+2\sum\limits_{j=1}^{n/2-1}f(x_{2j})+4\sum\limits_{j=1}^{n/2}f(x_{2j-1})+f(x_n)\right]
+\end{equation}
+
+\begin{equation}
+\label{gauss}
+f(x)=\int_{-\infty}^{x}e^{-\frac{t^2}{2}}dt=0.5\times \sqrt{2\pi} + \int_{0}^{x}e^{-\frac{t^2}{2}}dt
+\end{equation}
+
 
 
 
