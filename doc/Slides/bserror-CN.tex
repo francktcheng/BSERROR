@@ -1,0 +1,169 @@
+%\documentclass[a4paper]{article}
+%\usepackage{beamerarticle}
+%\documentclass[handout]{beamer}
+%\usepackage{handoutWithNotes}
+%\setbeameroption{show notes} 
+%\pgfpagesuselayout{4 on 1 with notes}[a4paper,border shrink=5mm]
+%\documentclass[ignorenonframetext,red]{beamer}
+
+%\documentclass[notes=only]{beamer} %notes only
+\documentclass[notes]{beamer} %slides with notes
+% \documentclass{beamer}
+
+\mode<presentation>{
+	% \usetheme{Goettingen}
+	\usetheme{CambridgeUS} 
+	\usecolortheme{beaver}
+	%\setbeamercovered{transparent}
+}
+
+%set up chinese environment
+\usepackage{fontspec}
+\newfontfamily\zhfont[BoldFont=Hiragino Sans GB W3]{Hiragino Sans GB W3} %设置中文
+\newfontfamily\zhpunctfont{Hiragino Sans GB W3} % 设置中文
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt
+\renewcommand{\today}{\number\year 年\number\month 月\number\day 日}
+% \setmainfont{Hiragino Sans GB W3}           %这里设置英文衬线字体
+% \setmonofont{Hiragino Sans GB W3}                     %英文等宽字体
+% \setsansfont{Hiragino Sans GB W3}               %英文无衬线字体
+\usepackage{zhspacing}
+\zhspacing
+
+% set up other environment
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{animate}
+\usepackage[caption=false,font=footnotesize]{subfig}
+\usepackage{listings}
+\lstset{language=C++}
+\lstset{breaklines}
+\lstset{extendedchars=false}
+\lstset{basicstyle=\tiny}
+\lstset{frame=shadowbox}
+
+\usepackage[justification = centering,
+labelsep = period,font = scriptsize]{caption}
+\setlength{\abovecaptionskip}{1pt}
+\setlength{\belowcaptionskip}{1pt}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\setbeamertemplate{footline}[frame number]
+
+\title{标题}
+
+% \logo{
+%   \includegraphics[width=0.25cm,height=0.25cm,keepaspectratio]{Figures/logo-MdS.jpg}%
+%   \includegraphics[width=0.5cm,height=0.5cm,keepaspectratio]{Figures/logo-Lille1.jpg}%
+%   \includegraphics[width=0.5cm,height=0.25cm,keepaspectratio]{Figures/logo-lbnl.png}%
+%   \includegraphics[width=0.5cm,height=0.35cm,keepaspectratio]{Figures/logo-inria.jpg}%
+% }
+
+\institute[机构1,机构2, 机构3] % (optional, but mostly needed)
+{
+  \inst{1} 机构1 
+  \and
+  \inst{2} 机构2 
+  \and
+  \inst{3} 机构3 
+  \and
+  \inst{4} 机构4 \\ 
+  \vspace{3ex}
+  % \scalebox{4}{\insertlogo}
+}
+
+\author[作者] % (optional, use only with lots of authors)
+{\scriptsize 作者1\inst{1,2} \and 作者2\inst{1,2} \and 作者3 \inst{3} \and 作者4\inst{4}}
+
+% % - Keep it simple, no one is interested in your street address.
+%
+% \only<presentation>{
+%
+%   \subject{Krylov Subspace, Auto-tuning, Arnoldi Orthogonalization}
+% }
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+
+%\AtBeginSection[]
+%{
+%  \begin{frame}<beamer>{Outline}
+%    \tableofcontents[currentsection,currentsubsection]
+%  \end{frame}
+%}
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+%\beamerdefaultoverlayspecification{<+->}
+
+\makeatletter
+\newenvironment{withoutheadline}{
+  \setbeamertemplate{headline}[default]
+  \def\beamer@entrycode{\vspace*{-\headheight}}
+}{}
+\makeatother
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[pagenumber]
+
+% \author{报告人：\href{mailto:xx@xx.cn}{作者名}}
+% \institute{机构名}
+% \date{\today}
+
+\begin{document}
+
+\begin{frame}[plain]
+	\titlepage
+\end{frame}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{内容提要}
+	% \tableofcontents[hideothersubsections]
+	\tableofcontents
+	\note[item]{注释说明1}
+\end{frame}
+\end{withoutheadline}
+
+\begin{frame}
+	\frametitle{技术路线}
+	技术路线
+\end{frame}
+
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{实验}
+	\begin{block}{实验内容}
+		content
+	\end{block}
+	\note[item]{dffdfdf}
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}{An Hyper Graph Model for SpMV}
+	\textbf{In Hyper Graph $\mathcal{H}=(\mathcal{V},\mathcal{N})$ }
+	\vspace*{0.5cm}
+	\begin{itemize}
+		\item Vertice $v_i$ represents row $i$ of $A$. 
+		\item Net $n_i$ contains vertices $v_j$ with $a_{ij} \neq 0$ (dependency). 
+		\item A $k$ partition of graph represents assignment of rows to $k$ processes. 
+	\end{itemize}
+	\vspace*{0.5cm}
+	\textbf{Optimization in two aspects:}
+	\vspace*{0.5cm}
+	\begin{itemize}
+		\item Each row $i$ only receives data from vertices $v_j$ with $v_j \in n_i$ and $v_i, v_j$ in different parts of 
+			$k$ partition.(pre-compute to find these vertices dependencies for later iteration use). 
+		\item A good $k$ partition could minimize the total data transfer for all the rows
+	\end{itemize}
+\end{frame}
+\end{withoutheadline}
+
+\end{document}

@@ -1,4 +1,0 @@
-\beamer@endinputifotherversion {3.10pt}
-\beamer@sectionintoc {1}{章}{3}{0}{1}
-\beamer@subsectionintoc {1}{1}{节}{5}{0}{1}
-\beamer@sectionintoc {2}{总结}{9}{0}{2}
