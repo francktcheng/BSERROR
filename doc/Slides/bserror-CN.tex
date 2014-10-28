@@ -7,8 +7,8 @@
 %\documentclass[ignorenonframetext,red]{beamer}
 
 %\documentclass[notes=only]{beamer} %notes only
-\documentclass[notes]{beamer} %slides with notes
-% \documentclass{beamer}
+% \documentclass[notes]{beamer} %slides with notes
+\documentclass{beamer}
 
 \mode<presentation>{
 	% \usetheme{Goettingen}
@@ -53,30 +53,33 @@ labelsep = period,font = scriptsize]{caption}
 \usepackage{epstopdf}
 \setbeamertemplate{footline}[frame number]
 
-\title{标题}
+\title{基于Intel Xeon/Xeon Phi平台的关于离散时间对冲误差的并行化研究}
 
-% \logo{
-%   \includegraphics[width=0.25cm,height=0.25cm,keepaspectratio]{Figures/logo-MdS.jpg}%
-%   \includegraphics[width=0.5cm,height=0.5cm,keepaspectratio]{Figures/logo-Lille1.jpg}%
-%   \includegraphics[width=0.5cm,height=0.25cm,keepaspectratio]{Figures/logo-lbnl.png}%
-%   \includegraphics[width=0.5cm,height=0.35cm,keepaspectratio]{Figures/logo-inria.jpg}%
-% }
+\logo{
+  \includegraphics[width=0.4cm,height=0.4cm,keepaspectratio]{Figures/logo-MdS.jpg}%
+  \hspace{0.5ex}
+  \includegraphics[width=0.4cm,height=0.4cm,keepaspectratio]{Figures/logo-CEA.jpg}%
+  \hspace{0.5ex}
+  \includegraphics[width=0.6cm,height=0.8cm,keepaspectratio]{Figures/logo-cnrs2.png}%
+  \hspace{0.5ex}
+  \includegraphics[width=0.4cm,height=0.35cm,keepaspectratio]{Figures/logo-versaille2.png}%
+}
 
 \institute[机构1,机构2, 机构3] % (optional, but mostly needed)
 {
-  \inst{1} 机构1 
+  \inst{1} Maison de la Simulation 
   \and
-  \inst{2} 机构2 
+  \inst{2} Atomic Energy and Alternative Energies Commission (C.E.A) 
   \and
-  \inst{3} 机构3 
+  \inst{3} French National Centre for Scientific Research (C.N.R.S) 
   \and
-  \inst{4} 机构4 \\ 
+  \inst{4} Versailles Saint-Quentin-en-Yvelines University \\ 
   \vspace{3ex}
-  % \scalebox{4}{\insertlogo}
+  \scalebox{4}{\insertlogo}
 }
 
 \author[作者] % (optional, use only with lots of authors)
-{\scriptsize 作者1\inst{1,2} \and 作者2\inst{1,2} \and 作者3 \inst{3} \and 作者4\inst{4}}
+{\scriptsize 叶帆\inst{1,2} \and 陈浪石\inst{1,3} \and 潘慈辉\inst{1,4}}
 
 % % - Keep it simple, no one is interested in your street address.
 %
@@ -91,12 +94,14 @@ labelsep = period,font = scriptsize]{caption}
 % Delete this, if you do not want the table of contents to pop up at
 % the beginning of each subsection:
 
-%\AtBeginSection[]
-%{
-%  \begin{frame}<beamer>{Outline}
-%    \tableofcontents[currentsection,currentsubsection]
-%  \end{frame}
-%}
+\AtBeginSection[]
+{
+	\begin{withoutheadline}
+		\begin{frame}<beamer>{内容提要}
+			\tableofcontents[currentsection,currentsubsection]
+		\end{frame}
+	\end{withoutheadline}
+}
 
 % If you wish to uncover everything in a step-wise fashion, uncomment
 % the following command: 
@@ -110,10 +115,6 @@ labelsep = period,font = scriptsize]{caption}
 \makeatother
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[pagenumber]
-
-% \author{报告人：\href{mailto:xx@xx.cn}{作者名}}
-% \institute{机构名}
-% \date{\today}
 
 \begin{document}
 
@@ -130,40 +131,129 @@ labelsep = period,font = scriptsize]{caption}
 \end{frame}
 \end{withoutheadline}
 
-\begin{frame}
-	\frametitle{技术路线}
-	技术路线
-\end{frame}
-
+\section{背景介绍} % (fold)
+\label{sec:context}
 
 \begin{withoutheadline}
 \begin{frame}
-	\frametitle{实验}
-	\begin{block}{实验内容}
-		content
-	\end{block}
-	\note[item]{dffdfdf}
+	\frametitle{超算发展及Xeon Phi}
+	content
 \end{frame}
 \end{withoutheadline}
 
 \begin{withoutheadline}
-\begin{frame}{An Hyper Graph Model for SpMV}
-	\textbf{In Hyper Graph $\mathcal{H}=(\mathcal{V},\mathcal{N})$ }
-	\vspace*{0.5cm}
-	\begin{itemize}
-		\item Vertice $v_i$ represents row $i$ of $A$. 
-		\item Net $n_i$ contains vertices $v_j$ with $a_{ij} \neq 0$ (dependency). 
-		\item A $k$ partition of graph represents assignment of rows to $k$ processes. 
-	\end{itemize}
-	\vspace*{0.5cm}
-	\textbf{Optimization in two aspects:}
-	\vspace*{0.5cm}
-	\begin{itemize}
-		\item Each row $i$ only receives data from vertices $v_j$ with $v_j \in n_i$ and $v_i, v_j$ in different parts of 
-			$k$ partition.(pre-compute to find these vertices dependencies for later iteration use). 
-		\item A good $k$ partition could minimize the total data transfer for all the rows
-	\end{itemize}
+\begin{frame}
+	\frametitle{金融领域的超算}
+	contents
 \end{frame}
+\end{withoutheadline}
+
+% section 背景介绍 (end)
+
+\section{课题陈述} % (fold)
+\label{sec:subject}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{欧式期权}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{Black-Scholes模型}
+	content
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{对冲策略及误差分析}
+	content
+\end{frame}
+\end{withoutheadline}
+% section 课题陈述 (end)
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{参数选择及收敛条件}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+\section{并行化算法} % (fold)
+\label{sec:algorithm}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{并行性分析}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{单MIC并行优化}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{基于汇编的矢量化积分运算}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{N值的最优化搜索}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{多MIC并行优化}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+% section 并行化算法 (end)
+
+\section{实验结果及分析} % (fold)
+\label{sec:exp}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{单MIC及CPU版本的实验对比}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{多MIC优化实验及结果分析}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{算法的收敛性研究}
+	content	
+\end{frame}
+\end{withoutheadline}
+
+% section 实验结果及分析 (end)
+
+\begin{withoutheadline}
+  \begin{frame}{参考文献}
+	\scriptsize
+	\bibliographystyle{splncs}
+	\bibliography{docear}
+  \end{frame}
 \end{withoutheadline}
 
 \end{document}
