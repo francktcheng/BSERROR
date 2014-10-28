@@ -3,21 +3,22 @@
 
 PAC2014 (Parallel Application Challenge 2014) is a national HPC application competition of China. It is held by CCF-TCHPC (China Computer Federation,
 Technical Committee on High Performance Computing), Intel China and organized by \textsl{PARATERA}(Beijing PARATERA Tech Co.,Ltd). The challenge 
-started in 2013 while it develops fast and achieves a great nation-wide success. This year, the number of attending teams grows to 83, nearly triple of
-the number of last year. The challenge of 2014 aims to boost the development of Intel's Xeon Phi programming in China, and thus has got substantial 
+started in 2013 while it develops fast and achieves a great nation-wide success. This year the number of attending teams increased by 3 times compared to the last year. 
+The challenge of 2014 aims to boost the development of Intel's Xeon Phi programming in China, and thus has got substantial 
 support from Intel China. 
 
 \section{The Agenda of PAC2014} % (fold)
 \label{sec:AgendaPAC2014}
 
-PAC2014 has set up two best prize: 1) The best Application Prize. 2) The best Scalability Prize.
-In the road to the best prize, each team should go through a preliminary contest, a semi-final and the final contest. 
-Before the Preliminary contest, each team has accepted a summer school training course specially for the Xeon Phi programming.  
+PAC2014 organize 2 parallel sessions for the contest: 1) The best application 2) The best scalability. 
+On the way to the top prizes, each team should go through a preliminary contest, a semi-final and the final contest. 
+Before the preliminary contest, every team in China has accepted a summer school training course specially for the Xeon Phi programming.  
 
 \subsection{Preliminary Contest} % (fold)
 \label{sub:Preliminary}
-The Preliminary Contest was from 31 August to 14 September. It has accepted the inscriptions from 83 teams. 
-These teams come from all the prestigious universities and institutions in China. All the teams are divided into four regions.  
+The Preliminary Contest was from 31 August to 14 September. 
+All the prestigious universities and institutions of China have sent their teams to this event. 
+During this phase, the teams are regrouped according to their region (North China, East China, Central and South China, NorthEast and West China). 
 Each team should provide their own application as its contest subject. Their submission should include the following contents: 
 \begin{itemize}
 	\item A report and a slide for presenting their work.
@@ -34,18 +35,18 @@ By doing so, 24 teams have won their tickets to the semi-final contest, and thei
 \label{sub:Semi-Final}
 The Semi-Final Contest has began in 15 September and ended in 28 September. Each of the 24 team have time to improve their own work. The evaluation of
 their work is decided by the committee and the votes from each team's supporters of network polls. In Semi-Final Contest, the committee also invited 
-a foreign team which comes from a French HPC laboratory, \textsl{Maison de la Simulation}. After the competing, 8 team has entered the Final contest of
-\textsl{The Best Scalability Prize}, and 6 teams has entered the \textsl{The Best Application Prize}. The invited French team has also entered into 
-the Final contest. 
+a foreign team which comes from a French HPC laboratory, \textsl{Maison de la Simulation}. 
+By the end of this phase, less than 10 teams would be selected to enter the final phase. 
+Table \ref{tab:bestScal} gives out all the teams running for best scalability in the final round. 
 \begin{table}[htbp]
 \centering
-\caption{Teams for the Best Scalability Prize}
+\caption{Teams for the Best Scalability}
 \label{tab:bestScal}
 \begin{tabular}{|c|c|}
 \hline
 Team Name & Subject\\
 \hline
-Beijing University & A Parallel Dark Channel Prior Algorithm \\
+Peking University & A Parallel Dark Channel Prior Algorithm \\
 \hline
 NUDT team 1 & Lattice Boltzmann methods (LBM) in CFD simulation \\
 \hline
@@ -61,18 +62,21 @@ CNIC\& National Observatory & NMaker: a new N-body numerical simulation software
 \hline
 ISCAS & Parallel Optimization of aerography software Package \textsl{MPAS} \\
 \hline
+Maison de la Simulation, France &  Parallel Computing of Discrete Time Hedging Error\\
+\hline
 \end{tabular}
 \end{table}
-Table \ref{tab:bestScal} gives out all the teams running for best scalability Final contest. 
+
+Table \ref{tab:bestApp} presents all the teams competing for best application in the final round. 
 \begin{table}[htbp]
 \centering
-\caption{Teams for the Best Application Prize}
+\caption{Teams for the Best Application}
 \label{tab:bestApp}
 \begin{tabular}{|c|c|}
 \hline
 Team Name & Subject \\
 \hline
-Beijing University \& Dalian CAS & Gromacs optimization on MIC platform \\
+Peking University \& Dalian CAS & Gromacs optimization on MIC platform \\
 \hline
 NUDT team 0 & BigData in bioinformation DNA analysis \\
 \hline
@@ -84,32 +88,36 @@ CNIC\& National Observatory & NMaker: a new N-body numerical simulation software
 \hline
 Dalian CAS & Protein molecular dynamics Simulation based on quantum mechanics \\
 \hline
+Maison de la Simulation, France &  Parallel Computing of Discrete Time Hedging Error\\
+\hline
 \end{tabular}
 \end{table}
-Table \ref{tab:bestApp} presents all the teams competing for \textsl{Best Application Final Contest}. 
+
 Part of the Semi-Final Contest work would be selected as Application cases to be published in China HPC annual conference 2014. 
 
 % subsection Semi-Final Contest (end)
 
 \subsection{Final Contest} % (fold)
 \label{sub:Final}
-The Final Contest shall be held during HPC China annual conference 2014 in Guangzhou. The competition for the \textsl{Best Application 
-Prize} is based on the improvement of their Semi-Final work. The contest of the \textsl{Best Scalability Prize} has give a subject to all 
-the teams. \textsl{The optimization of Gromacs software on Tianhe2A}. The resource provided by the organizer includes 8 nodes from the 
+The Final Contest shall be held during HPC China annual conference 2014 in Guangzhou. The competition for the \textsl{Best Application} 
+is based on the improvement of their Semi-Final work. While the contest of the \textsl{Best Scalability} is based on \textsl{the optimization of Gromacs software on Tianhe2A}.
+The workload would be released on 15th october. 
+The resource provided by the organizer includes 8 nodes from the 
 Tianhe2A cluster and the source codes of Gromacs software both in CPU version and MIC version (symmetric mode).
-The optimization object is to maximize the performance (minimize the walltime) of Gromacs under the premise of correctness and precision. 
-The optimization codes must run on the computing resource provided by the organizer, and then the results could be accepted in the competition. 
-All the team in Final Contest shall present their work and answer the questions from the jury and audience in the conference. A voting process of 
+The optimization object is to maximize the performance (minimize the walltime) of Gromacs without undermining the correctness and accuracy. 
+The optimization codes must run on the computing resource provided by the organizer. 
+All teams in Final Contest shall present their work and answer the questions from the jury and audience in the conference. A voting process of 
 the audience is also considered in the final decision. 
-The Final contest will have 
-\begin{itemize}
-	\item Gold Prize for Best Scalability Challenge, 1 team, awarded of 8154 US dollar
-	\item Silver Prize for Best Scalability Challenge, 2 teams, awarded of 1630 US dollar
-	\item Bronze Prize for Best Scalability Challenge, 5 teams, awarded of 815 US dollar
-	\item Gold Prize for Best Application, 1 team, awarded of 3261 US dollar
-	\item Silver Prize for Best Application, 2 teams, awarded of 1630 US dollar
-	\item Bronze Prize for Best Application, 3 teams, awarded of 815 US dollar
-\end{itemize}
+
+%The Final contest will have 
+%\begin{itemize}
+%	\item Gold Prize for Best Scalability Challenge, 1 team, awarded of 8154 US dollar
+%	\item Silver Prize for Best Scalability Challenge, 2 teams, awarded of 1630 US dollar
+%	\item Bronze Prize for Best Scalability Challenge, 5 teams, awarded of 815 US dollar
+%	\item Gold Prize for Best Application, 1 team, awarded of 3261 US dollar
+%	\item Silver Prize for Best Application, 2 teams, awarded of 1630 US dollar
+%	\item Bronze Prize for Best Application, 3 teams, awarded of 815 US dollar
+%\end{itemize}
 % subsection Final Contest (end)
 
 % section The Agenda of PAC2014 (end)
