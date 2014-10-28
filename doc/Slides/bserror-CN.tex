@@ -37,7 +37,8 @@
 \usepackage{times}
 \usepackage[T1]{fontenc}
 \usepackage{animate}
-\usepackage[caption=false,font=footnotesize]{subfig}
+% \usepackage[caption=false,font=footnotesize]{subfig}
+\usepackage[font=footnotesize]{subfig}
 \usepackage{listings}
 \lstset{language=C++}
 \lstset{breaklines}
@@ -51,6 +52,10 @@ labelsep = period,font = scriptsize]{caption}
 \setlength{\belowcaptionskip}{1pt}
 \usepackage{amssymb}
 \usepackage{epstopdf}
+%tikz packages
+\usepackage{tikz}
+\usetikzlibrary{mindmap,trees}
+
 \setbeamertemplate{footline}[frame number]
 
 \title{基于Intel Xeon/Xeon Phi平台的关于离散时间对冲误差的并行化研究}
@@ -122,6 +127,9 @@ labelsep = period,font = scriptsize]{caption}
 	\titlepage
 \end{frame}
 
+%remove logs at footline of each page
+\setbeamertemplate{logo}{}
+
 \begin{withoutheadline}
 \begin{frame}
 	\frametitle{内容提要}
@@ -137,15 +145,86 @@ labelsep = period,font = scriptsize]{caption}
 \begin{withoutheadline}
 \begin{frame}
 	\frametitle{超算发展及Xeon Phi}
-	content
+	\begin{columns}
+		\column{0.4\textwidth}
+			高性能计算已经进入后Petaflop($10^{15}$)时代。但是能优化到Petaflop级别的实际应用却很少，面临问题如下
+			\vspace{1ex}
+			\begin{itemize}
+				\item 算法的内在并行性不足
+				\vspace{1ex}
+				\item 并行算法的通信受制于内存和网络连接
+				\vspace{1ex}
+				\item 并行编程的难度
+			\end{itemize}
+			\vspace{1ex}
+			超级计算机本身还面临
+			\begin{itemize}
+				\item 能耗过大
+			\end{itemize}
+		\column{0.6\textwidth}
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=\textwidth]{Figures/context/top500Perf.png}
+				\caption{超算Top500发展趋势}
+				\label{fig:top500}
+			\end{figure}
+	\end{columns}
 \end{frame}
 \end{withoutheadline}
 
 \begin{withoutheadline}
 \begin{frame}
-	\frametitle{金融领域的超算}
-	contents
+	\frametitle{超算发展及Xeon Phi}
+	\begin{columns}
+		\column{0.4\textwidth}
+			单个CPU的发展已经达到性能和功耗的瓶颈，超算转向众核架构(Manycore), 其具有如下优势
+			\begin{itemize}
+				\item 高带宽(bandwidth)带来的高通量(high data throughput)
+				\item 高能耗效率(flops/watt)
+					\note[item]{世界绿色500强榜单上的高能效机器越来越多采用众核结构}
+				\item 适合大规模的数据并行性应用(data parallel)
+			\end{itemize}
+			目前众核结构处理器的代表
+			\begin{itemize}
+				\item Nvidia 的GPU加速器
+				\item Intel 的Xeon Phi协处理器
+			\end{itemize}
+		\column{0.6\textwidth}
+		\begin{figure}[htbp]
+			\centering
+			\includegraphics[width=0.8\textwidth]{Figures/context/CPU-Scaling.jpg}
+			\caption{单个CPU发展遇到的各种瓶颈问题}
+			\label{fig:CPUScale}
+		\end{figure}
+	\end{columns}
 \end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+	\begin{frame}
+		\frametitle{金融领域的超算}
+		\begin{tikzpicture}
+			\path[mindmap,concept color=black,text=white]
+			node[concept] {Computer Science}
+			[clockwise from=0]
+			child[concept color=green!50!black] {
+				node[concept] {practical}
+				[clockwise from=90]
+				child { node[concept] {algorithms} }
+				child { node[concept] {data structures} }
+				child { node[concept] {pro\-gramming languages} }
+				child { node[concept] {software engineer\-ing} }
+			}  
+			child[concept color=blue] {
+				node[concept] {applied}
+				[clockwise from=-30]
+				child { node[concept] {databases} }
+				child { node[concept] {WWW} }
+			}
+			child[concept color=red] { node[concept] {technical} }
+			child[concept color=orange] { node[concept] {theoretical} };
+		\end{tikzpicture}
+	\end{frame}
 \end{withoutheadline}
 
 % section 背景介绍 (end)
