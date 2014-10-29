@@ -46,15 +46,11 @@
 \lstset{basicstyle=\tiny}
 \lstset{frame=shadowbox}
 
-\usepackage[justification = centering,
-labelsep = period,font = scriptsize]{caption}
+\usepackage[justification = centering,labelsep = period,font = scriptsize]{caption}
 \setlength{\abovecaptionskip}{1pt}
 \setlength{\belowcaptionskip}{1pt}
 \usepackage{amssymb}
 \usepackage{epstopdf}
-%tikz packages
-\usepackage{tikz}
-\usetikzlibrary{mindmap,trees}
 
 \setbeamertemplate{footline}[frame number]
 
@@ -203,27 +199,32 @@ labelsep = period,font = scriptsize]{caption}
 \begin{withoutheadline}
 	\begin{frame}
 		\frametitle{金融领域的超算}
-		\begin{tikzpicture}
-			\path[mindmap,concept color=black,text=white]
-			node[concept] {Computer Science}
-			[clockwise from=0]
-			child[concept color=green!50!black] {
-				node[concept] {practical}
-				[clockwise from=90]
-				child { node[concept] {algorithms} }
-				child { node[concept] {data structures} }
-				child { node[concept] {pro\-gramming languages} }
-				child { node[concept] {software engineer\-ing} }
-			}  
-			child[concept color=blue] {
-				node[concept] {applied}
-				[clockwise from=-30]
-				child { node[concept] {databases} }
-				child { node[concept] {WWW} }
-			}
-			child[concept color=red] { node[concept] {technical} }
-			child[concept color=orange] { node[concept] {theoretical} };
-		\end{tikzpicture}
+		\begin{columns}
+			\column{0.45\textwidth}
+			\begin{itemize}
+				\item 高频交易
+				\item 风险管理
+				\item 金融衍生品定价
+				\item 定量经济分析
+			\end{itemize}
+			\begin{block}{高频交易}
+				从那些人们无法利用的极为短暂的市场变化中寻求获利的计算机化交易
+			\end{block}
+			\begin{enumerate}
+				\item 数据在交易所和计算机之间加速(co-location)
+				\item 数据在计算机内部加速(网卡+CPU 或者 FPGA
+				\item 海量数据的分析工作
+			\end{enumerate}
+			\column{0.45\textwidth}
+			\vspace{-4ex}
+			\begin{figure}[htbp]
+				\centering
+				\subfloat{\includegraphics[width=\textwidth, height=0.4\textheight]{Figures/context/hf-trade.jpg}}\vfill
+				\subfloat{\includegraphics[width=\textwidth, height=0.4\textheight]{Figures/context/hf-trade2.jpg}}
+				% \caption{cap}
+				% \label{label}
+			\end{figure}
+		\end{columns}
 	\end{frame}
 \end{withoutheadline}
 
