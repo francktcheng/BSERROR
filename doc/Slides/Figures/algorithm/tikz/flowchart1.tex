@@ -1,0 +1,50 @@
+\documentclass{article}
+
+% \usepackage[latin1]{inputenc}
+\usepackage{tikz}
+
+\usepackage{fontspec}
+% \newfontfamily\zhfont[BoldFont=Hiragino Sans GB W3]{Hiragino Sans GB W3} %设置中文
+% \newfontfamily\zhpunctfont{Hiragino Sans GB W3} % 设置中文
+\setromanfont{Hiragino Sans GB} % 儷黑pro
+\setmonofont[Scale=0.8]{Courier New} % 等寬字型
+
+\usetikzlibrary{shapes,arrows}
+\begin{document}
+\pagestyle{empty}
+
+
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+text width=8em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+text width=8em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=4cm,
+minimum height=2em]
+
+\begin{tikzpicture}[node distance = 2cm, auto]
+	% Place nodes
+	\node [block] (plan) {确定优化方案};
+	\node [cloud, left of=plan] (problem){问题模型};
+	\node [cloud, right of=plan] (arch) {系统架构};
+	\node [block, below of=plan] (program) {确定编程模型};
+	\node [block, below of=program] (running) {测试程序\\分析结果};
+	\node [decision, below of=running] (evaluate) {是否达到\\优化预期};
+	\node [block, left of=program, node distance=4cm] (update) {改进编程模型};
+	\node [block, below of=evaluate, node distance=3cm] (stop) {完成并行优化};
+	% \node [block, below of=decide, node distance=3cm] (stop) {stop};
+	% Draw edges
+	\path [line] (plan) -- (program);
+	\path [line, dashed] (problem) -- (plan);
+	\path [line, dashed] (arch) -- (plan);
+	\path [line] (program) -- (running);
+	\path [line] (running) -- (evaluate);
+	\path [line] (evaluate) -| node [near start] {否} (update);
+	\path [line] (update) -- (program);
+	\path [line] (evaluate) -- node {是}(stop);
+	% \path [line,dashed] (expert) -- (init);
+	% \path [line,dashed] (system) -- (init);
+	% \path [line,dashed] (system) |- (evaluate);
+\end{tikzpicture}
+\end{document}

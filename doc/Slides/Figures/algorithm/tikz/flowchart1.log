@@ -1,16 +1,16 @@
-This is XeTeX, Version 3.14159265-2.6-0.99991 (TeX Live 2014) (preloaded format=xelatex 2014.5.25)  30 OCT 2014 13:21
+This is XeTeX, Version 3.14159265-2.6-0.99991 (TeX Live 2014) (preloaded format=xelatex 2014.5.25)  30 OCT 2014 15:05
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**finance-hpc.tex
-(./finance-hpc.tex
+**flowchart1.tex
+(./flowchart1.tex
 LaTeX2e <2014/05/01>
 Babel <3.9k> and hyphenation patterns for 78 languages loaded.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2014/texmf-dist/tex/latex/base/size12.clo
-File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count80
 \c@section=\count81
@@ -231,22 +231,7 @@ File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
 \tikz@expandcount=\count107
 (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.0 (rcs-revision 1.2)
-))) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarymindmap.code.tex
-File: tikzlibrarymindmap.code.tex 2013/07/16 v3.0.0 (rcs-revision 1.10)
-(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytrees.code.tex
-File: tikzlibrarytrees.code.tex 2008/02/24 v3.0.0 (rcs-revision 1.2)
-) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.code.tex (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/modules/pgfmoduledecorations.code.tex
-\pgfdecoratedcompleteddistance=\dimen151
-\pgfdecoratedremainingdistance=\dimen152
-\pgfdecoratedinputsegmentcompleteddistance=\dimen153
-\pgfdecoratedinputsegmentremainingdistance=\dimen154
-\pgf@decorate@distancetomove=\dimen155
-\pgf@decorate@repeatstate=\count108
-\pgfdecorationsegmentamplitude=\dimen156
-\pgfdecorationsegmentlength=\dimen157
-)
-\tikz@lib@dec@box=\box37
-)) (/usr/local/texlive/2014/texmf-dist/tex/latex/fontspec/fontspec.sty
+))) (/usr/local/texlive/2014/texmf-dist/tex/latex/fontspec/fontspec.sty
 Package: fontspec 2013/05/20 v2.3c Font selection for XeLaTeX and LuaLaTeX
 (/usr/local/texlive/2014/texmf-dist/tex/latex/l3kernel/expl3.sty
 Package: expl3 2014/05/20 v4814 L3 programming layer (loader) 
@@ -258,7 +243,7 @@ Package: expl3 2014/05/20 v4814 L3 programming layer (code)
 L3 Module: l3bootstrap 2014/05/16 v4782 L3 Bootstrap code
 (/usr/local/texlive/2014/texmf-dist/tex/latex/etex-pkg/etex.sty
 Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
-\et@xins=\count109
+\et@xins=\count108
 )
 L3 Module: l3names 2014/05/04 v4728 L3 Namespace for primitives
 L3 Module: l3basics 2014/05/04 v4728 L3 Basic definitions
@@ -266,31 +251,31 @@ L3 Module: l3expan 2014/04/30 v4712 L3 Argument expansion
 L3 Module: l3tl 2014/05/04 v4728 L3 Token lists
 L3 Module: l3seq 2014/04/30 v4712 L3 Sequences and stacks
 L3 Module: l3int 2014/05/16 v4776 L3 Integers
-\c_max_int=\count110
-\l_tmpa_int=\count111
-\l_tmpb_int=\count112
-\g_tmpa_int=\count113
-\g_tmpb_int=\count114
+\c_max_int=\count109
+\l_tmpa_int=\count110
+\l_tmpb_int=\count111
+\g_tmpa_int=\count112
+\g_tmpb_int=\count113
 L3 Module: l3quark 2014/05/04 v4728 L3 Quarks
 L3 Module: l3prg 2014/05/04 v4728 L3 Control structures
-\g__prg_map_int=\count115
+\g__prg_map_int=\count114
 L3 Module: l3clist 2014/05/04 v4728 L3 Comma separated lists
 L3 Module: l3token 2014/05/04 v4728 L3 Experimental token manipulation
 L3 Module: l3prop 2014/04/30 v4712 L3 Property lists
 L3 Module: l3msg 2014/05/04 v4728 L3 Messages
 L3 Module: l3file 2014/05/05 v4737 L3 File and I/O operations
-\l_iow_line_count_int=\count116
-\l__iow_target_count_int=\count117
-\l__iow_current_line_int=\count118
-\l__iow_current_word_int=\count119
-\l__iow_current_indentation_int=\count120
+\l_iow_line_count_int=\count115
+\l__iow_target_count_int=\count116
+\l__iow_current_line_int=\count117
+\l__iow_current_word_int=\count118
+\l__iow_current_indentation_int=\count119
 L3 Module: l3skip 2014/05/05 v4738 L3 Dimensions and skips
-\c_zero_dim=\dimen158
-\c_max_dim=\dimen159
-\l_tmpa_dim=\dimen160
-\l_tmpb_dim=\dimen161
-\g_tmpa_dim=\dimen162
-\g_tmpb_dim=\dimen163
+\c_zero_dim=\dimen151
+\c_max_dim=\dimen152
+\l_tmpa_dim=\dimen153
+\l_tmpb_dim=\dimen154
+\g_tmpa_dim=\dimen155
+\g_tmpb_dim=\dimen156
 \c_zero_skip=\skip43
 \c_max_skip=\skip44
 \l_tmpa_skip=\skip45
@@ -304,79 +289,79 @@ L3 Module: l3skip 2014/05/05 v4738 L3 Dimensions and skips
 \g_tmpa_muskip=\muskip14
 \g_tmpb_muskip=\muskip15
 L3 Module: l3keys 2014/05/08 v4753 L3 Key-value interfaces
-\g__keyval_level_int=\count121
-\l_keys_choice_int=\count122
+\g__keyval_level_int=\count120
+\l_keys_choice_int=\count121
 L3 Module: l3fp 2014/04/30 v4712 L3 Floating points
-\c__fp_leading_shift_int=\count123
-\c__fp_middle_shift_int=\count124
-\c__fp_trailing_shift_int=\count125
-\c__fp_big_leading_shift_int=\count126
-\c__fp_big_middle_shift_int=\count127
-\c__fp_big_trailing_shift_int=\count128
-\c__fp_Bigg_leading_shift_int=\count129
-\c__fp_Bigg_middle_shift_int=\count130
-\c__fp_Bigg_trailing_shift_int=\count131
+\c__fp_leading_shift_int=\count122
+\c__fp_middle_shift_int=\count123
+\c__fp_trailing_shift_int=\count124
+\c__fp_big_leading_shift_int=\count125
+\c__fp_big_middle_shift_int=\count126
+\c__fp_big_trailing_shift_int=\count127
+\c__fp_Bigg_leading_shift_int=\count128
+\c__fp_Bigg_middle_shift_int=\count129
+\c__fp_Bigg_trailing_shift_int=\count130
 L3 Module: l3box 2014/05/04 v4728 L3 Experimental boxes
-\c_empty_box=\box38
-\l_tmpa_box=\box39
-\l_tmpb_box=\box40
-\g_tmpa_box=\box41
-\g_tmpb_box=\box42
+\c_empty_box=\box37
+\l_tmpa_box=\box38
+\l_tmpb_box=\box39
+\g_tmpa_box=\box40
+\g_tmpb_box=\box41
 L3 Module: l3coffins 2014/05/04 v4728 L3 Coffin code layer
-\l__coffin_internal_box=\box43
-\l__coffin_internal_dim=\dimen164
-\l__coffin_offset_x_dim=\dimen165
-\l__coffin_offset_y_dim=\dimen166
-\l__coffin_x_dim=\dimen167
-\l__coffin_y_dim=\dimen168
-\l__coffin_x_prime_dim=\dimen169
-\l__coffin_y_prime_dim=\dimen170
-\c_empty_coffin=\box44
-\l__coffin_aligned_coffin=\box45
-\l__coffin_aligned_internal_coffin=\box46
-\l_tmpa_coffin=\box47
-\l_tmpb_coffin=\box48
-\l__coffin_display_coffin=\box49
-\l__coffin_display_coord_coffin=\box50
-\l__coffin_display_pole_coffin=\box51
-\l__coffin_display_offset_dim=\dimen171
-\l__coffin_display_x_dim=\dimen172
-\l__coffin_display_y_dim=\dimen173
+\l__coffin_internal_box=\box42
+\l__coffin_internal_dim=\dimen157
+\l__coffin_offset_x_dim=\dimen158
+\l__coffin_offset_y_dim=\dimen159
+\l__coffin_x_dim=\dimen160
+\l__coffin_y_dim=\dimen161
+\l__coffin_x_prime_dim=\dimen162
+\l__coffin_y_prime_dim=\dimen163
+\c_empty_coffin=\box43
+\l__coffin_aligned_coffin=\box44
+\l__coffin_aligned_internal_coffin=\box45
+\l_tmpa_coffin=\box46
+\l_tmpb_coffin=\box47
+\l__coffin_display_coffin=\box48
+\l__coffin_display_coord_coffin=\box49
+\l__coffin_display_pole_coffin=\box50
+\l__coffin_display_offset_dim=\dimen164
+\l__coffin_display_x_dim=\dimen165
+\l__coffin_display_y_dim=\dimen166
 L3 Module: l3color 2014/04/30 v4712 L3 Experimental color support
 L3 Module: l3luatex 2014/04/30 v4712 L3 Experimental LuaTeX-specific functions
-\g__cctab_allocate_int=\count132
-\g__cctab_stack_int=\count133
+\g__cctab_allocate_int=\count131
+\g__cctab_stack_int=\count132
 L3 Module: l3candidates 2014/05/04 v4734 L3 Experimental additions to l3kernel
-\l__box_top_dim=\dimen174
-\l__box_bottom_dim=\dimen175
-\l__box_left_dim=\dimen176
-\l__box_right_dim=\dimen177
-\l__box_top_new_dim=\dimen178
-\l__box_bottom_new_dim=\dimen179
-\l__box_left_new_dim=\dimen180
-\l__box_right_new_dim=\dimen181
-\l__box_internal_box=\box52
-\l__coffin_bounding_shift_dim=\dimen182
-\l__coffin_left_corner_dim=\dimen183
-\l__coffin_right_corner_dim=\dimen184
-\l__coffin_bottom_corner_dim=\dimen185
-\l__coffin_top_corner_dim=\dimen186
-\l__coffin_scaled_total_height_dim=\dimen187
-\l__coffin_scaled_width_dim=\dimen188
+\l__box_top_dim=\dimen167
+\l__box_bottom_dim=\dimen168
+\l__box_left_dim=\dimen169
+\l__box_right_dim=\dimen170
+\l__box_top_new_dim=\dimen171
+\l__box_bottom_new_dim=\dimen172
+\l__box_left_new_dim=\dimen173
+\l__box_right_new_dim=\dimen174
+\l__box_internal_box=\box51
+\l__coffin_bounding_shift_dim=\dimen175
+\l__coffin_left_corner_dim=\dimen176
+\l__coffin_right_corner_dim=\dimen177
+\l__coffin_bottom_corner_dim=\dimen178
+\l__coffin_top_corner_dim=\dimen179
+\l__coffin_scaled_total_height_dim=\dimen180
+\l__coffin_scaled_width_dim=\dimen181
 )) (/usr/local/texlive/2014/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2014/05/05 v4740 L3 Experimental document command parser
-\l__xparse_current_arg_int=\count134
-\l__xparse_m_args_int=\count135
-\l__xparse_mandatory_args_int=\count136
-\l__xparse_processor_int=\count137
-\l__xparse_v_nesting_int=\count138
+\l__xparse_current_arg_int=\count133
+\l__xparse_m_args_int=\count134
+\l__xparse_mandatory_args_int=\count135
+\l__xparse_processor_int=\count136
+\l__xparse_v_nesting_int=\count137
 )
-\l_fontspec_script_int=\count139
-\l_fontspec_language_int=\count140
-\l_fontspec_strnum_int=\count141
-\l_fontspec_tmpa_dim=\dimen189
-\l_fontspec_tmpb_dim=\dimen190
-\l_fontspec_tmpc_dim=\dimen191
+\l_fontspec_script_int=\count138
+\l_fontspec_language_int=\count139
+\l_fontspec_strnum_int=\count140
+\l_fontspec_tmpa_dim=\dimen182
+\l_fontspec_tmpb_dim=\dimen183
+\l_fontspec_tmpc_dim=\dimen184
 Variant \tl_gset:cV already defined; not changing it on line 69
 (/usr/local/texlive/2014/texmf-dist/tex/latex/fontspec/fontspec-patches.sty
 Package: fontspec-patches 2013/05/20 v2.3c Font selection for XeLaTeX and LuaLaTeX
@@ -415,7 +400,7 @@ LaTeX Font Info:    Try loading font information for EU1+lmss on input line 357.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/euenc/eu1lmss.fd
 File: eu1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ))
-\tipaTiiicode=\count142
+\tipaTiiicode=\count141
 \tipasavetokens=\toks27
 \tipachecktokens=\toks28
 )
@@ -525,14 +510,14 @@ File: eu1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 .................................................
 Variant \prop_gput:cnV already defined; not changing it on line 582
 Variant \prop_gput:cnx already defined; not changing it on line 583
-\l_fontspec_tmp_int=\count143
+\l_fontspec_tmp_int=\count142
 LaTeX Info: Redefining \itshape on input line 2087.
 LaTeX Info: Redefining \slshape on input line 2092.
 LaTeX Info: Redefining \scshape on input line 2097.
 LaTeX Info: Redefining \upshape on input line 2102.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
 \g__file_internal_ior=\read2
-\g_fontspec_family_Hiragino Sans GB_int=\count144
+\g_fontspec_family_Hiragino Sans GB_int=\count143
 .................................................
 . fontspec info: "no-font-shape"
 . 
@@ -555,7 +540,7 @@ LaTeX Info: Redefining \upshape on input line 2102.
 . * 'bold italic' with NFSS spec.:
 . <->"Hiragino Sans GB/BI/ICU:script=latn;language=DFLT;"
 .................................................
-\g_fontspec_family_Courier New_int=\count145
+\g_fontspec_family_Courier New_int=\count144
 .................................................
 . fontspec info: "defining-font"
 . 
@@ -576,29 +561,76 @@ LaTeX Info: Redefining \upshape on input line 2102.
 . * 'bold italic' with NFSS spec.:
 . <->s*[0.8]"Courier New/BI/ICU:script=latn;language=DFLT;"
 .................................................
-(./finance-hpc.aux)
-\openout1 = `finance-hpc.aux'.
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.code.tex
+File: tikzlibraryshapes.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.geometric.code.tex
+File: tikzlibraryshapes.geometric.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.geometric.code.tex
+File: pgflibraryshapes.geometric.code.tex 2008/06/26 v3.0.0 (rcs-revision 1.1)
+)) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.misc.code.tex
+File: tikzlibraryshapes.misc.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.misc.code.tex
+File: pgflibraryshapes.misc.code.tex 2013/07/18 v3.0.0 (rcs-revision 1.5)
+)) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.symbols.code.tex
+File: tikzlibraryshapes.symbols.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.symbols.code.tex
+File: pgflibraryshapes.symbols.code.tex 2013/09/11 v3.0.0 (rcs-revision 1.6)
+)) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.arrows.code.tex
+File: tikzlibraryshapes.arrows.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.arrows.code.tex
+File: pgflibraryshapes.arrows.code.tex 2008/06/26 v3.0.0 (rcs-revision 1.1)
+)) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.callouts.code.tex (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.callouts.code.tex)) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.multipart.code.tex
+File: tikzlibraryshapes.multipart.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.multipart.code.tex
+File: pgflibraryshapes.multipart.code.tex 2010/01/07 v3.0.0 (rcs-revision 1.2)
+\pgfnodepartlowerbox=\box52
+\pgfnodeparttwobox=\box53
+\pgfnodepartthreebox=\box54
+\pgfnodepartfourbox=\box55
+\pgfnodeparttwentybox=\box56
+\pgfnodepartnineteenbox=\box57
+\pgfnodeparteighteenbox=\box58
+\pgfnodepartseventeenbox=\box59
+\pgfnodepartsixteenbox=\box60
+\pgfnodepartfifteenbox=\box61
+\pgfnodepartfourteenbox=\box62
+\pgfnodepartthirteenbox=\box63
+\pgfnodeparttwelvebox=\box64
+\pgfnodepartelevenbox=\box65
+\pgfnodeparttenbox=\box66
+\pgfnodepartninebox=\box67
+\pgfnodeparteightbox=\box68
+\pgfnodepartsevenbox=\box69
+\pgfnodepartsixbox=\box70
+\pgfnodepartfivebox=\box71
+))) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryarrows.code.tex
+File: tikzlibraryarrows.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.code.tex
+File: pgflibraryarrows.code.tex 2013/09/23 v3.0.0 (rcs-revision 1.16)
+\arrowsize=\dimen185
+)) (./flowchart1.aux)
+\openout1 = `flowchart1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for EU1/lmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 12.
-LaTeX Font Info:    Try loading font information for T3+cmr on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for EU1/lmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 13.
+LaTeX Font Info:    Try loading font information for T3+cmr on input line 13.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/tipa/t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    ... okay on input line 13.
 ABD: EveryShipout initializing macros
 .................................................
 . fontspec info: "setup-math"
@@ -607,76 +639,71 @@ ABD: EveryShipout initializing macros
 .................................................
 \symlegacymaths=\mathgroup4
 LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
-(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 12.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 12.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 12.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 12.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 12.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 12.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 12.
-LaTeX Font Info:    Redeclaring math accent \check on input line 12.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 12.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 12.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \colon on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 12.
-LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 12.
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 12.
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 13.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 13.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 13.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 13.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 13.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 13.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 13.
+LaTeX Font Info:    Redeclaring math accent \check on input line 13.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 13.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 13.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \colon on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 13.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 13.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 13.
 LaTeX Font Info:    Encoding `OT1' has changed to `EU1' for symbol font
-(Font)              `operators' in the math version `normal' on input line 12.
+(Font)              `operators' in the math version `normal' on input line 13.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> EU1/HiraginoSansGB(0)/m/n on input line 12.
+(Font)                  OT1/cmr/m/n --> EU1/HiraginoSansGB(0)/m/n on input line 13.
 LaTeX Font Info:    Encoding `OT1' has changed to `EU1' for symbol font
-(Font)              `operators' in the math version `bold' on input line 12.
+(Font)              `operators' in the math version `bold' on input line 13.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> EU1/HiraginoSansGB(0)/m/n on input line 12.
+(Font)                  OT1/cmr/bx/n --> EU1/HiraginoSansGB(0)/m/n on input line 13.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  EU1/HiraginoSansGB(0)/m/n --> EU1/HiraginoSansGB(0)/m/n on input line 12.
+(Font)                  EU1/HiraginoSansGB(0)/m/n --> EU1/HiraginoSansGB(0)/m/n on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  EU1/HiraginoSansGB(0)/m/n --> EU1/HiraginoSansGB(0)/m/n on input line 12.
+(Font)                  EU1/HiraginoSansGB(0)/m/n --> EU1/HiraginoSansGB(0)/m/n on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> EU1/HiraginoSansGB(0)/m/it on input line 12.
+(Font)                  OT1/cmr/m/it --> EU1/HiraginoSansGB(0)/m/it on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> EU1/HiraginoSansGB(0)/bx/n on input line 12.
+(Font)                  OT1/cmr/bx/n --> EU1/HiraginoSansGB(0)/bx/n on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> EU1/lmss/m/n on input line 12.
+(Font)                  OT1/cmss/m/n --> EU1/lmss/m/n on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> EU1/CourierNew(0)/m/n on input line 12.
+(Font)                  OT1/cmtt/m/n --> EU1/CourierNew(0)/m/n on input line 13.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  EU1/HiraginoSansGB(0)/m/n --> EU1/HiraginoSansGB(0)/bx/n on input line 12.
+(Font)                  EU1/HiraginoSansGB(0)/m/n --> EU1/HiraginoSansGB(0)/bx/n on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  EU1/HiraginoSansGB(0)/m/n --> EU1/HiraginoSansGB(0)/bx/n on input line 12.
+(Font)                  EU1/HiraginoSansGB(0)/m/n --> EU1/HiraginoSansGB(0)/bx/n on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> EU1/HiraginoSansGB(0)/bx/it on input line 12.
+(Font)                  OT1/cmr/bx/it --> EU1/HiraginoSansGB(0)/bx/it on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> EU1/lmss/bx/n on input line 12.
+(Font)                  OT1/cmss/bx/n --> EU1/lmss/bx/n on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> EU1/CourierNew(0)/bx/n on input line 12.
-
-Overfull \hbox (24.27827pt too wide) in paragraph at lines 35--36
- [] 
- []
-
+(Font)                  OT1/cmtt/m/n --> EU1/CourierNew(0)/bx/n on input line 13.
 [1
 
-] (./finance-hpc.aux) ) 
+] (./flowchart1.aux) ) 
 Here is how much of TeX's memory you used:
- 23215 strings out of 493734
- 498732 string characters out of 6146348
- 516260 words of memory out of 5000000
- 26283 multiletter control sequences out of 15000+600000
- 4074 words of font info for 32 fonts, out of 8000000 for 9000
+ 24972 strings out of 493734
+ 547750 string characters out of 6146348
+ 578259 words of memory out of 5000000
+ 28010 multiletter control sequences out of 15000+600000
+ 3752 words of font info for 28 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
- 55i,9n,78p,10401b,1251s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,5n,67p,10400b,600s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on finance-hpc.pdf (1 page).
+Output written on flowchart1.pdf (1 page).

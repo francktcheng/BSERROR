@@ -1,0 +1,69 @@
+\frametitle{算法并行性分析}
+% \begin{algorithm}[H]
+  % \caption{欧式期权对冲策略误差判断的串行算法}
+  % \label{alg:bserror}
+  % \begin{columns}
+  % \begin{column}[T]{0.7\textwidth}
+\begin{algorithmic}
+  \tiny
+ % \Require $X_0$ \Comment{金融产品在$t=0$时的初始价格}
+ % \Require $\sigma$ \Comment{市场波动性}
+ % \Require $K$ \Comment{期权合约价格}
+ % \Require $T$ \Comment{期权到期时间}
+ % \Require $\epsilon$ \Comment{可接受的误差上限}
+     %     \Require $M$ \Comment{蒙特卡洛模拟次数}
+     %     \Require $N$ \Comment{离散抽样次数}
+     %     \Ensure $prob$
+ \Procedure{BSERROR}{M, N}
+         \State $error \gets 0$ %\Comment{离散策略和连续策略的误差}
+         \State $NRV[N]$ %\Comment{符合正态分布的N个独立随机数}
+         \State $BM[N]$ %\Comment{布朗运动的N个状态}
+         \State $PX[N+1]$ %\Comment{在离散时间点的期权价格}
+ \State $\delta t \gets T/N$ %\Comment{时间间隔}
+ \State\tikzmark{start1} $count \gets 0$ %\Comment{在$M$次模拟中$N$被接受的次数}
+  \For{$m=1:M$}\tikzmark{end1} %\Comment{M次蒙特卡洛模拟}
+      \State\tikzmark{start2}$error \gets 0$ %\Comment{离散策略和连续策略的误差}
+  \ForAll {$NRV[j]$}\tikzmark{end2}
+     $NRV[j] \gets GaussianNumGenerator()$
+  \EndFor
+  \State \tikzmark{start3}$BM[0] \gets NRV[0] \cdot \sqrt{\delta t}$
+  \ForAll {$BM[j]$}\tikzmark{end3}
+     $BM[j] \gets BM[j-1] + NRV[j]\cdot \sqrt{\delta t}$
+  \EndFor
+  \State \tikzmark{start4}$PX[0] \gets X0$
+  \ForAll {$j= 1:N+1$}\tikzmark{end4}
+  \State $PX[j]\gets X0 \cdot exp(-0.5\cdot \sigma^2 \cdot j \cdot \delta t + \sigma \cdot BM[j-1])$
+  \EndFor
+  \tikzmark{start5}\ForAll{$j=0:N-1$}\tikzmark{end5}
+  \State $Upper \gets (\log(PX[j]/K) + 0.5\cdot \sigma^2 \cdot (T- T_j))/ (\sigma \cdot \sqrt{T-T_j})$
+  \State $error \gets error - 1/(\sqrt{2\pi}) \cdot (PX[j+1]-PX[j])\cdot \int_{-\infty}^{Upper}e^{-t^2/2}dt $
+  \EndFor
+  % \If {$PX[N] > K$}
+  % \State $error \gets error + (PX[N]-K)$
+  % \EndIf
+  % \State $Upper1 \gets (log(X0/K) + 0.5\cdot \sigma^2 \cdot T)/(\sigma \sqrt{T})$
+  % \State $Upper2 \gets (log(X0/K) - 0.5\cdot \sigma^2 \cdot T)/(\sigma \sqrt{T})$
+  % \State $error = error + K/\sqrt{2\pi} \cdot \int_{-\infty}^{Upper2}e^{-t^2/2}dt -X0/\sqrt{2\pi}\cdot \int_{-\infty}^{Upper1}e^{-t^2/2}dt$
+  % \If {$error < \epsilon$}
+  % \State $count \gets count + 1$
+  % \EndIf
+  \EndFor
+  % \State $prob \gets count/M$
+  % \State return $prob$
+ \EndProcedure
+  \end{algorithmic}
+  % \end{column}
+  % \end{columns}
+  \begin{tikzpicture}[remember picture,overlay]
+  \draw[blue, thick] ( $ (start1) + (-2pt,-2pt) $ ) rectangle ( $ (end1) + (2pt,-2pt)$ );
+  \draw[red, thick] ( $ (start2) + (-2pt,-2pt) $ ) rectangle ( $ (end2) + (2pt,-2pt)$ );
+  \draw[red, thick] ( $ (start3) + (-2pt,-2pt) $ ) rectangle ( $ (end3) + (2pt,-2pt)$ );
+  \draw[red, thick] ( $ (start4) + (-2pt,-2pt) $ ) rectangle ( $ (end4) + (2pt,-2pt)$ );
+  \draw[red, thick] ( $ (start5) + (-22pt,-2pt) $ ) rectangle ( $ (end5) + (2pt,-2pt)$ );
+  % \draw[orange] ( $ (start2) + (-2pt,-2pt) $ ) rectangle ( $ (end2) + (1.8,-2pt) $ );
+  % \draw[orange,-latex] let \p1=(start1), \p2=(end1), \p3=(start2), \p4=(end2)
+    % in ( $ (\x2,0.5*\y1+0.5*\y2) + (1.3,0) $ ) to[out=0,in=0] ( $ (\x4,0.5*\y3+0.5*\y4) + (1.8,0) $ );
+\node[notice={(-4.5cm, -1.5cm)}, text width=5cm, align=left] at ($(end1) + (5cm, 2cm)$) {\tiny \color{blue}{ 蓝色的外层循环为相互独立的蒙特卡洛模拟次数并行度高,
+可并行在单个MIC的不同线程上也可以并行在多个MIC处理器上}};
+\end{tikzpicture}
+% \end{algorithm}

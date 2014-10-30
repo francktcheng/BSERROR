@@ -4,33 +4,34 @@
 \usetikzlibrary{mindmap,trees}
 %set up chinese environment
 \usepackage{fontspec}
-\newfontfamily\zhfont[BoldFont=Hiragino Sans GB W3]{Hiragino Sans GB W3} %设置中文
-\newfontfamily\zhpunctfont{Hiragino Sans GB W3} % 设置中文
+% \newfontfamily\zhfont[BoldFont=Hiragino Sans GB W3]{Hiragino Sans GB W3} %设置中文
+% \newfontfamily\zhpunctfont{Hiragino Sans GB W3} % 设置中文
+\setromanfont{Hiragino Sans GB} % 儷黑pro
+\setmonofont[Scale=0.8]{Courier New} % 等寬字型
 
 \begin{document}
 \pagestyle{empty}
 \vspace*{\fill}
 \begin{center}
 	\begin{tikzpicture}
-		\path[mindmap,concept color=white,text=black]
-		node[concept] {金融}
+		\path[mindmap,concept color=black,text=white]
+		node[concept] {金融在超算\\的应用}
 		[clockwise from=0]
 		child[concept color=green!50!black] {
-			node[concept] {practical}
+			node[concept] {高频交易}
 			[clockwise from=90]
-			child { node[concept] {algorithms} }
-			child { node[concept] {data structures} }
-			child { node[concept] {pro\-gramming languages} }
-			child { node[concept] {software engineer\-ing} }
+			child { node[concept] {外部数据\\加速} }
+			child { node[concept] {内部数据\\加速} }
+			child { node[concept] {海量数据\\分析} }
 		}  
 		child[concept color=blue] {
-			node[concept] {applied}
-			[clockwise from=-30]
-			child { node[concept] {databases} }
-			child { node[concept] {WWW} }
+			node[concept] {风险管理}
+			% [clockwise from=-30]
+			% child { node[concept] {databases} }
+			% child { node[concept] {WWW} }
 		}
-		child[concept color=red] { node[concept] {technical} }
-		child[concept color=orange] { node[concept] {theoretical} };
+		child[concept color=red] { node[concept] {金融衍生品\\定价} }
+		child[concept color=orange] { node[concept] {定量经济\\分析} };
 	\end{tikzpicture}
 \end{center}
 \vspace*{\fill}
