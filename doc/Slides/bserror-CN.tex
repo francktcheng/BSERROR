@@ -56,7 +56,6 @@
 \usepackage{algorithm}
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
-
 \usepackage{tikz}
 \usetikzlibrary{arrows,calc,intersections}
 \usetikzlibrary{shapes.callouts}
@@ -68,6 +67,7 @@
 }
 \usepackage{xcolor}
 \makeatletter
+
 
 \newcommand\tikzmark[1]{%
 	  \tikz[overlay,remember picture,baseline] \coordinate (#1);}
@@ -333,11 +333,6 @@
 \begin{withoutheadline}
 \begin{frame}[fragile]
 	\frametitle{算法并行性分析}
-% \begin{algorithm}[H]
-  % \caption{欧式期权对冲策略误差判断的串行算法}
-  % \label{alg:bserror}
-  % \begin{columns}
-	  % \begin{column}[T]{0.7\textwidth}
 	\begin{algorithmic}
   \tiny
 	 % \Require $X_0$ \Comment{金融产品在$t=0$时的初始价格}
@@ -386,48 +381,100 @@
 	  % \State return $prob$
 	 \EndProcedure
   \end{algorithmic}
-  % \end{column}
-  % \end{columns}
   \begin{tikzpicture}[remember picture,overlay]
 	  \draw[blue, thick] ( $ (start1) + (-2pt,-2pt) $ ) rectangle ( $ (end1) + (2pt,-2pt)$ );
 	  \draw[red, thick] ( $ (start2) + (-2pt,-2pt) $ ) rectangle ( $ (end2) + (2pt,-2pt)$ );
 	  \draw[red, thick] ( $ (start3) + (-2pt,-2pt) $ ) rectangle ( $ (end3) + (2pt,-2pt)$ );
 	  \draw[red, thick] ( $ (start4) + (-2pt,-2pt) $ ) rectangle ( $ (end4) + (2pt,-2pt)$ );
 	  \draw[red, thick] ( $ (start5) + (-22pt,-2pt) $ ) rectangle ( $ (end5) + (2pt,-2pt)$ );
-	  % \draw[orange] ( $ (start2) + (-2pt,-2pt) $ ) rectangle ( $ (end2) + (1.8,-2pt) $ );
-	  % \draw[orange,-latex] let \p1=(start1), \p2=(end1), \p3=(start2), \p4=(end2) 
-	    % in ( $ (\x2,0.5*\y1+0.5*\y2) + (1.3,0) $ ) to[out=0,in=0] ( $ (\x4,0.5*\y3+0.5*\y4) + (1.8,0) $ );
-	\node[notice={(-4.5cm, -1.5cm)}, text width=5cm, align=left] at ($(end1) + (5cm, 2cm)$) {\tiny \color{blue}{ 蓝色的外层循环为相互独立的蒙特卡洛模拟次数并行度高, 
-			可并行在单个MIC的不同线程上也可以并行在多个MIC处理器上}};
+	\node[notice={(-3cm, -0.7cm)}, text width=5cm, align=left] at ($(end1) + (5cm, 1.5cm)$) {\tiny \color{blue}{ 
+			蓝色的外层循环为相互独立的蒙特卡洛模拟次数并行度高, 可并行在单个MIC的不同线程上也可以并行在多个MIC处理器上}};
+	\node[notice={(-4.5cm, 0.4cm)}, text width=5cm, align=left] at ($(end2) + (6.5cm, -0.5cm)$) {\tiny \color{red}{ 
+			红色循环为离线状态数组, 数组前后状态有依赖关系，需要进行并行优化}};
 	\end{tikzpicture}
-% \end{algorithm}
 \end{frame}
 \end{withoutheadline}
 
 \begin{withoutheadline}
 \begin{frame}
-	\frametitle{单片MIC并行优化}
+	\frametitle{单片MIC单次蒙特卡洛并行优化}
+	\includegraphics[width=0.9\textwidth]{Figures/algorithm/tikz/sMICOpt.pdf}\vfill
+\begin{block}{方案一}
+	离线状态的数组总长度N分为$n$个子集，每个的长度为$N_{cache}$, 单片MIC上的所有线程依次同时
+	并行工作于子集1, 子集2，直至最后一个子集。$N_{cache}$的大小要和缓存大小匹配，使数据可以在缓存
+	内被所有线程所共享($512K \times 61 = 31M$, 所有线程共享一个随机数发生流)
+\end{block}
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{单片MIC单次蒙特卡洛并行优化}
+	\includegraphics[width=0.9\textwidth]{Figures/algorithm/tikz/sMICOpt2.pdf}\vfill
+\begin{block}{方案二}
+	离线状态的数组总长度N分为$n$个子集，每个的长度为$N_{vec}$, 每个子集由一个线程负责，所有线程同时
+	并行工作，每个线程拥有自己的随机数发生流，$N_{vec}$ 要和单个核心的$L2$缓存相符合(512K)，以达到最大的数据重用。
+\end{block}
 \end{frame}
 \end{withoutheadline}
 
 \begin{withoutheadline}
 \begin{frame}
 	\frametitle{基于汇编的矢量化积分运算}
-	content	
+	并行算法中大量使用了如下形式的积分运算
+	\begin{block}{}
+		\begin{equation}
+			f(x)=\int_{-\infty}^{x}e^{-\frac{t^2}{2}}dt
+		\end{equation}
+	\end{block}
+	利用辛普森积分法(Simpson's rule)可以对高斯积分进行矢量化(vectorized)计算
+	\begin{block}{转化为高斯积分}
+		\begin{equation}
+			\label{eq:gauss}
+			f(x)=\int_{-\infty}^{x}e^{-\frac{t^2}{2}}dt=0.5\times \sqrt{2\pi} + \int_{0}^{x}e^{-\frac{t^2}{2}}dt
+		\end{equation}
+	\end{block}
+	\begin{block}{Simpson's rule}
+		\begin{equation}
+			\label{eq:simpson}
+			\int_{a}^{b}f(x)dx\approx \frac{h}{3}\left[f(x_0)+2\sum\limits_{j=1}^{n/2-1}f(x_{2j})+4\sum\limits_{j=1}^{n/2}f(x_{2j-1})+f(x_n)\right]
+		\end{equation}
+	\end{block}
 \end{frame}
 \end{withoutheadline}
 
 \begin{withoutheadline}
 \begin{frame}
-	\frametitle{N值的最优化搜索}
-	content	
+	\frametitle{基于二分法的N值最优化搜索}
+	\begin{columns}
+		\begin{column}[T]{0.5\textwidth}
+			\includegraphics[width=0.8\textwidth]{Figures/algorithm/tikz/flowchart2.pdf}
+		\end{column}\hfill
+		\begin{column}[T]{0.5\textwidth}
+			\begin{block}{初始值$N_0$}
+				本文通过数学推导给出了一个$N$值的上界$N_0$, 从而使我们的二分法有了初始的
+				搜索上界
+			\end{block}
+			\begin{block}{参数$\lambda$, $Prob$, $M$}
+				$\lambda$是设置的最小区间，当上下界之差小于$\lambda$时，认为二分法结束
+				$Prob$则为置信概率，值越高表明最后搜索到得$N$值可信度越高。
+				$M$为蒙特卡洛模拟的次数，越大的$M$也说明搜索到的结果越可靠。
+			\end{block}
+		\end{column}
+	\end{columns}
 \end{frame}
 \end{withoutheadline}
 
 \begin{withoutheadline}
 \begin{frame}
 	\frametitle{多MIC并行优化}
-	content	
+	\vspace{-1ex}
+	\begin{block}{Maser-Slave模式}
+		一个节点被选为Master，其余节点为Slave节点在$M$的维度上进行并行优化。
+	\end{block}
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{Figures/algorithm/tikz/mBSERROR.pdf}
+	\end{center}
 \end{frame}
 \end{withoutheadline}
 

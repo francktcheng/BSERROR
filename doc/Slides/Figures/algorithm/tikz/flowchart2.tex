@@ -1,0 +1,60 @@
+% \documentclass{article}
+\documentclass[class=minimal,border=5pt]{standalone}
+% \usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{fontspec}
+% \newfontfamily\zhfont[BoldFont=Hiragino Sans GB W3]{Hiragino Sans GB W3} %设置中文
+% \newfontfamily\zhpunctfont{Hiragino Sans GB W3} % 设置中文
+\setromanfont{Hiragino Sans GB} % 儷黑pro
+\setmonofont[Scale=0.8]{Courier New} % 等寬字型
+\usetikzlibrary{shapes,arrows}
+\begin{document}
+\pagestyle{empty}
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+text width=8em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=green!20, 
+text width=8em, text centered, rounded corners, minimum height=3em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=4cm,
+minimum height=3em]
+\tikzstyle{empty} = [draw=none,node distance=4cm]
+
+\begin{tikzpicture}[node distance = 2cm, auto]
+	% Place nodes
+	\node [block] (init) at (0,8) {$lastvalid=-1$\\$nL\gets 0$\\$nU\gets N_0$\\$n\gets (nL + nU)/2$};
+	\node [cloud, left=1.5cm of init] (math){数学推导$N_0$};
+	\node [cloud, right=1.5cm of init] (para){参数$M$, $\lambda$\\$Prob$};
+	\node [block, below=1cm of init] (run) {$result\gets BSERROR(M,n)$};
+	\node [decision, below=1cm of run] (evaluate1) {$result > Prob$};
+	\node [block, below=1cm of evaluate1] (newN) {$lastvalid=n$\\$nU\gets n$\\$n\gets (nL + nU)/2$};
+	\node [block, right=1.5cm of evaluate1] (sameN) {$nL\gets n$\\$n\gets (nU + nL)/2$};
+	\node [decision, below=1cm of newN] (evaluate2) {$|nU-nL|>\lambda$};
+	\node [empty, left=1.5cm of evaluate2] (pos){是};
+	\node [decision, below=1cm of evaluate2] (evaluate3) {$lastvalid \neq -1$};
+	\node [block, below=1cm of evaluate3] (find) {find $N = n$};
+	\node [block, right=1.5cm of evaluate3] (nofind) {没找到$N$};
+	% Draw edges
+
+	\path [line] (init) -- (run);
+	\path [line, dashed] (math) -- (init);
+	\path [line, dashed] (para) -- (init);
+	\path [line] (run) -- (evaluate1);
+	\path [line] (evaluate1) -- node[near start]{是}(newN);
+	\path [line] (evaluate1) -- node[near start]{否} (sameN);
+	\path [line] (newN) -- (evaluate2);
+	\path [line] (sameN) |- (evaluate2);
+	\path [line] (evaluate2) -- node[near start]{否}(evaluate3);
+	\path [line] (evaluate2.west) -- (pos);
+	\path [line] (pos) |- (run);
+	\path [line] (evaluate3) -- node[near start]{是}(find);
+	\path [line] (evaluate3) -- node[near start]{否}(nofind);
+	% \path [line] (evaluate) -| node [near start] {否} (update);
+	% \path [line] (update) -- (program);
+	% \path [line] (evaluate) -- node {是}(stop);
+	% \path [line,dashed] (expert) -- (init);
+	% \path [line,dashed] (system) -- (init);
+	% \path [line,dashed] (system) |- (evaluate);
+\end{tikzpicture}
+\end{document}

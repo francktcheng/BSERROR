@@ -2,8 +2,8 @@ PWD /Users/chenlangshi/Documents/GitRepos/Coding/BSERROR/doc/Slides/Figures/algo
 INPUT /usr/local/texlive/2014/texmf.cnf
 INPUT /usr/local/texlive/2014/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2014/texmf-var/web2c/xetex/xelatex.fmt
-INPUT flowchart1.tex
-OUTPUT flowchart1.log
+INPUT flowchart2.tex
+OUTPUT flowchart2.log
 INPUT /usr/local/texlive/2014/texmf-dist/tex/latex/standalone/standalone.cls
 INPUT /usr/local/texlive/2014/texmf-dist/tex/latex/standalone/standalone.cls
 INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifluatex.sty
@@ -126,6 +126,8 @@ INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/pgflibraryplo
 INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
 INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
+INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
+INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
 INPUT /usr/local/texlive/2014/texmf-dist/tex/latex/fontspec/fontspec.sty
 INPUT /usr/local/texlive/2014/texmf-dist/tex/latex/fontspec/fontspec.sty
 INPUT /usr/local/texlive/2014/texmf-dist/tex/latex/l3kernel/expl3.sty
@@ -185,9 +187,9 @@ INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libr
 INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryarrows.code.tex
 INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.code.tex
 INPUT /usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.code.tex
-INPUT flowchart1.aux
-INPUT flowchart1.aux
-OUTPUT flowchart1.aux
+INPUT flowchart2.aux
+INPUT flowchart2.aux
+OUTPUT flowchart2.aux
 INPUT /usr/local/texlive/2014/texmf-dist/tex/latex/tipa/t3cmr.fd
 INPUT /usr/local/texlive/2014/texmf-dist/tex/latex/tipa/t3cmr.fd
-INPUT flowchart1.aux
+INPUT flowchart2.aux

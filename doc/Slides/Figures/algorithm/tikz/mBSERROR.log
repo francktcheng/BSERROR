@@ -1,10 +1,10 @@
-This is XeTeX, Version 3.14159265-2.6-0.99991 (TeX Live 2014) (preloaded format=xelatex 2014.10.28)  31 OCT 2014 14:34
+This is XeTeX, Version 3.14159265-2.6-0.99991 (TeX Live 2014) (preloaded format=xelatex 2014.10.28)  2 NOV 2014 22:01
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**flowchart1.tex
-(./flowchart1.tex
+**mBSERROR.tex
+(./mBSERROR.tex
 LaTeX2e <2014/05/01>
 Babel <3.9k> and hyphenation patterns for 78 languages loaded.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/standalone/standalone.cls
@@ -564,7 +564,18 @@ LaTeX Info: Redefining \upshape on input line 2102.
 . * 'bold italic' with NFSS spec.:
 . <->s*[0.8]"Courier New/BI/ICU:script=latn;language=DFLT;"
 .................................................
-(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.code.tex
+(/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.pathreplacing.code.tex (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.code.tex (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/modules/pgfmoduledecorations.code.tex
+\pgfdecoratedcompleteddistance=\dimen184
+\pgfdecoratedremainingdistance=\dimen185
+\pgfdecoratedinputsegmentcompleteddistance=\dimen186
+\pgfdecoratedinputsegmentremainingdistance=\dimen187
+\pgf@decorate@distancetomove=\dimen188
+\pgf@decorate@repeatstate=\count139
+\pgfdecorationsegmentamplitude=\dimen189
+\pgfdecorationsegmentlength=\dimen190
+)
+\tikz@lib@dec@box=\box53
+) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.pathreplacing.code.tex)) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.code.tex
 File: tikzlibraryshapes.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
 (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.geometric.code.tex
 File: tikzlibraryshapes.geometric.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
@@ -586,33 +597,33 @@ File: pgflibraryshapes.arrows.code.tex 2008/06/26 v3.0.0 (rcs-revision 1.1)
 File: tikzlibraryshapes.multipart.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
 (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.multipart.code.tex
 File: pgflibraryshapes.multipart.code.tex 2010/01/07 v3.0.0 (rcs-revision 1.2)
-\pgfnodepartlowerbox=\box53
-\pgfnodeparttwobox=\box54
-\pgfnodepartthreebox=\box55
-\pgfnodepartfourbox=\box56
-\pgfnodeparttwentybox=\box57
-\pgfnodepartnineteenbox=\box58
-\pgfnodeparteighteenbox=\box59
-\pgfnodepartseventeenbox=\box60
-\pgfnodepartsixteenbox=\box61
-\pgfnodepartfifteenbox=\box62
-\pgfnodepartfourteenbox=\box63
-\pgfnodepartthirteenbox=\box64
-\pgfnodeparttwelvebox=\box65
-\pgfnodepartelevenbox=\box66
-\pgfnodeparttenbox=\box67
-\pgfnodepartninebox=\box68
-\pgfnodeparteightbox=\box69
-\pgfnodepartsevenbox=\box70
-\pgfnodepartsixbox=\box71
-\pgfnodepartfivebox=\box72
+\pgfnodepartlowerbox=\box54
+\pgfnodeparttwobox=\box55
+\pgfnodepartthreebox=\box56
+\pgfnodepartfourbox=\box57
+\pgfnodeparttwentybox=\box58
+\pgfnodepartnineteenbox=\box59
+\pgfnodeparteighteenbox=\box60
+\pgfnodepartseventeenbox=\box61
+\pgfnodepartsixteenbox=\box62
+\pgfnodepartfifteenbox=\box63
+\pgfnodepartfourteenbox=\box64
+\pgfnodepartthirteenbox=\box65
+\pgfnodeparttwelvebox=\box66
+\pgfnodepartelevenbox=\box67
+\pgfnodeparttenbox=\box68
+\pgfnodepartninebox=\box69
+\pgfnodeparteightbox=\box70
+\pgfnodepartsevenbox=\box71
+\pgfnodepartsixbox=\box72
+\pgfnodepartfivebox=\box73
 ))) (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryarrows.code.tex
 File: tikzlibraryarrows.code.tex 2008/01/09 v3.0.0 (rcs-revision 1.1)
 (/usr/local/texlive/2014/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.code.tex
 File: pgflibraryarrows.code.tex 2013/09/23 v3.0.0 (rcs-revision 1.16)
-\arrowsize=\dimen184
-)) (./flowchart1.aux)
-\openout1 = `flowchart1.aux'.
+\arrowsize=\dimen191
+)) (./mBSERROR.aux)
+\openout1 = `mBSERROR.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
 LaTeX Font Info:    ... okay on input line 13.
@@ -697,14 +708,18 @@ LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
 (Font)                  OT1/cmss/bx/n --> EU1/lmss/bx/n on input line 13.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> EU1/CourierNew(0)/bx/n on input line 13.
-[1] (./flowchart1.aux) ) 
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 26.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 26.
+[1] (./mBSERROR.aux) ) 
 Here is how much of TeX's memory you used:
- 25223 strings out of 493734
- 553693 string characters out of 6146347
- 586237 words of memory out of 5000000
- 28247 multiletter control sequences out of 15000+600000
- 3752 words of font info for 28 fonts, out of 8000000 for 9000
+ 25739 strings out of 493734
+ 570209 string characters out of 6146347
+ 601964 words of memory out of 5000000
+ 28748 multiletter control sequences out of 15000+600000
+ 3768 words of font info for 30 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
- 55i,6n,67p,10400b,654s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,7n,67p,10398b,836s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on flowchart1.pdf (1 page).
+Output written on mBSERROR.pdf (1 page).

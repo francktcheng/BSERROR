@@ -1,0 +1,71 @@
+% \documentclass{article}
+\documentclass[class=minimal,border=5pt]{standalone}
+\usepackage{tikz}
+\usepackage{fontspec}
+% \newfontfamily\zhfont[BoldFont=Hiragino Sans GB W3]{Hiragino Sans GB W3} %设置中文
+% \newfontfamily\zhpunctfont{Hiragino Sans GB W3} % 设置中文
+\setromanfont{Hiragino Sans GB} % 儷黑pro
+\setmonofont[Scale=0.8]{Courier New} % 等寬字型
+
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{shapes,arrows}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{tikzpicture}
+
+\tikzstyle{master}=[circle,fill=red,draw,text=black, minimum width=3cm, minimum height=2cm]
+\tikzstyle{slave}=[circle, fill=blue!20,draw,text=black, minimum width=2cm, minimum height=1cm]
+\tikzstyle{tag}=[circle,draw=none, text=black, minimum width=2cm, minimum height=1cm]
+\tikzstyle{note}=[rectangle,draw=none, text=black, minimum width=4cm, minimum height=3cm]
+\tikzstyle{line} = [thick, draw, -latex']
+\tikzstyle{line1} = [thick, draw=blue, -latex']
+
+\node[master] (M) at (-4, 0) {Master};
+\node[slave] (s1) at (-10, -5) {Slave$1$};
+\node[slave] (s2) at (-7, -5) {Slave$2$};
+\node[slave] (s3) at (-4, -5) {Slave$3$};
+\node[tag] (s4) at (-1, -5) {$\cdots$};
+\node[slave] (s5) at (2, -5) {Slave$p$};
+
+\node[tag] (t1) at (-10, -7) {$M_1$};
+\node[tag] (t2) at (-7, -7) {$M_2$};
+\node[tag] (t3) at (-4, -7) {$M_3$};
+\node[tag] (t4) at (-1, -7) {$\cdots$};
+\node[tag] (t5) at (2, -7) {$M_p$};
+
+\node[tag] (tM) at (-1,0) {$M\%p$};
+
+\path [line] (s1) -- node[sloped, anchor=center, above]{$M_1$次模拟结果(MPI async)}(M);
+\path [line] (s2) -- node[sloped, anchor=center, above]{$M_2$次模拟结果}(M);
+\path [line] (s3) -- node[sloped, anchor=center, above]{$M_3$次模拟结果}(M);
+\path [line] (s5) -- node[sloped, anchor=center, above]{$M_p$次模拟结果}(M);
+\path (M) edge [loop above] node[sloped, anchor=center, above]{$M\%p$次模拟结果}(M);
+
+\path [line1] ([yshift=-2cm]M) -- node[sloped, anchor=center, below]{新的$N$}([yshift=-2cm]s1);
+\path [line1] ([yshift=-2cm]M) -- node[sloped, anchor=center, below]{新的$N$}([yshift=-2cm]s2);
+\path [line1] ([yshift=-2cm]M) -- node[sloped, anchor=center, above]{新的$N$}([yshift=-2cm]s3);
+\path [line1] ([yshift=-2cm]M) -- node[sloped, anchor=center, below]{新的$N$}([yshift=-2cm]s5);
+
+\path ([yshift=-2cm]M) edge [loop above, draw=blue] node[sloped, anchor=center, below]{新的$N$}([yshift=-2cm]M);
+
+% \node[thread] (t1) at (-10, -12) {$P_1$};
+% \node[thread] (t2) at (-9, -12) {$P_2$};
+% \node[thread] (t3) at (-8, -12) {$P_3$};
+% \node[connect] (sc) at (-7, -12) {$\cdots$};
+% \node[thread] (tn) at (-4, -12) {$P_{n}$};
+
+% \draw [decorate, thick, decoration={brace,amplitude=10pt},xshift=-1cm,yshift=0.6cm]
+% (-10, -9) -- (-8, -9) node [black,midway,yshift=0.5cm] 
+% {\footnotesize 长度 $N_{vec}$};
+
+% \path [line] (t1) -- (s1); 
+% \path [line] (t2) -- (s2); 
+% \path [line] (t3) -- (s3); 
+% \path [line] (tn) -- (sn); 
+
+\end{tikzpicture}
+\end{document}
+
+

@@ -1,0 +1,49 @@
+\documentclass{article}
+
+% \usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usepackage{fontspec}
+% \newfontfamily\zhfont[BoldFont=Hiragino Sans GB W3]{Hiragino Sans GB W3} %设置中文
+% \newfontfamily\zhpunctfont{Hiragino Sans GB W3} % 设置中文
+\setromanfont{Hiragino Sans GB} % 儷黑pro
+\setmonofont[Scale=0.8]{Courier New} % 等寬字型
+
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{shapes,arrows}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{tikzpicture}
+
+\tikzstyle{segment}=[rectangle,fill=red,draw,text=black, minimum width=2cm, minimum height=1cm]
+\tikzstyle{connect}=[rectangle,draw=none,text=black, minimum width=2cm, minimum height=1cm]
+\tikzstyle{thread}=[circle,fill=yellow,draw,text=black, minimum size=1cm]
+\tikzstyle{line} = [thick, draw, -latex']
+
+\node[segment] (s1) at (-10, -9) {子集$1$};
+\node[segment] (s2) at (-8, -9) {子集$2$};
+\node[segment] (s3) at (-6, -9) {子集$3$};
+\node[connect] (sc) at (-4, -9) {$\cdots$};
+\node[segment] (sn1) at (-2, -9) {子集$n-1$};
+\node[segment] (sn) at (0, -9) {子集$n$};
+
+\node[thread] (t1) at (-10, -12) {$P_1$};
+\node[thread] (t2) at (-9, -12) {$P_2$};
+\node[thread] (t3) at (-8, -12) {$P_3$};
+\node[connect] (sc) at (-7, -12) {$\cdots$};
+\node[thread] (tn) at (-4, -12) {$P_{n}$};
+
+\draw [decorate, thick, decoration={brace,amplitude=10pt},xshift=-1cm,yshift=0.6cm]
+(-10, -9) -- (-8, -9) node [black,midway,yshift=0.5cm] 
+{\footnotesize 长度 $N_{vec}$};
+
+\path [line] (t1) -- (s1); 
+\path [line] (t2) -- (s2); 
+\path [line] (t3) -- (s3); 
+\path [line] (tn) -- (sn); 
+
+\end{tikzpicture}
+\end{document}
+
+

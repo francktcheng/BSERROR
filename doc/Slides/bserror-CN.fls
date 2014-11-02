@@ -1,4 +1,4 @@
-PWD /Users/lchen/Documents/GitRepos/Coding/BSERROR/doc/Slides
+PWD /Users/chenlangshi/Documents/GitRepos/Coding/BSERROR/doc/Slides
 INPUT /usr/local/texlive/2014/texmf.cnf
 INPUT /usr/local/texlive/2014/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2014/texmf-var/web2c/xetex/xelatex.fmt
@@ -469,6 +469,10 @@ INPUT bserror-CN.vrb
 INPUT bserror-CN.vrb
 INPUT /usr/local/texlive/2014/texmf-dist/fonts/tfm/adobe/helvetic/phvb8t.tfm
 INPUT /usr/local/texlive/2014/texmf-dist/fonts/tfm/adobe/helvetic/phvrc8t.tfm
+INPUT Figures/algorithm/tikz/sMICOpt.pdf
+INPUT Figures/algorithm/tikz/sMICOpt2.pdf
+INPUT Figures/algorithm/tikz/flowchart2.pdf
+INPUT Figures/algorithm/tikz/mBSERROR.pdf
 INPUT bserror-CN.toc
 INPUT bserror-CN.toc
 INPUT bserror-CN.bbl

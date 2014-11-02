@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99991 (TeX Live 2014) (preloaded format=xelatex 2014.5.25)  30 OCT 2014 18:33
+This is XeTeX, Version 3.14159265-2.6-0.99991 (TeX Live 2014) (preloaded format=xelatex 2014.10.28)  2 NOV 2014 22:06
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -1652,24 +1652,42 @@ File: Figures/algorithm/tikz/flowchart1.pdf Graphic file (type QTm)
 
 (./bserror-CN.vrb
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <6> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 17.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 12.
 ) [15
 
-] [16
+]
+File: Figures/algorithm/tikz/sMICOpt.pdf Graphic file (type QTm)
+<use  "Figures/algorithm/tikz/sMICOpt.pdf" > [16
 
-] [17
+]
+File: Figures/algorithm/tikz/sMICOpt2.pdf Graphic file (type QTm)
+<use  "Figures/algorithm/tikz/sMICOpt2.pdf" > [17
 
-] [18
+]
+Overfull \vbox (0.70538pt too high) detected at line 443
+ []
 
-] [19
+[18
 
-] (./bserror-CN.toc) [20
+]
+File: Figures/algorithm/tikz/flowchart2.pdf Graphic file (type QTm)
+<use  "Figures/algorithm/tikz/flowchart2.pdf" > [19
 
-] [21
+]
+File: Figures/algorithm/tikz/mBSERROR.pdf Graphic file (type QTm)
+<use  "Figures/algorithm/tikz/mBSERROR.pdf" >
+Overfull \vbox (15.70573pt too high) detected at line 478
+ []
+
+[20
+
+] (./bserror-CN.toc) [21
 
 ] [22
 
 ] [23
+
+] [24
 
 ] (./bserror-CN.bbl
 File: beamericonarticle.pdf Graphic file (type QTm)
@@ -1678,8 +1696,8 @@ File: beamericonarticle.pdf Graphic file (type QTm)
 LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
 )
-Package atenddvi Info: Last page = 24.
-[24
+Package atenddvi Info: Last page = 25.
+[25
 
 ]
 \tf@nav=\write6
@@ -1691,23 +1709,23 @@ Package atenddvi Info: Last page = 24.
 \tf@snm=\write8
 \openout8 = `bserror-CN.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 470.
-Package atveryend Info: Executing hook `AfterLastShipout' on input line 470.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 517.
+Package atveryend Info: Executing hook `AfterLastShipout' on input line 517.
 (./bserror-CN.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 470.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 470.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 517.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 517.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 470.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 517.
  ) 
 Here is how much of TeX's memory you used:
- 40056 strings out of 493734
- 794920 string characters out of 6146348
- 865976 words of memory out of 5000000
- 42664 multiletter control sequences out of 15000+600000
+ 40077 strings out of 493734
+ 795396 string characters out of 6146347
+ 867058 words of memory out of 5000000
+ 42681 multiletter control sequences out of 15000+600000
  35975 words of font info for 66 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
  56i,11n,67p,10439b,936s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on bserror-CN.pdf (24 pages).
+Output written on bserror-CN.pdf (25 pages).
