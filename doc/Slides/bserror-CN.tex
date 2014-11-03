@@ -270,30 +270,155 @@
 
 \begin{withoutheadline}
 \begin{frame}
-	\frametitle{欧式期权}
-	content	
-\end{frame}
-\end{withoutheadline}
-
-\begin{withoutheadline}
-\begin{frame}
 	\frametitle{Black-Scholes模型}
-	content
+经济金融中的离散时间模型和连续时间模型之间的关系被广泛的研究。
+在不完备的市场中，经费自给的交易策略是不可能完美的复制连续时间模型中的金融衍生证券。
+我们希望研究离散化的交易策略和连续时间的交易策略的误差。我们的研究基于Black-Scholes 模型。
+
+广义Black-Scholes 模型:
+\begin{itemize}
+\item 风险资产: $dX_t=\mu(X_t)X_tdt+\sigma(X_t)X_tdB_t$, $X_0>0$
+\item 无风险资产: $dS_t^0=rS^0_tdt$
+\item 中性风险概率: $W_t=B_t+\int^t_0\frac{\mu(X_s)-r}{\sigma(X_s)}ds$ 为布朗运动.
+\item 回报函数: $f\in L^2(X_t)$.
+\end{itemize}
+简单起见，我们假设$r=0, \sigma(X_t)=\sigma, f(x)=(x-K)^+$
 \end{frame}
 \end{withoutheadline}
 
 \begin{withoutheadline}
 \begin{frame}
-	\frametitle{对冲策略及误差分析}
-	content
+\frametitle{交易误差}
+另 $u(t, x)=\mathbb{E}(e^{-r(T-t)}f(X_{T-t}^x))$, 期权定价公式为:
+\[
+e^{-rT}f(X_T)=h(f)+\int_0^T \xi_t d\widetilde{X}_t
+\]
+\begin{itemize}
+\item 期权价格: $h(f)=u(0,x)$
+\item delta 对冲策略: $\xi_t=\frac{\partial u}{\partial x}$
+\end{itemize}
+连续时间的delta 对冲策略和离散时间的delta 对冲策略所产生的差:
+\[
+\begin{split}
+M_T^N
+&=e^{-rT}f(X_T)-(u(0,x)+\int_0^T\frac{\partial u}{\partial x}(\varphi(t),
+X_{\varphi_t}))d\widetilde{X}_t\\
+&=\int_0^T\frac{\partial u}{\partial x}(t, X_t)d\widetilde{X}_t-\int_0^T\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})d\widetilde{X}_t\\
+\end{split}
+\]
 \end{frame}
 \end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+\frametitle{交易误差}
+\[
+\begin{split}
+M_T^N
+&=(X_T-K)^+-\mathbb{E}[(X_T-K)^+]-\int_0^T\frac{\partial u}{\partial x}(\varphi(t), X_{\varphi(t)})dX_t\\
+&=-\frac{x_0}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T}
+{\sigma\sqrt{T}}}e^{-\frac{v^2}{2}}dv+\frac{K}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{x_0}{K})-\frac{1}{2}\sigma^2T}{\sigma\sqrt{T}}}e^{-\frac{v^2}{2}}dv\\
+&+(X_T-K)^+-\sum_{i=0}^{n-1}\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\frac{\log(\frac{X_{t_i}}{K})+\frac{1}{2}\sigma^2(T-t_i)}{\sigma\sqrt{T-t_i}}}e^{-\frac{v^2}{2}}dv(X_{t_{i+1}}-X_{t_i})\\
+\end{split}
+\]
+这里 $t_k=kT/N$, $k\in \{0,...,N\}$ 以及 $\varphi(t)=sup\{t_i | t_i\leq t \}$.
+\end{frame}
+\end{withoutheadline}
+
+
+\begin{withoutheadline}
+\begin{frame}
+\frametitle{串行算法}
+\begin{algorithm}[H]
+\textbf{Step1}: 给定 M (蒙特卡洛模拟的次数) 和 N (离散时间点的数目), 生成矩阵$M\times N$ 的
+$NRV[M][N]$. 该矩阵由 $M\times N$ 个独立标准正态分布的随机变量组成。
+
+\textbf{Step2}: 生成布朗运动矩阵 $BM[M][N]$：$BM[i][j]=BM[i][j-1]+\sqrt{\frac{T}{N}}NRV[i][j]$
+初始条件为$BM[i][1]=\sqrt{\frac{T}{N}}NRV[i][1]$, $1\leq i\leq M, 1\leq j\leq N$.
+
+\textbf{Step3}: 生成价格矩阵 $PX[M][N]$：$PX[i][j]=x_0exp(-\frac{1}{2}\sigma^2j\frac{T}{N}+\sigma BM[i][j])$,
+$1\leq i\leq M, 1\leq j\leq N$.
+
+\textbf{Step4}: 对每个 $1\leq i\leq M$, 计算 $M_T^N[i]$。 计算 $M_T^N[i]$ 小于 $\epsilon$的次数 $s$,
+计算模拟仿真的概率 $P=\frac{s}{M}$.
+
+\textbf{Step5}: 如果$P$ 大于阈值概率 $Prob$, 则我们降低 $N$, 反之增加 $N$.
+
+\textbf{Step6}: 由新给出的$N$ 重复上述过程.
+\end{algorithm}
+
+\end{frame}
+\end{withoutheadline}
+
 % section 课题陈述 (end)
 
 \begin{withoutheadline}
 \begin{frame}
-	\frametitle{参数选择及收敛条件}
-	content	
+	\frametitle{参数选择}
+我们进行 M 次模特卡罗模拟实验， 对于每一次模拟， 选取某个$N$， 计算相应的误差$M_T^N$， 我们希望该误差小于可接受的最大误差$\epsilon=X0*10^{-2}$。
+我们用蒙特卡洛的方法计算 $M_T^N\leq \epsilon$ 的概率， 并希望该概率能超过某一个特定值：$Prob=95\%$。
+在这个问题中$M$和$N$的初始值以及其更新方法至关重要。 对$M$而言， 一方面较大的$M$会增大模特卡罗方法以及通过此方法计算出来的概率的可信度， 另一方面
+$M$过大， 将不可避免的造成更高的资源和硬件的要求， 如何在保持一定可行度的条件下选择一个较小的$M$需要一个精巧的方法。
+对$N$而言， 较大的$N$会使得逼近更准确， 从而误差$M_T^N$较小， 但也会造成资源的浪费和迭代收敛的过程冗长。
+较大或者较小的$M$和$N$的初始值将导致收敛缓慢甚至不收敛。
+如何选择合适的$M$和$N$的初始值，
+如何让它们互相迭代更新， 以及怎样判断收敛与否是本章所需要解决的问题。
+关于$N$的初始值的选取， 一个首要的问题是， 数值模拟中， $M$会影响我们对$N$的判断， 甚至一个选取不好的$M$会给出错误的$N$的更新方向，
+从而导致问题得不到收敛。 为了避免这种问题， 我们在这里给出一种不依赖于$M$的$N$的初始值选定方法。
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+\frametitle{参数选择}
+我们需要一个尽可能小的$N$， 使得存在某个关于$N$的函数$P(N)$，如下不等式成立：
+\begin{equation}
+Probability(M_T^N\geq\epsilon)=\mathbb{P}(M_T^N\geq\epsilon)<P(N)。
+\end{equation}
+若我们能发现这样的函数$P(N)$， 则所有满足不等式：
+\begin{equation}
+P(N)\leq 1-Prob=5\%
+\end{equation}
+的正整数$N$， 都满足$\mathbb{P}(M_T^N<\epsilon)>Prob=95\%$。
+我们只需要取满足不等式的最小的正整数$N$即可。 此时$N$的选取独立于$M$， 也即无论我们选取怎样的$M$， 理论上都会有$\mathbb{P}(M_T^N<\epsilon)>Prob$成立。
+\end{frame}
+\end{withoutheadline}
+
+
+\begin{withoutheadline}
+\begin{frame}
+\frametitle{参数选择}
+ 我们的研究推导给出了$N$的估界：
+\begin{theorem}
+ 假设如上文，我们有：
+ \begin{equation}
+ \mathbb{P}(M_T^n\geq \gamma)\leq
+ \begin{cases}
+ \frac{128\sigma^{\frac{1}{2}}x_0^2T^{\frac{5}{4}}e^{\sigma^2}}{e^{\frac{1}{4}}\gamma^2\pi (\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T)^{\frac{1}{2}}(2\pi)^{\frac{1}{4}}}\frac{1}{n}, \quad \log(C_1n)<3\log(2)+3\\
+ T^{\frac{1}{4}}(\frac{\sigma}{(\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T)\sqrt{2\pi}})^{\frac{1}{2}}e^{-\frac{1}{4}}e^{-\frac{3\gamma^{\frac{2}{3}}\pi^{\frac{1}{3}}}{2ex_0^{\frac{2}{3}}T^{\frac{1}{3}}16^{\frac{1}{3}}e^{\frac{\sigma^2}{3}}}n^{\frac{1}{3}}}, \quad \log(C_1n)\geq 3\log(2)+3\\
+ \end{cases}
+ \end{equation}
+\end{theorem}
+\end{frame}
+\end{withoutheadline}
+
+
+% section 参数N (end)
+\begin{withoutheadline}
+\begin{frame}
+\frametitle{参数迭代}
+在由上面定理确定了$N$的迭代初始值之后$N_0$， 我们可以使用该值来确定一个合适大小的$M$的迭代初始值。
+一种选取方式是在$N$为其初始迭代值时， 选取尽量小的$M$的值应该使得模特卡罗模拟出的概率$\mathbb{P}(M_T^N<\epsilon)$收敛稳定。
+也即， 固定$N$ 为其初始值不变， 当$M$ 在其迭代初始值附近扰动时， 相应的$\mathbb{P}(M_T^N<\epsilon)$也只是在可接受范围内微小扰动。
+
+在我们的问题背景下， 通过动态调优和经验发现， 一个较为恰当的$M$初始值可以为$M=10^5$， 我们通过比较$M=10^5+i*1000$， $i=0,...,10$。
+所对应的$\mathbb{P}(M_T^N<\epsilon)$来调整$M$， 若对应的概率在 $10^{-2}$范围内， 则将$M$ 减小为原先的一半， 否则增大$M$为原先的两倍。
+重复此过程， 知道发现满足条件的最小的 $M$。 我们然后固定这个最优的$M$， 然后尝试找出最优的$N$。
+
+根据前面的理论， 最优的$N$存在于$[0, N_0]$区间内。 我们仍然使用二分法寻找最优的$N$, 首先我们令$N_1=N_0/2$， 在此参数下模拟相应的
+$\mathbb{P}(M_T^N<\epsilon)$， 若此模拟概率大于$Prob$， 则令 $N_2=N_1/2$， 反之， 则令 $N_2=\frac{N_0+N_1}{2}$。
+重复此过程直至找到最优的$N$。
+
 \end{frame}
 \end{withoutheadline}
 
@@ -493,7 +618,7 @@
 		\includegraphics[width=0.8\textwidth]{Figures/exp/bsV1-6-mic-cpu-Time-Chunck-0.pdf}\vfill
 		\begin{tikzpicture}[overlay]
 			\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6){
-				单机并行算法1在单块CPU和单块MIC上的实验对比，Chunk采用系统默认调度策略};
+				单机并行算法1在单块CPU和单块MIC上的实验对比，Chunk采用系统默认调度策略,$N = 10^6$, $M = 10$};
 			\pause
 			\node[notice={(-1.6cm, -1.4cm)}, draw=black, text=blue,text width=3cm, align=left, font=\tiny] at (9,3.5) {  
 				Ncache值取在$10^4$时MIC运算时间最短，2x加速CPU};
@@ -510,7 +635,7 @@
 	\includegraphics[width=0.8\textwidth]{Figures/exp/bsV2-6-mic-cpu-Time-Chunck-0.pdf}\vfill
 		\begin{tikzpicture}[overlay]
 			\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6) {
-				单机并行算法2在单块CPU和单块MIC上的实验对比，Chunk采用系统默认调度策略};
+				单机并行算法2在单块CPU和单块MIC上的实验对比，Chunk采用系统默认调度策略,$N = 10^6$, $M = 10$};
 			\pause
 			\node[notice={(1cm, -3.4cm)},draw=black, text=blue, text width=3cm, align=left, font=\tiny] at (5,6) {
 				MIC版本仍有优势，时间随Nvec值变化而小幅度波动，系统Chunk自动调整的结果};
@@ -524,7 +649,13 @@
 	\includegraphics[width=0.8\textwidth]{Figures/exp/bsV1-mic-Time-Chunck.pdf}\vfill
 	\begin{tikzpicture}[overlay]
 		\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6){
-			Chunk值是系统每次分配给单个线程的并行任务数量, 图为算法1在MIC上的测试取5组不同的Chunk值};
+			Chunk值是系统每次分配给单个线程的并行任务数量, 图为算法1在MIC上的测试取5组不同的Chunk值, $N=10^5$, $M=10$};
+		\pause
+		\node[notice={(1cm, -3.4cm)},draw=black, text=red, text width=3cm, align=left, font=\tiny] at (3.5,7){
+				Ncache值小于$10^4$时时间随Chunk变化而波动};
+		\pause
+		\node[notice={(2.5cm, 0cm)},draw=black, text=blue, text width=3cm, align=left, font=\tiny] at (4,2){
+				Ncache值大于$10^4$时运行时间收敛于较小的值};
 	\end{tikzpicture}
 \end{frame}
 \end{withoutheadline}
@@ -535,33 +666,86 @@
 	\includegraphics[width=0.8\textwidth]{Figures/exp/bsV2-mic-Time-Chunck.pdf}\vfill
 		\begin{tikzpicture}[overlay]
 			\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6){
-			Chunk值是系统每次分配给单个线程的并行任务数量, 图为算法2在MIC上的测试取5组不同的Chunk值};
+			Chunk值是系统每次分配给单个线程的并行任务数量, 图为算法2在MIC上的测试取5组不同的Chunk值, $N=10^5$, $M=10$};
+		\pause
+		\node[notice={(0cm, -0.2cm)},draw=black, text=blue, text width=3cm, align=left, font=\tiny] at (3.5,3){
+				Nvec值小于$10^2$时运行时间随Chunk值变化而波动};
+		\pause
+		\node[notice={(2cm, -1cm)},draw=black, text=red, text width=3cm, align=left, font=\tiny] at (3.5,5){
+				Nvec值介于$10^2$和$10^3$之间时,Chunk值越小运行时间越短};
+		\pause
+		\node[notice={(-1.6cm, 4cm)},draw=black, text=brown, text width=3cm, align=left, font=\tiny] at (9.5,2.5){
+				Nvec值大于$10^3$时,不同Chunk值下运行时间逐渐收敛};
 		\end{tikzpicture}
 \end{frame}
 \end{withoutheadline}
 
 \begin{withoutheadline}
 \begin{frame}
-	\frametitle{多MIC优化实验及结果分析}
-	content	
+	\frametitle{Omp1与Omp2两种算法的加速对比}
+	\includegraphics[width=0.8\textwidth]{Figures/exp/BS-Core-bar.pdf}\vfill
+	\begin{tikzpicture}[overlay]
+		\node[draw=black, text=black,text width=2cm, align=left, font=\tiny] at (10,6){
+			OpenMP线程数目选取4组值测试相对串行算法的加速比，算法2比算法1有更高的加速比。两种算法在不同的
+		线程数下加速比变化不大。Chunk采用系统默认模式, $N = 251988$, $M = 100$, $Ncache = 2000$, $Nvec = 376$};
+	\end{tikzpicture}
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{多MIC优化可扩展性}
+	\includegraphics[width=0.8\textwidth]{Figures/exp/bsmpi-mic-scale.pdf}\vfill
+	\begin{tikzpicture}[overlay]
+	\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6){
+			$N = 251988$, $M = 10000$, $Ncache = 2000$, $Nvec = 192$。图中显示我们的算法 获得了超线性的扩展性能};
+	\pause
+	\node[notice={(-2cm, -2cm)},draw=black, text=red, text width=3cm, align=left, font=\tiny] at (6,6.5){
+			蒙特卡洛模拟需要大量的计算量来达到收敛性是个计算密集型的算法};
+	\pause
+	\node[notice={(-1cm, -0.5cm)},draw=black, text=blue, text width=3cm, align=left, font=\tiny] at (7.5,4){
+			蒙特卡洛各次模拟之间具有相互独立性,给算法上的实现提供了很大的潜在并行性。 
+			同时我们的并行算法让单块Xeon Phi只负责一次蒙特卡洛的循环, 这样各个Xeon Phi之间由于蒙特卡洛的独立性从而只有极小部分的通信需求, 
+			这就使算法获得了非常理想的扩展性。};
+	\end{tikzpicture}
 \end{frame}
 \end{withoutheadline}
 
 \begin{withoutheadline}
 \begin{frame}
 	\frametitle{算法的收敛性研究}
-	content	
+	\includegraphics[width=0.8\textwidth]{Figures/exp/bs-converge.pdf}\vfill
+	\begin{tikzpicture}[overlay]
+	\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6){
+		算法2在多CPU上的收敛性, N = 251988, Nvec = 192};
+	\pause
+	\node[notice={(-0.5cm, -2cm)},draw=black, text=red, text width=2cm, align=left, font=\tiny] at (6,4.5){
+			当M次数超过$10^4$, 我们搜索到得N值已经收敛};
+	\end{tikzpicture}
 \end{frame}
 \end{withoutheadline}
 
 % section 实验结果及分析 (end)
 
 \begin{withoutheadline}
-  \begin{frame}{参考文献}
-	\scriptsize
-	\bibliographystyle{splncs}
-	\bibliography{docear}
-  \end{frame}
+\begin{frame}
+	\frametitle{结论}
+	\begin{itemize}
+		\item 我们研究了基于Black-Scholes模型的离散时间版本的Delta对冲策略与理论上的Delta对冲策略之间的误差。
+		\item 我们利用高性能计算的相关技术针对Intel平台实现了该应用的并行化。
+		\item 我们首先针对单机利用多线程 和矢量化提出了两种并行方案，然后使用Master-Slave模型利用消息传递模式通过MPI实现了多机上运行的并行版本。
+		\item 我们开创性地通过理论给出最优抽样次数的数学上界,然后通过二分法在由该上界给出的闭区间内搜索最优解。
+		\item 测试表明并行程序相对于串行版本获得了极大的性能提升。并行程序在MIC集群上也获得了良好的扩展性。
+	\end{itemize}
+\end{frame}
 \end{withoutheadline}
+
+% \begin{withoutheadline}
+%   \begin{frame}{参考文献}
+% 	\scriptsize
+% 	\bibliographystyle{splncs}
+% 	\bibliography{docear}
+%   \end{frame}
+% \end{withoutheadline}
 
 \end{document}
