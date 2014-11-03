@@ -380,17 +380,21 @@
 	  % \State $prob \gets count/M$
 	  % \State return $prob$
 	 \EndProcedure
-  \end{algorithmic}
+  \end{algorithmic}\vfill
+  \pause
   \begin{tikzpicture}[remember picture,overlay]
 	  \draw[blue, thick] ( $ (start1) + (-2pt,-2pt) $ ) rectangle ( $ (end1) + (2pt,-2pt)$ );
+      \pause
 	  \draw[red, thick] ( $ (start2) + (-2pt,-2pt) $ ) rectangle ( $ (end2) + (2pt,-2pt)$ );
 	  \draw[red, thick] ( $ (start3) + (-2pt,-2pt) $ ) rectangle ( $ (end3) + (2pt,-2pt)$ );
 	  \draw[red, thick] ( $ (start4) + (-2pt,-2pt) $ ) rectangle ( $ (end4) + (2pt,-2pt)$ );
 	  \draw[red, thick] ( $ (start5) + (-22pt,-2pt) $ ) rectangle ( $ (end5) + (2pt,-2pt)$ );
-	\node[notice={(-3cm, -0.7cm)}, text width=5cm, align=left] at ($(end1) + (5cm, 1.5cm)$) {\tiny \color{blue}{ 
-			蓝色的外层循环为相互独立的蒙特卡洛模拟次数并行度高, 可并行在单个MIC的不同线程上也可以并行在多个MIC处理器上}};
-	\node[notice={(-4.5cm, 0.4cm)}, text width=5cm, align=left] at ($(end2) + (6.5cm, -0.5cm)$) {\tiny \color{red}{ 
-			红色循环为离线状态数组, 数组前后状态有依赖关系，需要进行并行优化}};
+    \pause
+	\node[notice={(-3.5cm, -1cm)}, draw=black, text=blue, text width=3cm, align=left, font=\tiny] at ($(end1) + (5cm, 1.5cm)$) { 
+			蓝色的外层循环为相互独立的蒙特卡洛模拟次数并行度高, 可并行在单个MIC的不同线程上也可以并行在多个MIC处理器上};
+  \pause
+	\node[notice={(-4.5cm, 0.4cm)}, draw=black, text=red, text width=3cm, align=left, font=\tiny] at ($(end2) + (6.5cm, -0.5cm)$) { 
+			红色循环为离线状态数组, 数组前后状态有依赖关系，需要进行并行优化};
 	\end{tikzpicture}
 \end{frame}
 \end{withoutheadline}
@@ -484,9 +488,55 @@
 \label{sec:exp}
 
 \begin{withoutheadline}
+	\begin{frame}
+		\frametitle{单MIC及CPU版本的实验对比(1/2)}
+		\includegraphics[width=0.8\textwidth]{Figures/exp/bsV1-6-mic-cpu-Time-Chunck-0.pdf}\vfill
+		\begin{tikzpicture}[overlay]
+			\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6){
+				单机并行算法1在单块CPU和单块MIC上的实验对比，Chunk采用系统默认调度策略};
+			\pause
+			\node[notice={(-1.6cm, -1.4cm)}, draw=black, text=blue,text width=3cm, align=left, font=\tiny] at (9,3.5) {  
+				Ncache值取在$10^4$时MIC运算时间最短，2x加速CPU};
+			\pause
+			\node[notice={(1cm, -2.4cm)}, draw=black, text=red,text width=3cm, align=left, font=\tiny] at (5,7) {  
+				CPU版本也存在Ncache最优区间};
+		\end{tikzpicture}
+	\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
 \begin{frame}
-	\frametitle{单MIC及CPU版本的实验对比}
-	content	
+	\frametitle{单MIC及CPU版本的实验对比(2/2)}
+	\includegraphics[width=0.8\textwidth]{Figures/exp/bsV2-6-mic-cpu-Time-Chunck-0.pdf}\vfill
+		\begin{tikzpicture}[overlay]
+			\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6) {
+				单机并行算法2在单块CPU和单块MIC上的实验对比，Chunk采用系统默认调度策略};
+			\pause
+			\node[notice={(1cm, -3.4cm)},draw=black, text=blue, text width=3cm, align=left, font=\tiny] at (5,6) {
+				MIC版本仍有优势，时间随Nvec值变化而小幅度波动，系统Chunk自动调整的结果};
+		\end{tikzpicture}
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{Chunk取值对算法1的影响}
+	\includegraphics[width=0.8\textwidth]{Figures/exp/bsV1-mic-Time-Chunck.pdf}\vfill
+	\begin{tikzpicture}[overlay]
+		\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6){
+			Chunk值是系统每次分配给单个线程的并行任务数量, 图为算法1在MIC上的测试取5组不同的Chunk值};
+	\end{tikzpicture}
+\end{frame}
+\end{withoutheadline}
+
+\begin{withoutheadline}
+\begin{frame}
+	\frametitle{Chunk取值对算法2的影响}
+	\includegraphics[width=0.8\textwidth]{Figures/exp/bsV2-mic-Time-Chunck.pdf}\vfill
+		\begin{tikzpicture}[overlay]
+			\node[draw=black, text=black,text width=1cm, align=left, font=\tiny] at (10.5,6){
+			Chunk值是系统每次分配给单个线程的并行任务数量, 图为算法2在MIC上的测试取5组不同的Chunk值};
+		\end{tikzpicture}
 \end{frame}
 \end{withoutheadline}
 

@@ -46,15 +46,19 @@
   % \State $prob \gets count/M$
   % \State return $prob$
  \EndProcedure
-  \end{algorithmic}
+  \end{algorithmic}\vfill
+  \pause
   \begin{tikzpicture}[remember picture,overlay]
   \draw[blue, thick] ( $ (start1) + (-2pt,-2pt) $ ) rectangle ( $ (end1) + (2pt,-2pt)$ );
+      \pause
   \draw[red, thick] ( $ (start2) + (-2pt,-2pt) $ ) rectangle ( $ (end2) + (2pt,-2pt)$ );
   \draw[red, thick] ( $ (start3) + (-2pt,-2pt) $ ) rectangle ( $ (end3) + (2pt,-2pt)$ );
   \draw[red, thick] ( $ (start4) + (-2pt,-2pt) $ ) rectangle ( $ (end4) + (2pt,-2pt)$ );
   \draw[red, thick] ( $ (start5) + (-22pt,-2pt) $ ) rectangle ( $ (end5) + (2pt,-2pt)$ );
-\node[notice={(-3cm, -0.7cm)}, text width=5cm, align=left] at ($(end1) + (5cm, 1.5cm)$) {\tiny \color{blue}{
-蓝色的外层循环为相互独立的蒙特卡洛模拟次数并行度高, 可并行在单个MIC的不同线程上也可以并行在多个MIC处理器上}};
-\node[notice={(-4.5cm, 0.4cm)}, text width=5cm, align=left] at ($(end2) + (6.5cm, -0.5cm)$) {\tiny \color{red}{
-红色循环为离线状态数组, 数组前后状态有依赖关系，需要进行并行优化}};
+    \pause
+\node[notice={(-3.5cm, -1cm)}, draw=black, text=blue, text width=3cm, align=left, font=\tiny] at ($(end1) + (5cm, 1.5cm)$) {
+蓝色的外层循环为相互独立的蒙特卡洛模拟次数并行度高, 可并行在单个MIC的不同线程上也可以并行在多个MIC处理器上};
+  \pause
+\node[notice={(-4.5cm, 0.4cm)}, draw=black, text=red, text width=3cm, align=left, font=\tiny] at ($(end2) + (6.5cm, -0.5cm)$) {
+红色循环为离线状态数组, 数组前后状态有依赖关系，需要进行并行优化};
 \end{tikzpicture}

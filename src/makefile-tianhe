@@ -1,0 +1,3 @@
+#compiling single MIC version for algorithm 1
+par-omp1: par_omp.c inc/misc.h inc/onetimesimu.h
+	icc -Wall -O3 -openmp -mkl -std=c99 -opt-threads-per-core=2 -mmic -o par-omp1 par_omp.c
