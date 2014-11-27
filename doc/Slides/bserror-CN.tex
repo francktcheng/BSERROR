@@ -37,8 +37,8 @@
 \usepackage{times}
 \usepackage[T1]{fontenc}
 \usepackage{animate}
-% \usepackage[caption=false,font=footnotesize]{subfig}
-\usepackage[font=footnotesize]{subfig}
+\usepackage[caption=false,font=footnotesize]{subfig}
+%\usepackage[font=footnotesize]{subfig}
 \usepackage{listings}
 \lstset{language=C++}
 \lstset{breaklines}
@@ -46,7 +46,7 @@
 \lstset{basicstyle=\tiny}
 \lstset{frame=shadowbox}
 
-\usepackage[justification = centering,labelsep = period,font = scriptsize]{caption}
+%\usepackage[justification = centering,labelsep = period,font = scriptsize]{caption}
 \setlength{\abovecaptionskip}{1pt}
 \setlength{\belowcaptionskip}{1pt}
 \usepackage{amssymb}
@@ -351,20 +351,24 @@ $1\leq i\leq M, 1\leq j\leq N$.
 \end{withoutheadline}
 
 % section 课题陈述 (end)
-
+\section{参数选择与迭代} % (fold)
+\label{sec:parameter}
 \begin{withoutheadline}
 \begin{frame}
 	\frametitle{参数选择}
-我们进行 M 次模特卡罗模拟实验， 对于每一次模拟， 选取某个$N$， 计算相应的误差$M_T^N$， 我们希望该误差小于可接受的最大误差$\epsilon=X0*10^{-2}$。
-我们用蒙特卡洛的方法计算 $M_T^N\leq \epsilon$ 的概率， 并希望该概率能超过某一个特定值：$Prob=95\%$。
-在这个问题中$M$和$N$的初始值以及其更新方法至关重要。 对$M$而言， 一方面较大的$M$会增大模特卡罗方法以及通过此方法计算出来的概率的可信度， 另一方面
-$M$过大， 将不可避免的造成更高的资源和硬件的要求， 如何在保持一定可行度的条件下选择一个较小的$M$需要一个精巧的方法。
-对$N$而言， 较大的$N$会使得逼近更准确， 从而误差$M_T^N$较小， 但也会造成资源的浪费和迭代收敛的过程冗长。
-较大或者较小的$M$和$N$的初始值将导致收敛缓慢甚至不收敛。
-如何选择合适的$M$和$N$的初始值，
-如何让它们互相迭代更新， 以及怎样判断收敛与否是本章所需要解决的问题。
-关于$N$的初始值的选取， 一个首要的问题是， 数值模拟中， $M$会影响我们对$N$的判断， 甚至一个选取不好的$M$会给出错误的$N$的更新方向，
-从而导致问题得不到收敛。 为了避免这种问题， 我们在这里给出一种不依赖于$M$的$N$的初始值选定方法。
+对于参数$M, N$:
+\begin{itemize}
+\item 给定$N$, 计算$M_T^N$
+\item 给定$M$, 计算$M_T^N\leq \epsilon$的概率，$\epsilon$为我们可以接受的最大误差
+\item 由计算出的概率更新$M, N$ 重复前两步，直到$M_T^N \leq \epsilon$的概率刚好超过某一特定值：$Prob=95\%$
+\end{itemize}
+如何选择$M, N$的初始值以及如何迭代更新？
+\begin{itemize}
+\item 较大的$M$会增大模特卡罗方法计算出来的概率的可信度
+\item 较大的$M$将不可避免的造成更高的资源和硬件的要求
+\item 过小的$M$可能给出错误的$N$的更新方向，导致不收敛
+\end{itemize}
+解决方案：我们在这里给出一种不依赖于$M$的$N$的初始值选定方法。
 \end{frame}
 \end{withoutheadline}
 
@@ -388,14 +392,14 @@ P(N)\leq 1-Prob=5\%
 \begin{withoutheadline}
 \begin{frame}
 \frametitle{参数选择}
- 我们的研究推导给出了$N$的估界：
+ 我们的研究推导给出了一个适宜的$P(N)$的表达式：
 \begin{theorem}
  假设如上文，我们有：
  \begin{equation}
  \mathbb{P}(M_T^n\geq \gamma)\leq
  \begin{cases}
  \frac{128\sigma^{\frac{1}{2}}x_0^2T^{\frac{5}{4}}e^{\sigma^2}}{e^{\frac{1}{4}}\gamma^2\pi (\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T)^{\frac{1}{2}}(2\pi)^{\frac{1}{4}}}\frac{1}{n}, \quad \log(C_1n)<3\log(2)+3\\
- T^{\frac{1}{4}}(\frac{\sigma}{(\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T)\sqrt{2\pi}})^{\frac{1}{2}}e^{-\frac{1}{4}}e^{-\frac{3\gamma^{\frac{2}{3}}\pi^{\frac{1}{3}}}{2ex_0^{\frac{2}{3}}T^{\frac{1}{3}}16^{\frac{1}{3}}e^{\frac{\sigma^2}{3}}}n^{\frac{1}{3}}}, \quad \log(C_1n)\geq 3\log(2)+3\\
+ T^{\frac{1}{4}}(\frac{\sigma}{(\log(\frac{x_0}{K})+\frac{1}{2}\sigma^2T)\sqrt{2\pi}})^{\frac{1}{2}}e^{-\frac{1}{4}}e^{-\frac{3\gamma^{\frac{2}{3}}\pi^{\frac{1}{3}}}{2ex_0^{\frac{2}{3}}T^{\frac{1}{3}}16^{\frac{1}{3}}e^{\frac{\sigma^2}{3}}}n^{\frac{1}{3}}}, otherwise\\
  \end{cases}
  \end{equation}
 \end{theorem}
@@ -407,17 +411,16 @@ P(N)\leq 1-Prob=5\%
 \begin{withoutheadline}
 \begin{frame}
 \frametitle{参数迭代}
-在由上面定理确定了$N$的迭代初始值之后$N_0$， 我们可以使用该值来确定一个合适大小的$M$的迭代初始值。
-一种选取方式是在$N$为其初始迭代值时， 选取尽量小的$M$的值应该使得模特卡罗模拟出的概率$\mathbb{P}(M_T^N<\epsilon)$收敛稳定。
-也即， 固定$N$ 为其初始值不变， 当$M$ 在其迭代初始值附近扰动时， 相应的$\mathbb{P}(M_T^N<\epsilon)$也只是在可接受范围内微小扰动。
+我们给出参数迭代的算法：
+\begin{algorithm}[H]
+\textbf{Step1}:由上面定理确定了$N$的迭代初始值之后$N_0$
 
-在我们的问题背景下， 通过动态调优和经验发现， 一个较为恰当的$M$初始值可以为$M=10^5$， 我们通过比较$M=10^5+i*1000$， $i=0,...,10$。
-所对应的$\mathbb{P}(M_T^N<\epsilon)$来调整$M$， 若对应的概率在 $10^{-2}$范围内， 则将$M$ 减小为原先的一半， 否则增大$M$为原先的两倍。
-重复此过程， 知道发现满足条件的最小的 $M$。 我们然后固定这个最优的$M$， 然后尝试找出最优的$N$。
+\textbf{Step2}:固定该$N_0$, 选取尽可能小的$M$的值$M_0$,使得模特卡罗模拟出的概率$\mathbb{P}(M_T^N<\epsilon)$收敛稳定
 
-根据前面的理论， 最优的$N$存在于$[0, N_0]$区间内。 我们仍然使用二分法寻找最优的$N$, 首先我们令$N_1=N_0/2$， 在此参数下模拟相应的
+\textbf{Step3}:固定$M_0$, 使用二分法在$[0, N_0]$区间内寻找最优的$N$。 首先我们令$N_1=N_0/2$， 在此参数下模拟相应的
 $\mathbb{P}(M_T^N<\epsilon)$， 若此模拟概率大于$Prob$， 则令 $N_2=N_1/2$， 反之， 则令 $N_2=\frac{N_0+N_1}{2}$。
-重复此过程直至找到最优的$N$。
+
+\end{algorithm}
 
 \end{frame}
 \end{withoutheadline}
